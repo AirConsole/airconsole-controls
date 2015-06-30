@@ -1,3 +1,43 @@
+/**
+ * An object containing a configuration for the Joystick constructor.
+ * @typedef {object} JoystickConfig
+ * @property {Function} touchstart -
+ *           The callback that gets called when the Joystick is touched
+ * @property {Joystick~touchMoveCallback} touchmove -
+ *           The callback that gets called when the Joystick is moved
+ * @property {Function} touchend -
+ *           The callback that gets called when the Joystick is released
+ * @property {number} distance - The maximum amount of pixels a joystick can be
+ *                               moved. Default: 10
+ * @property {boolean} log - Debug output iff a callback is not set.
+ */
+
+/**
+ * A coordinate is an object with an x and y property.
+ * @typedef {object} Joystick~Offset
+ * @param {number} x - The x offset. A value between -1 and 1;
+ * @param {number} y - The y offset. A value between -1 and 1;
+ */
+
+/**
+ * This callback is called when the direction of a DPad changes.
+ * @callback Joystick~touchMoveCallback
+ * @param {Joystick~Offset} offset - The offset of the joystick.
+ */
+
+/**
+ * A coordinate is an object with an x and y property.
+ * @typedef {object} Joystick~Coordinate
+ * @param {number} x - The x coordinate
+ * @param {number} y - The y coordinate
+ */
+
+/**
+ * An analogue relative joystick.
+ * @param {HTMLElement|string} el - The HTML container element or its ID.
+ * @param {JoystickConfig} opts - Constructor config.
+ * @constructor
+ */
 function Joystick(el, opts) {
   var me = this;
   opts = opts || {}
@@ -65,6 +105,10 @@ function Joystick(el, opts) {
   me.distance_sq = Math.pow(me.distance, 2);
 }
 
+/**
+ * Gets called when the Joystick gets touched
+ * @param {Joystick~Coordinate} pos - The position of the initial touch.
+ */
 Joystick.prototype.onStart = function(pos) {
   var me = this;
   me.base = pos;
@@ -72,6 +116,10 @@ Joystick.prototype.onStart = function(pos) {
   me.start_cb();
 };
 
+/**
+ * Gets called when the Joystick is moved.
+ * @param {Joystick~Coordinate} pos
+ */
 Joystick.prototype.onMove = function(pos) {
   var me = this;
   var dx = pos.x - me.base.x;
@@ -91,6 +139,9 @@ Joystick.prototype.onMove = function(pos) {
 
 };
 
+/**
+ * Gets called when the the Joystick is released.
+ */
 Joystick.prototype.onEnd = function() {
   var me = this;
   me.placeRelative(0, 0);
@@ -99,12 +150,22 @@ Joystick.prototype.onEnd = function() {
   me.end_cb();
 };
 
+/**
+ * Returns the page offset of an event
+ * @param {Event} e - An event
+ * @return {Joystick~Coordinate}
+ */
 Joystick.prototype.getRelativePos = function(e) {
   var me = this;
   var rect = me.container.getBoundingClientRect();
   return { "x": e.pageX - rect.left, "y": e.pageY - rect.top };
 };
 
+/**
+ * Places the relative joystick element.
+ * @param {number} dx - The x offset in pixels
+ * @param {number} dy - The y offset in pixels
+ */
 Joystick.prototype.placeRelative = function(dx, dy) {
   var me = this;
   if (!me.relative) {

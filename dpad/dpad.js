@@ -1,3 +1,51 @@
+/**
+ * An object containing a configuration for the DPad constructor.
+ * @typedef {object} DPadConfig
+ * @property {DPad~directionChangeCallback} directionchange -
+ *           The callback that handles a DPad direction change.
+ * @property {Function} touchstart -
+ *           The callback that gets called when the DPad is touched
+ * @property {DPad~touchEndCallback} touchend -
+ *           The callback that gets called when the DPad is released
+ * @property {number|DPad~Coordinate|undefined} distance - amount of pixels
+ *           which the user needs to move the DPad before triggering a
+ *           direction. Default: 10
+ * @property {boolean|undefined} diagonal - If true, diagonal movement are
+ *           possible and it becomes a 8-way DPad: For exmaple UP and RIGHT at
+ *           the same time. Default: false
+ * @property {boolean} log - Debug output iff a callback is not set.
+ */
+
+/**
+ * A coordinate is an object with an x and y property.
+ * @typedef {object} DPad~Coordinate
+ * @param {number} x - The x coordinate
+ * @param {number} y - The y coordinate
+ */
+
+/**
+ * This callback is called when the direction of a DPad changes.
+ * @callback DPad~directionChangeCallback
+ * @param {string} direction - One of DPad.UP, DPad.DOWN, DPad.LEFT, DPad.RIGHT
+ * @param {boolean} pressed - If the direction is active
+ */
+
+/**
+ * This callback is called when a DPad is released
+ * @callback DPad~touchEndCallback
+ * @param {boolean} had_direction - A boolean indicating if at lease one
+ *                                  direction was active. Can be used to
+ *                                  determine if it was just a "tap" on the
+ *                                  DPad.
+ */
+
+/**
+ * A 4-way or 8-way relative swipe DPad usually used for movement,
+ * but also great if you want to have 4 buttons on a controller.
+ * @param {HTMLElement|string} el - The HTML container element or its ID.
+ * @param {DPadConfig} opts - Constructor config.
+ * @constructor
+ */
 function DPad(el, opts) {
   var me = this;
   opts = opts || {}
@@ -80,11 +128,34 @@ function DPad(el, opts) {
   me.resetState();
 }
 
+/**
+ * Direction up
+ * @constant
+ * @type {string}
+ */
 DPad.UP = "up";
+/**
+ * Direction down
+ * @constant
+ * @type {string}
+ */
 DPad.DOWN = "down";
+/**
+ * Direction left
+ * @constant
+ * @type {string}
+ */
 DPad.LEFT = "left";
+/**
+ * Direction right
+ * @constant
+ * @type {string}
+ */
 DPad.RIGHT = "right";
 
+/**
+ * Resets the internal state so no direction is active.
+ */
 DPad.prototype.resetState = function() {
   var me = this;
   me.setState(DPad.UP, false);
@@ -93,14 +164,21 @@ DPad.prototype.resetState = function() {
   me.setState(DPad.RIGHT, false);
 };
 
-DPad.prototype.setState = function(direction, pressed) {
+/**
+ * Sets the internal state of the DPad, calls the callbacks and sets the
+ * css of the arrows if needed.
+ * @param {string} direction - One of DPad.UP, DPad.DOWN, DPad.LEFT, DPad.RIGHT
+ * @param {boolean} active - If the direction is active;
+ * @return {boolean} - Returns if the state has changed.
+ */
+DPad.prototype.setState = function(direction, active) {
   var me = this;
-  if (me.state[direction] != pressed) {
-    me.state[direction] = pressed;
+  if (me.state[direction] != active) {
+    me.state[direction] = active;
     if (me.change_cb) {
-      me.change_cb(direction, pressed);
+      me.change_cb(direction, active);
     }
-    if (pressed) {
+    if (active) {
       me.elements[direction].className += " dpad-arrow-active";
     } else {
       me.elements[direction].className =
@@ -111,6 +189,10 @@ DPad.prototype.setState = function(direction, pressed) {
   return false;
 };
 
+/**
+ * Gets called when the DPad gets touched
+ * @param {DPad~Coordinate} pos - The position of the initial touch.
+ */
 DPad.prototype.onStart = function(pos) {
   var me = this;
   me.base = pos;
@@ -119,6 +201,10 @@ DPad.prototype.onStart = function(pos) {
   me.start_cb();
 };
 
+/**
+ * Gets called when the DPad is moved.
+ * @param {DPad~Coordinate} pos
+ */
 DPad.prototype.onMove = function(pos) {
   var me = this;
   var dx = pos.x - me.base.x;
@@ -180,6 +266,11 @@ DPad.prototype.onMove = function(pos) {
   me.placeRelative(dx, dy);
 };
 
+/**
+ * Places the relative dpad element.
+ * @param {number} dx - The x offset in pixels
+ * @param {number} dy - The y offset in pixels
+ */
 DPad.prototype.placeRelative = function(dx, dy) {
   var me = this;
   if (!me.relative) {
@@ -192,6 +283,9 @@ DPad.prototype.placeRelative = function(dx, dy) {
   style.bottom = me.distance.y - dy;
 };
 
+/**
+ * Gets called when the the DPad is released.
+ */
 DPad.prototype.onEnd = function() {
   var me = this;
   me.container.className = me.container.className.replace(" dpad-active", "");
@@ -200,6 +294,11 @@ DPad.prototype.onEnd = function() {
   me.resetState();
 };
 
+/**
+ * Returns the page offset of an event
+ * @param {Event} e - An event
+ * @return {DPad~Coordinate}
+ */
 DPad.prototype.getRelativePos = function(e) {
   var me = this;
   var rect = me.container.getBoundingClientRect();

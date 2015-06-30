@@ -1,3 +1,18 @@
+/**
+ * An object containing a configuration for the Button constructor.
+ * @typedef {object} ButtonConfig
+ * @property {Function} down - Gets called when the button is pressed.
+ * @property {Function} up - Gets called when the button is released.
+ * @property {boolean} log - Debug output iff a callback is not set.
+
+ */
+
+/**
+ * A simple button that works well for touch devices and local debugging.
+ * @param {HTMLElement|string} el - The HTML container element or its ID.
+ * @param {Object} opts - Constructor config.
+ * @constructor
+ */
 function Button(el, opts) {
   var me = this;
   opts = opts || {}
@@ -43,12 +58,17 @@ function Button(el, opts) {
   }
 }
 
+/**
+ * Gets called when the button is pressed.
+ */
 Button.prototype.down = function() {
   this.container.className += " button-active";
   this.down_cb();
 };
 
-
+/**
+ * Gets called when the button is released.
+ */
 Button.prototype.up = function() {
   this.container.className
   this.container.className =
