@@ -1,0 +1,66 @@
+<html>
+  <head>
+    <script type="text/javascript" src="../joystick/joystick.js"></script>
+    <style type="text/css">
+      body {
+        -ms-user-select: none;
+        -moz-user-select: none;
+        -webkit-user-select: none;
+        user-select: none;
+      }
+
+      .example-container {
+        position: relative;
+        background-color: #3b3b3b;
+        text-align: center;
+        font-family: sans-serif;
+        display: inline-block;
+        width: 100%;
+        height: 100%;
+        max-width: 720px;
+        max-height: 360px;
+      }
+
+      /* You need to explicitly position your joystick */
+      #my-joystick {
+        position: absolute;
+        width: 45%;
+        height: 90%;
+        top: 5%;
+        left: 5%;
+      }
+
+      .joystick {
+        border-radius: 100%;
+        background-color: black;
+      }
+
+      .joystick-relative {
+        border-radius: 100%;
+        background-color: #adee00;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="example-container">
+      <div id="my-joystick" class="joystick">
+        <div class="joystick-relative"></div>
+      </div>
+    </div>
+    <script type="text/javascript">
+
+      var my_joystick = new Joystick("my-joystick", {
+        "touchstart": function() {
+          console.log("Touch start");
+        },
+        "touchmove": function(position) {
+          console.log("Touch move: " + position.x + " " + position.y);
+        },
+        "touchend": function(had_direction) {
+          console.log("Touch end");
+        }
+      });
+
+    </script>
+  </body>
+</html>
