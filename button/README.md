@@ -39,12 +39,12 @@ For example:
 
 ## Styles
 
-The main button element gets the css class "button-active" when it is pressed.
+The main button element gets the css class ```button-active``` when it is pressed.
 
 ### Optional default styles
 
 If you include ```button.css``` you will get the following default styles:
 - A 80 pixel round button that can be used like this:
-  ```<div class=button-80></div>```
+  ```<div class=button-80><div class=button-text>X</div></div>```
 - A 300x150 pixel rectangular button that can be used like this:
-  ```<div class=button-300-150></div>```
+  ```<div class=button-300-150><div class=button-text>X</div></div>```
