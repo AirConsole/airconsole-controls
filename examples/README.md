@@ -21,3 +21,10 @@
 [Live Demo](https://rawgit.com/AirConsole/airconsole-controls/master/examples/joystick.html) -
 [Source](https://github.com/AirConsole/airconsole-controls/blob/master/examples/joystick.html) -
 [Documentation](https://github.com/AirConsole/airconsole-controls/blob/master/joystick/README.md)
+
+## Example Controller
+
+![alt text](https://github.com/airconsole/airconsole-controls/raw/master/examples/example-controller.png "Example Controller")
+
+[Live Demo](https://rawgit.com/AirConsole/airconsole-controls/master/examples/example-controller.html) -
+[Source](https://github.com/AirConsole/airconsole-controls/blob/master/examples/example-controller.html)

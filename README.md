@@ -13,3 +13,8 @@ An analogue relative joystick.
 
 ## Examples
 See examples for how to use these components.
+
+![alt text](https://github.com/airconsole/airconsole-controls/raw/master/examples/example-controller.png "Example Controller")
+
+[Live Demo](https://rawgit.com/AirConsole/airconsole-controls/master/examples/example-controller.html) -
+[Documentation](https://github.com/AirConsole/airconsole-controls/blob/master/examples/README.md)

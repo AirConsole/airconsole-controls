@@ -1,5 +1,5 @@
 # Joystick
-A simple button that works well for touch devices and local debugging.
+An analogue relative joystick.
 
 ## Example
 
