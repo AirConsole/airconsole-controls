@@ -11,3 +11,5 @@ A 4-way or 8-way relative swipe DPad usually used for movement, *but also great 
 ## Joystick
 An analogue relative joystick.
 
+## Examples
+See examples for how to use these components.
