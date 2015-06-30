@@ -68,6 +68,7 @@ function Joystick(el, opts) {
 Joystick.prototype.onStart = function(pos) {
   var me = this;
   me.base = pos;
+  me.container.className += " joystick-active";
   me.start_cb();
 };
 
@@ -93,6 +94,8 @@ Joystick.prototype.onMove = function(pos) {
 Joystick.prototype.onEnd = function() {
   var me = this;
   me.placeRelative(0, 0);
+  me.container.className =
+      me.container.className.replace(" joystick-active", "");
   me.end_cb();
 };
 
