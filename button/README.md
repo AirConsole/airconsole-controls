@@ -10,7 +10,7 @@ A simple button that works well for touch devices and local debugging.
 
 ## General
 
-You need to place & size the button explicitely. It needs to have position **relative/absolute/fixed**.
+You need to place & size the button explicitly. It needs to have position **relative/absolute/fixed**.
 
 For example:
 ```html
@@ -19,8 +19,8 @@ For example:
     position: absolute;
     left: 0px;
     top: 0px;
-    width: 300px;
-    height: 150px;
+    width: 40%;
+    height: 50%;
   }
 </style>
 ```
