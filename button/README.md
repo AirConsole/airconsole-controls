@@ -27,6 +27,7 @@ For example:
 
 ## Javascript
 ```javascript
+  // The first argument can be an html element or and element id. The second argument are options.
   new Button("your-button", {
     "down": function() {
       // The callback function for when the button is pressed
