@@ -27,6 +27,7 @@ For example:
 
 ## Javascript
 ```javascript
+  // The first argument can be an html element or and element id. The second argument are options.
   new DPad("my-dpad", {
       // Gets called when the dpad direction changes.
       // Key is one of: DPad.UP, DPad.DOWN, DPad.LEFT, DPad.RIGHT.
