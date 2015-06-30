@@ -28,22 +28,23 @@ For example:
 ## Javascript
 ```javascript
   new DPad("my-dpad", {
-      "directionchange": function(key, pressed) {
-        // Gets called when the dpad direction changes.
-        // Key is one of: DPad.UP, DPad.DOWN, DPad.LEFT, DPad.RIGHT.
-        // Pressed is a boolean, true if the direction is active.
-      },
-      "touchstart": function() {
-        // Gets called when the DPad is touched.
-      },
-      "touchend": function(had_direction) {
-        // Gets called when the DPad is released.
-        // had_direction is a boolean that tells you if at lease one direction was active.
-        //               can be used to determine if it was just a "tap" on the DPad.
-      },
+      // Gets called when the dpad direction changes.
+      // Key is one of: DPad.UP, DPad.DOWN, DPad.LEFT, DPad.RIGHT.
+      // Pressed is a boolean, true if the direction is active.
+      "directionchange": function(key, pressed) {},
+      
+      // Gets called when the DPad is touched.
+      "touchstart": function() {},
+      
+      // Gets called when the DPad is released.
+      // had_direction is a boolean that tells you if at lease one direction was active.
+      //               can be used to determine if it was just a "tap" on the DPad.
+      "touchend": function(had_direction) {},
+      
       // (Optional) distance which the user needs to move before triggering a direction.
       "distance": {x: 10, y:10}, 
-      // (Optional) diagonal: If true, diagonal movement are possible:
+      
+      // (Optional) diagonal: If true, diagonal movement are possible and it becomes a 8-way DPad:
       //                      For exmaple UP and RIGHT at the same time.
       "diagonal": false
     });
@@ -52,7 +53,7 @@ For example:
 ## Styles
 
 The main dpad element gets the css class ```dpag-active``` when it is touched.
-The sub-divs ```dpad-arrow-up```, ```dpad-arrow-down```, ```dpad-arrow-left```,```dpad-arrow-right```
+The sub-divs with class ```dpad-arrow-up```, ```dpad-arrow-down```, ```dpad-arrow-left```,```dpad-arrow-right```
 get the class ```dpad-arrow-active``` when the direction is active.
 
 ### Optional default styles
