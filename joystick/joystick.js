@@ -172,8 +172,8 @@ Joystick.prototype.placeRelative = function(dx, dy) {
     return;
   }
   var style = me.relative.style;
-  style.left = me.distance + dx;
-  style.right = me.distance - dx;
-  style.top = me.distance + dy;
-  style.bottom = me.distance - dy;
+  style.left = (me.distance + dx) + "px";
+  style.right = (me.distance - dx) + "px";
+  style.top = (me.distance + dy) + "px";
+  style.bottom = (me.distance - dy) + "px";
 };
