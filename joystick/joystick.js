@@ -9,6 +9,9 @@
  *           The callback that gets called when the Joystick is released
  * @property {number} distance - The maximum amount of pixels a joystick can be
  *                               moved. Default: 10
+ * @property {number} min_delta - The minimum delta a joystick needs to have
+ *                                moved before we call the callback.
+ *                                Default: 0.25
  * @property {boolean} log - Debug output iff a callback is not set.
  */
 
@@ -42,6 +45,8 @@ function Joystick(el, opts) {
   var me = this;
   opts = opts || {}
   me.distance = opts.distance || 10;
+  me.min_delta = opts.min_delta || 0.25;
+  me.min_delta_sq = me.min_delta * me.min_delta;
 
   var log_cb = function(name) {
     return function (data) {
@@ -112,6 +117,7 @@ function Joystick(el, opts) {
 Joystick.prototype.onStart = function(pos) {
   var me = this;
   me.base = pos;
+  me.last_move_call = {x: 0, y: 0};
   me.container.className += " joystick-active";
   me.start_cb();
 };
@@ -134,9 +140,14 @@ Joystick.prototype.onMove = function(pos) {
     dx = pos.x - me.base.x;
     dy = pos.y - me.base.y;
   }
-  me.move_cb({"x": dx / me.distance, "y": dy / me.distance});
   me.placeRelative(dx, dy);
-
+  var candidate = {"x": dx / me.distance, "y": dy / me.distance};
+  var call_dx = candidate.x - me.last_move_call.x;
+  var call_dy = candidate.y - me.last_move_call.y;
+  if ((call_dx * call_dx) + (call_dy * call_dy) >= me.min_delta_sq) {
+    me.last_move_call = candidate;
+    me.move_cb(candidate);
+  }
 };
 
 /**

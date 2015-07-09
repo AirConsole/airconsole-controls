@@ -41,7 +41,11 @@ For example:
     "touchend": function() {},
     
     // (Optional) distance: The maximum distance in pixels the joystick can be moved.
-    "distance": 10
+    "distance": 10,
+    
+    // (Optional) min_delta: The minimum delta a joystick needs to have moved before
+    //                       the callback gets called.
+    "min_delta": 0.25
   });
 ```
 
