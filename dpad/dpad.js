@@ -223,6 +223,7 @@ DPad.prototype.onMove = function(pos) {
       me.had_direction = true;
       if (!me.diagonal) {
         me.base.y = pos.y;
+        dy = 0;
       }
     }
   } else if (dx <= -me.distance.x * eps) {
@@ -231,6 +232,7 @@ DPad.prototype.onMove = function(pos) {
       me.had_direction = true;
       if (!me.diagonal) {
         me.base.y = pos.y;
+        dy = 0;
       }
     }
   }
@@ -240,6 +242,7 @@ DPad.prototype.onMove = function(pos) {
       me.had_direction = true;
       if (!me.diagonal) {
         me.base.x = pos.x;
+        dx = 0;
       }
     }
   } else if (dy <= -me.distance.y * eps) {
@@ -248,6 +251,7 @@ DPad.prototype.onMove = function(pos) {
       me.had_direction = true;
       if (!me.diagonal) {
         me.base.x = pos.x;
+        dx = 0;
       }
     }
   }
