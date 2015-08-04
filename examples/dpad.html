@@ -1,63 +1,91 @@
 <html>
-  <head>
-    <script type="text/javascript" src="../dpad/dpad.js"></script>
-    <link rel="stylesheet" href="../dpad/dpad.css">
-    <style type="text/css">
-      body {
-        -ms-user-select: none;
-        -moz-user-select: none;
-        -webkit-user-select: none;
-        user-select: none;
-      }
+<head>
+  <script type="text/javascript" src="../dpad/dpad.js"></script>
+  <link rel="stylesheet" href="../dpad/dpad.css">
+  <style type="text/css">
+    body {
+      -ms-user-select: none;
+      -moz-user-select: none;
+      -webkit-user-select: none;
+      user-select: none;
+    }
 
-      .example-container {
-        position: relative;
-        background-color: #3b3b3b;
-        text-align: center;
-        font-family: sans-serif;
-        display: inline-block;
-        width: 100%;
-        height: 100%;
-        max-width: 720px;
-        max-height: 360px;
-      }
+    .example-container {
+      position: relative;
+      background-color: #3b3b3b;
+      text-align: center;
+      font-family: sans-serif;
+      display: inline-block;
+      width: 100%;
+      height: 100%;
+      max-width: 720px;
+      max-height: 360px;
+    }
 
-      /* You need to explicitly position your dpads */
-      #my-dpad {
-        position: absolute;
-        width: 40%;
-        height: 100%;
-        top: 0px;
-        left: 5%;
-      }
-    </style>
-  </head>
-  <body>
-    <div class="example-container">
-      <div id="my-dpad" class="dpad">
-        <div class="dpad-relative">
-          <div class="dpad-instructions">SWIPE</div>
-          <div class="dpad-arrow dpad-arrow-up"></div>
-          <div class="dpad-arrow dpad-arrow-down"></div>
-          <div class="dpad-arrow dpad-arrow-left"></div>
-          <div class="dpad-arrow dpad-arrow-right"></div>
-        </div>
-      </div>
+    /* You need to explicitly position your dpads */
+    #dpad-0 {
+      position: absolute;
+      width: 40%;
+      height: 100%;
+      top: 0px;
+      left: 5%;
+    }
+
+    #dpad-1 {
+      position: absolute;
+      width: 40%;
+      height: 100%;
+      top: 0px;
+      right: 5%;
+    }
+  </style>
+</head>
+<body>
+<div class="example-container">
+  <div id="dpad-0" class="dpad">
+    <div class="dpad-relative">
+      <div class="dpad-instructions">SWIPE<br>(Diagonal: off)</div>
+      <div class="dpad-arrow dpad-arrow-up"></div>
+      <div class="dpad-arrow dpad-arrow-down"></div>
+      <div class="dpad-arrow dpad-arrow-left"></div>
+      <div class="dpad-arrow dpad-arrow-right"></div>
     </div>
-    <script type="text/javascript">
+  </div>
+  <div id="dpad-1" class="dpad">
+    <div class="dpad-relative">
+      <div class="dpad-instructions">SWIPE<br>(Diagonal: on)</div>
+      <div class="dpad-arrow dpad-arrow-up"></div>
+      <div class="dpad-arrow dpad-arrow-down"></div>
+      <div class="dpad-arrow dpad-arrow-left"></div>
+      <div class="dpad-arrow dpad-arrow-right"></div>
+    </div>
+  </div>
+</div>
+<script type="text/javascript">
 
-      var my_dpad = new DPad("my-dpad", {
-        "directionchange": function(key, pressed) {
-          console.log("Direction changed: " + key + " " + pressed);
-        },
-        "touchstart": function() {
-          console.log("Touch start");
-        },
-        "touchend": function(had_direction) {
-          console.log("Touch end, had direction: " + had_direction);
-        }
-      });
-
-    </script>
-  </body>
+  var dpad0 = new DPad("dpad-0", {
+    "directionchange": function(key, pressed) {
+      console.log("Direction changed: " + key + " " + pressed);
+    },
+    "touchstart": function() {
+      console.log("Touch start");
+    },
+    "touchend": function(had_direction) {
+      console.log("Touch end, had direction: " + had_direction);
+    }
+  });
+  var dpad1 = new DPad("dpad-1", {
+    "directionchange": function(key, pressed) {
+      console.log("Direction changed: " + key + " " + pressed);
+    },
+    "touchstart": function() {
+      console.log("Touch start");
+    },
+    "touchend": function(had_direction) {
+      console.log("Touch end, had direction: " + had_direction);
+    },
+    "diagonal": true
+  });
+</script>
+</body>
 </html>
