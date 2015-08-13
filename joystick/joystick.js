@@ -157,7 +157,7 @@ Joystick.prototype.onEnd = function() {
   var me = this;
   me.placeRelative(0, 0);
   me.container.className =
-      me.container.className.replace(" joystick-active", "");
+      me.container.className.replace(/ joystick\-active/g, "");
   me.end_cb();
 };
 

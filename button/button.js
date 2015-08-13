@@ -72,6 +72,6 @@ Button.prototype.down = function() {
 Button.prototype.up = function() {
   this.container.className
   this.container.className =
-      this.container.className.replace(" button-active", "");
+      this.container.className.replace(/ button\-active/g, "");
   this.up_cb();
 };

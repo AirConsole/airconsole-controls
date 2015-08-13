@@ -182,7 +182,7 @@ DPad.prototype.setState = function(direction, active) {
       me.elements[direction].className += " dpad-arrow-active";
     } else {
       me.elements[direction].className =
-          me.elements[direction].className.replace(" dpad-arrow-active", "");
+          me.elements[direction].className.replace(/ dpad\-arrow\-active/g, "");
     }
     return true;
   }
@@ -292,7 +292,7 @@ DPad.prototype.placeRelative = function(dx, dy) {
  */
 DPad.prototype.onEnd = function() {
   var me = this;
-  me.container.className = me.container.className.replace(" dpad-active", "");
+  me.container.className = me.container.className.replace(/ dpad\-active/g, "");
   me.end_cb(me.had_direction);
   me.placeRelative(0, 0);
   me.resetState();
