@@ -13,6 +13,20 @@
     color: black;
 }
 
+.button-300-300 {
+    background-image: url('button-300-300.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: 50% 50%;
+}
+
+.button-300-300.button-active {
+    background-image: url('button-300-300-active.png');
+}
+
+.button-300-300.button-active .button-text {
+    color: black;
+}
 
 .button-80 {
     background-image: url('button-80.png');

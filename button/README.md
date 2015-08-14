@@ -56,4 +56,9 @@ A 300x150 pixel rectangular button that can be used like this:
 <div class=button-300-150><div class=button-text>X</div></div>
 ```
 
+A 300x300 pixel rectangular button that can be used like this:
+```html
+<div class=button-300-300><div class=button-text>X</div></div>
+```
+
 **It is highly recommended that you make the main button element as big as possible, even if it has the wrong aspect ratio. The image wont be skewed because the images are displayed as css ```background-image``` with ```background-size: contain```.**
