@@ -14,6 +14,7 @@
  *           possible and it becomes a 8-way DPad: For exmaple UP and RIGHT at
  *           the same time. Default: false
  * @property {boolean} log - Debug output iff a callback is not set.
+ * @property {boolean} is_relative - If true the controls work with relative swiping
  */
 
 /**
@@ -40,7 +41,7 @@
  */
 
 /**
- * A 4-way or 8-way relative swipe DPad usually used for movement,
+ * A 4-way or 8-way relative swipe or absolute tap DPad usually used for movement,
  * but also great if you want to have 4 buttons on a controller.
  * @param {HTMLElement|string} el - The HTML container element or its ID.
  * @param {DPadConfig} opts - Constructor config.
@@ -49,6 +50,7 @@
 function DPad(el, opts) {
   var me = this;
   opts = opts || {}
+  me.is_relative = opts.is_relative || false;
   opts.distance = opts.distance || { x: 10, y: 10};
   me.distance = {
     x: opts.distance.x || opts.distance,
@@ -84,49 +86,63 @@ function DPad(el, opts) {
     me.placeRelative(0, 0);
   }
 
-  me.container.addEventListener("touchstart", function(e) {
-    me.onStart(me.getRelativePos(e.targetTouches[0]));
-    e.preventDefault();
-  });
-  me.container.addEventListener("touchmove", function(e) {
-    me.onMove(me.getRelativePos(e.targetTouches[0]));
-    e.preventDefault();
-  });
-  me.container.addEventListener("touchend", function(e) {
-    me.onEnd();
-    e.preventDefault();
-  });
-  var mouse_down = false;
-  if (!("ontouchstart" in document.createElement("div"))) {
-    me.container.addEventListener("mousedown", function(e) {
-      me.onStart(me.getRelativePos(e));
-      mouse_down = true;
-      e.preventDefault();
-    });
-    me.container.addEventListener("mousemove", function(e) {
-      if (mouse_down) {
-        me.onMove(me.getRelativePos(e));
-      }
-      e.preventDefault();
-    });
-    me.container.addEventListener("mouseup", function(e) {
-      me.onEnd();
-      mouse_down = false;
-      e.preventDefault();
-    })
-  }
+  this.bindEvents();
+
   me.state = {};
   me.state[DPad.UP] = false;
   me.state[DPad.DOWN] = false;
   me.state[DPad.LEFT] = false;
   me.state[DPad.RIGHT] = false;
+  me.state[DPad.NONE] = true;
+  me.active_state = DPad.NONE;
   me.elements = {};
   me.elements[DPad.UP] = el.getElementsByClassName("dpad-arrow-up")[0];
   me.elements[DPad.DOWN] = el.getElementsByClassName("dpad-arrow-down")[0];
   me.elements[DPad.LEFT] = el.getElementsByClassName("dpad-arrow-left")[0];
   me.elements[DPad.RIGHT] = el.getElementsByClassName("dpad-arrow-right")[0];
   me.resetState();
-}
+};
+
+
+/**
+ * Bind input events
+ */
+DPad.prototype.bindEvents = function() {
+  var me = this;
+  var mouse_down = false;
+  var touch_start_fn = me.is_relative ? 'onStart' : 'onStartAbsolute';
+  var touch_move_fn = me.is_relative ? 'onMove' : 'onMoveAbsolute';
+
+  var onTouchStartHandler = function(e) {
+    mouse_down = true;
+    me[touch_start_fn](me.getRelativePos(e));
+    e.preventDefault();
+  };
+
+  var onTouchMoveHandler = function(e) {
+    if (mouse_down) {
+      me[touch_move_fn](me.getRelativePos(e));
+    }
+    e.preventDefault();
+  };
+
+  var onTouchEndHandler = function(e) {
+    mouse_down = false;
+    me.onEnd();
+    e.preventDefault();
+  };
+
+  me.container.addEventListener("touchstart", onTouchStartHandler);
+  me.container.addEventListener("touchmove", onTouchMoveHandler);
+  me.container.addEventListener("touchend", onTouchEndHandler);
+
+  // Mouse fallback
+  if (!("ontouchstart" in document.createElement("div"))) {
+    me.container.addEventListener("mousedown", onTouchStartHandler);
+    me.container.addEventListener("mousemove", onTouchMoveHandler);
+    me.container.addEventListener("mouseup", onTouchEndHandler);
+  }
+};
 
 /**
  * Direction up
@@ -152,6 +168,13 @@ DPad.LEFT = "left";
  * @type {string}
  */
 DPad.RIGHT = "right";
+/**
+ * Direction none
+ * @constant
+ * @type {string}
+ */
+DPad.NONE = "none";
+
 
 /**
  * Resets the internal state so no direction is active.
@@ -162,6 +185,8 @@ DPad.prototype.resetState = function() {
   me.setState(DPad.DOWN, false);
   me.setState(DPad.LEFT, false);
   me.setState(DPad.RIGHT, false);
+  me.setState(DPad.NONE, true);
+  me.active_state = DPad.NONE;
 };
 
 /**
@@ -175,6 +200,7 @@ DPad.prototype.setState = function(direction, active) {
   var me = this;
   if (me.state[direction] != active) {
     me.state[direction] = active;
+    me.active_state = direction;
     if (me.change_cb) {
       me.change_cb(direction, active);
     }
@@ -288,7 +314,7 @@ DPad.prototype.placeRelative = function(dx, dy) {
 };
 
 /**
- * Gets called when the the DPad is released.
+ * Gets called when the DPad is released.
  */
 DPad.prototype.onEnd = function() {
   var me = this;
@@ -305,6 +331,100 @@ DPad.prototype.onEnd = function() {
  */
 DPad.prototype.getRelativePos = function(e) {
   var me = this;
+  var pos = this.getEventPoint(e);
   var rect = me.container.getBoundingClientRect();
-  return { "x": e.pageX - rect.left, "y": e.pageY - rect.top };
+  return { "x": pos.x - rect.left, "y": pos.y - rect.top };
+};
+
+/**
+ * Returns the event point coordinates considering both touch and mouse events
+ * @param {Event} e - An event
+ * @return {DPad~Coordinate}
+ */
+DPad.prototype.getEventPoint = function(e) {
+  var out = { x: 0, y: 0 };
+  if(e.touches && (e.type == 'touchstart' || e.type == 'touchmove' ||
+     e.type == 'touchend' || e.type == 'touchcancel')) {
+    var touch = e.touches[0] || e.changedTouches[0];
+    out.x = touch.pageX;
+    out.y = touch.pageY;
+  } else if (e.type == 'mousedown' || e.type == 'mouseup' || e.type == 'mousemove' ||
+             e.type == 'mouseover'|| e.type=='mouseout' || e.type=='mouseenter' ||
+             e.type=='mouseleave') {
+    out.x = e.pageX;
+    out.y = e.pageY;
+  }
+  return out;
+};
+
+/**
+ * Gets called when the absolute DPad gets touched
+ * @param {DPad~Coordinate} pos - The position of the initial touch.
+ */
+DPad.prototype.onStartAbsolute = function(pos) {
+  var direction = this.getActiveArea(pos);
+  this.setState(direction, true);
+};
+
+/**
+ * Gets called when touch point is moving in the absolute DPad and changes the direction
+ * if another move button is entered
+ * @param {DPad~Coordinate} pos - The position of the current touch point
+ */
+DPad.prototype.onMoveAbsolute = function(pos) {
+  var active_dir = this.active_state;
+  var new_direction = this.getActiveArea(pos);
+  if (active_dir !== DPad.NONE &&
+      active_dir !== new_direction) {
+
+    // Calculate a threshold change distance so that e.g. if you go from left to right
+    // you do not hit bottom or top
+    var container = this.container.getBoundingClientRect();
+    var wh = container.width / 2;
+    var hh = container.height / 2;
+    var center_x = wh;
+    var center_y = hh;
+    var THRESHOLD_PERCENTAGE = 10;
+    var threshold_distance = (THRESHOLD_PERCENTAGE * container.width) / 100;
+    var actual_distance = Math.sqrt(Math.pow(center_x - pos.x, 2) + Math.pow(center_y - pos.y, 2));
+    if (actual_distance > threshold_distance) {
+      this.resetState();
+      this.setState(new_direction, true);
+    }
+  }
+};
+
+/**
+ * Returns the direction-area the point is currently in
+ * @param {DPad~Coordinate} pos - The position of the current touch point
+ * @return {DPad~Position}
+ */
+DPad.prototype.getActiveArea = function(pos) {
+  var position_container = this.container.getBoundingClientRect();
+  var container_w = position_container.right - position_container.left;
+  var x = pos.x;
+  var y = pos.y;
+  var direction = DPad.NONE;
+
+  // TOP OR RIGHT
+  if (x > y) {
+    // Right
+    if (x > container_w - y) {
+      direction = DPad.RIGHT;
+     // TOP
+     } else {
+      direction = DPad.UP;
+     }
+   // LEFT OR BOTTOM
+   } else {
+     // DOWN
+     if (x > container_w - y) {
+      direction = DPad.DOWN;
+     // LEFT
+     } else {
+      direction = DPad.LEFT;
+     }
+   }
+
+   return direction;
 };
