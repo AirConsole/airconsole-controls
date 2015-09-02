@@ -110,16 +110,16 @@ function DPad(el, opts) {
 DPad.prototype.bindEvents = function() {
   var me = this;
   var mouse_down = false;
-  var touch_start_fn = me.is_relative ? 'onStart' : 'onStartAbsolute';
-  var touch_move_fn = me.is_relative ? 'onMove' : 'onMoveAbsolute';
 
   var onTouchStartHandler = function(e) {
+    var touch_start_fn = me.is_relative ? 'onStart' : 'onStartAbsolute';
     mouse_down = true;
     me[touch_start_fn](me.getRelativePos(e));
     e.preventDefault();
   };
 
   var onTouchMoveHandler = function(e) {
+    var touch_move_fn = me.is_relative ? 'onMove' : 'onMoveAbsolute';
     if (mouse_down) {
       me[touch_move_fn](me.getRelativePos(e));
     }
