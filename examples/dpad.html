@@ -19,7 +19,7 @@
       width: 100%;
       height: 100%;
       max-width: 1000px;
-      max-height: 300px;
+      max-height: 500px;
     }
 
     /* You need to explicitly position your dpads */
@@ -68,20 +68,19 @@
       <div class="dpad-arrow dpad-arrow-right"></div>
     </div>
   </div>
-  <div id="dpad-2" class="dpad">
-    <div class="dpad-relative">
-      <div class="dpad-instructions">TOUCH</div>
-      <div class="dpad-arrow dpad-arrow-up"></div>
-      <div class="dpad-arrow dpad-arrow-down"></div>
-      <div class="dpad-arrow dpad-arrow-left"></div>
-      <div class="dpad-arrow dpad-arrow-right"></div>
+  <div id="dpad-2" class="dpad-absolute-container">
+    <div class="dpad-absolute">
+      <div class="dpad-arrow dpad-arrow-up dpad-arrow-abs-up"></div>
+      <div class="dpad-arrow dpad-arrow-down dpad-arrow-abs-down"></div>
+      <div class="dpad-arrow dpad-arrow-left dpad-arrow-abs-left"></div>
+      <div class="dpad-arrow dpad-arrow-right dpad-arrow-abs-right"></div>
     </div>
   </div>
 </div>
 <script type="text/javascript">
 
   var dpad0 = new DPad("dpad-0", {
-    is_relative: true,
+    distance: { x: 10, y: 10},
     "directionchange": function(key, pressed) {
       console.log("Direction changed: " + key + " " + pressed);
     },
@@ -93,7 +92,7 @@
     }
   });
   var dpad1 = new DPad("dpad-1", {
-    is_relative: true,
+    distance: { x: 10, y: 10},
     "directionchange": function(key, pressed) {
       console.log("Direction changed: " + key + " " + pressed);
     },

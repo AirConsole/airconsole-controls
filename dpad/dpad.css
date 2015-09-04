@@ -1,15 +1,23 @@
-.dpad {
+.dpad, .dpad-absolute-container {
     background-image: url('dpad-background.png');
     background-size: contain;
     background-repeat: no-repeat;
     background-position: 50% 50%;
 }
 
-.dpad-relative {
+.dpad-absolute-container {
+    background-image: url('dpad_cross_inactive.png');
+}
+
+.dpad-relative, .dpad-absolute {
     background-image: url('dpad-relative.png');
     background-size: 90% auto;
     background-repeat: no-repeat;
     background-position: 50% 50%;
+}
+
+.dpad-absolute {
+    background-image: url('dpad-relative.png');
 }
 
 .dpad-arrow {
@@ -42,6 +50,50 @@
 
 .dpad-arrow-right {
     background-image: url('dpad-arrow-right.png');
+}
+
+.dpad-arrow-abs-up {
+    background-size: 100% auto;
+    background-image: url('dpad_cross_active_up.png');
+}
+
+.dpad-arrow-abs-down {
+    background-size: 100% auto;
+    background-image: url('dpad_cross_active_down.png');
+}
+
+.dpad-arrow-abs-left {
+    background-size: 100% auto;
+    background-image: url('dpad_cross_active_left.png');
+}
+
+.dpad-arrow-abs-right {
+    background-size: 100% auto;
+    background-image: url('dpad_cross_active_right.png');
+}
+
+.dpad-absolute-container-blue {
+    background-image: url('dpad_cross_inactive_blue.png');
+}
+
+.dpad-arrow-abs-up-blue {
+    background-size: 100% auto;
+    background-image: url('dpad_cross_active_up_blue.png');
+}
+
+.dpad-arrow-abs-down-blue {
+    background-size: 100% auto;
+    background-image: url('dpad_cross_active_down_blue.png');
+}
+
+.dpad-arrow-abs-left-blue {
+    background-size: 100% auto;
+    background-image: url('dpad_cross_active_left_blue.png');
+}
+
+.dpad-arrow-abs-right-blue {
+    background-size: 100% auto;
+    background-image: url('dpad_cross_active_right_green.png');
 }
 
 .dpad-instructions {
