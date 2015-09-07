@@ -111,14 +111,14 @@ DPad.prototype.bindEvents = function() {
   var mouse_down = false;
 
   var onTouchStartHandler = function(e) {
-    var touch_start_fn = me.is_relative ? 'onStart' : 'onStartAbsolute';
+    var touch_start_fn = me.is_relative ? 'onStartRelative' : 'onStartAbsolute';
     mouse_down = true;
     me[touch_start_fn](me.getRelativePos(e));
     e.preventDefault();
   };
 
   var onTouchMoveHandler = function(e) {
-    var touch_move_fn = me.is_relative ? 'onMove' : 'onMoveAbsolute';
+    var touch_move_fn = me.is_relative ? 'onMoveRelative' : 'onMoveAbsolute';
     if (mouse_down) {
       me[touch_move_fn](me.getRelativePos(e));
     }
@@ -208,7 +208,7 @@ DPad.prototype.setState = function(direction, active) {
  * Gets called when the DPad gets touched
  * @param {DPad~Coordinate} pos - The position of the initial touch.
  */
-DPad.prototype.onStart = function(pos) {
+DPad.prototype.onStartRelative = function(pos) {
   var me = this;
   me.base = pos;
   me.had_direction = false;
@@ -220,7 +220,7 @@ DPad.prototype.onStart = function(pos) {
  * Gets called when the DPad is moved.
  * @param {DPad~Coordinate} pos
  */
-DPad.prototype.onMove = function(pos) {
+DPad.prototype.onMoveRelative = function(pos) {
   var me = this;
   var dx = pos.x - me.base.x;
   var dy = pos.y - me.base.y;
@@ -487,7 +487,7 @@ DPad.prototype.getActiveArea = function(pos) {
     var next = i + 1 > last_angle_index ? 0 : i + 1;
     var start = ca;
     var end = angle_steps[next];
-    // Hacky: Happens for angle which is between the 0 coordinate
+    // Edge case: Happens for angle which is between the 0 coordinate
     if (start > end) {
       if (angle < end) {
         start = end - angle_step;

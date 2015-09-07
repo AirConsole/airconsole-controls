@@ -25,32 +25,40 @@
     /* You need to explicitly position your dpads */
     #dpad-0 {
       position: absolute;
-      width: 30%;
+      width: 20%;
       height: 100%;
       top: 0px;
-      left: 5%;
+      left: 3%;
     }
 
     #dpad-1 {
       position: absolute;
-      width: 30%;
+      width: 20%;
       height: 100%;
       top: 0px;
-      left: 36%;
+      left: 25%;
     }
 
     #dpad-2 {
       position: absolute;
-      width: 30%;
+      width: 20%;
       height: 100%;
       top: 0px;
-      left: 67%;
+      left: 55%;
+    }
+
+    #dpad-3 {
+      position: absolute;
+      width: 20%;
+      height: 100%;
+      top: 0px;
+      left: 78%;
     }
   </style>
 </head>
 <body>
 <div class="example-container">
-  <div id="dpad-0" class="dpad">
+  <div id="dpad-0" class="dpad-relative-container">
     <div class="dpad-relative">
       <div class="dpad-instructions">SWIPE<br>(Diagonal: off)</div>
       <div class="dpad-arrow dpad-arrow-up"></div>
@@ -59,7 +67,7 @@
       <div class="dpad-arrow dpad-arrow-right"></div>
     </div>
   </div>
-  <div id="dpad-1" class="dpad">
+  <div id="dpad-1" class="dpad-relative-container">
     <div class="dpad-relative">
       <div class="dpad-instructions">SWIPE<br>(Diagonal: on)</div>
       <div class="dpad-arrow dpad-arrow-up"></div>
@@ -70,10 +78,18 @@
   </div>
   <div id="dpad-2" class="dpad-absolute-container">
     <div class="dpad-absolute">
-      <div class="dpad-arrow dpad-arrow-up dpad-arrow-abs-up"></div>
-      <div class="dpad-arrow dpad-arrow-down dpad-arrow-abs-down"></div>
-      <div class="dpad-arrow dpad-arrow-left dpad-arrow-abs-left"></div>
-      <div class="dpad-arrow dpad-arrow-right dpad-arrow-abs-right"></div>
+      <div class="dpad-arrow dpad-arrow-up"></div>
+      <div class="dpad-arrow dpad-arrow-down"></div>
+      <div class="dpad-arrow dpad-arrow-left"></div>
+      <div class="dpad-arrow dpad-arrow-right"></div>
+    </div>
+  </div>
+  <div id="dpad-3" class="dpad-absolute-container">
+    <div class="dpad-absolute">
+      <div class="dpad-arrow dpad-arrow-up"></div>
+      <div class="dpad-arrow dpad-arrow-down"></div>
+      <div class="dpad-arrow dpad-arrow-left"></div>
+      <div class="dpad-arrow dpad-arrow-right"></div>
     </div>
   </div>
 </div>
@@ -105,6 +121,18 @@
     "diagonal": true
   });
   var dpad2 = new DPad("dpad-2", {
+    "directionchange": function(key, pressed) {
+      console.log("Direction changed: " + key + " " + pressed);
+    },
+    "touchstart": function() {
+      console.log("Touch start");
+    },
+    "touchend": function(had_direction) {
+      console.log("Touch end, had direction: " + had_direction);
+    },
+  });
+  var dpad3 = new DPad("dpad-3", {
+    diagonal: true,
     "directionchange": function(key, pressed) {
       console.log("Direction changed: " + key + " " + pressed);
     },
