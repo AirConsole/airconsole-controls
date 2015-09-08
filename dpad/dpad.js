@@ -103,15 +103,24 @@ function DPad(el, opts) {
  */
 DPad.prototype.setDpad = function(is_relative) {
   this.is_relative = is_relative;
-  var container_class = null;
   var class_name = is_relative ? 'relative' : 'absolute';
-  this.container.children[0].className = 'dpad-' + class_name;
+  var container_class = 'dpad-' + class_name + '-container';
+  var child_ele = this.container.children[0];
+  child_ele.className = 'dpad-' + class_name;
+
+  // Has no class yet? Set it!
+  if (this.container.className.indexOf(container_class) === -1) {
+    this.container.className = 'dpad-' + class_name + '-container';
+  }
+
   if (is_relative) {
     container_class = this.container.className.replace(/absolute/g, class_name);
     this.setDpadRelative();
   } else {
+    child_ele.style.position = "static";
     container_class = this.container.className.replace(/relative/g, class_name);
   }
+
   this.container.className = container_class;
 };
 
