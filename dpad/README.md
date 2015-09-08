@@ -64,7 +64,7 @@ get the class ```dpad-arrow-active``` when the direction is active.
 If you include ```dpad.css``` you will get a default DPad styled like in the example above if used like this:
 
 ```html
-<div id="my-dpad">
+<div id="my-dpad" class="dpad-absolute-container">
   <div>
     <div class="dpad-arrow dpad-arrow-up"></div>
     <div class="dpad-arrow dpad-arrow-down"></div>
