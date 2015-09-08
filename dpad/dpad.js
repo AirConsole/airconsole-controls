@@ -79,15 +79,7 @@ function DPad(el, opts) {
   if (typeof el == "string") {
     el = document.getElementById(el);
   }
-
   me.container = el;
-  me.relative = me.container.getElementsByClassName("dpad-relative")[0];
-  if (me.relative) {
-    me.relative.style.position = "absolute";
-    me.placeRelative(0, 0);
-  }
-
-  this.bindEvents();
 
   me.state = {};
   me.state[DPad.UP] = false;
@@ -100,8 +92,39 @@ function DPad(el, opts) {
   me.elements[DPad.LEFT] = el.getElementsByClassName("dpad-arrow-left")[0];
   me.elements[DPad.RIGHT] = el.getElementsByClassName("dpad-arrow-right")[0];
   me.resetState();
+
+  this.bindEvents();
+  this.setDpad(me.is_relative);
 };
 
+/**
+ * Setup relative or absolute DPad
+ * @param {Boolean} is_relative - Pass true if you want a relative Dpad
+ */
+DPad.prototype.setDpad = function(is_relative) {
+  this.is_relative = is_relative;
+  var container_class = null;
+  var class_name = is_relative ? 'relative' : 'absolute';
+  this.container.children[0].className = 'dpad-' + class_name;
+  if (is_relative) {
+    container_class = this.container.className.replace(/absolute/g, class_name);
+    this.setDpadRelative();
+  } else {
+    container_class = this.container.className.replace(/relative/g, class_name);
+  }
+  this.container.className = container_class;
+};
+
+/**
+ * Inits relative Dpad
+ */
+DPad.prototype.setDpadRelative = function() {
+  this.relative = this.container.getElementsByClassName("dpad-relative")[0];
+  if (this.relative) {
+    this.relative.style.position = "absolute";
+    this.placeRelative(0, 0);
+  }
+};
 
 /**
  * Bind input events

@@ -65,7 +65,7 @@ If you include ```dpad.css``` you will get a default DPad styled like in the exa
 
 ```html
 <div id="my-dpad" class="dpad-absolute-container">
-  <div class="pad-absolute">
+  <div>
     <div class="dpad-arrow dpad-arrow-up"></div>
     <div class="dpad-arrow dpad-arrow-down"></div>
     <div class="dpad-arrow dpad-arrow-left"></div>
@@ -78,7 +78,7 @@ or for a swipe-dpad:
 
 ```html
 <div id="my-dpad" class="dpad-relative-container">
-  <div class="dpad-relative">
+  <div>
     <div class="dpad-instructions">SWIPE</div>
     <div class="dpad-arrow dpad-arrow-up"></div>
     <div class="dpad-arrow dpad-arrow-down"></div>
@@ -89,3 +89,16 @@ or for a swipe-dpad:
 ```
 
 **It is highly recommended that you make the main dpad element as big as possible, even if it has the wrong aspect ratio. The image wont be skewed because the images are displayed as css ```background-image``` with ```background-size: contain```.**
+
+### Switch between DPad relative and absolute
+
+Call the setDpad() method if you want to turn your absolute Dpad into a relative Dpad.
+
+```javascript
+  // Switch from absolute to relative:
+  absolute_dpad.setDpad(true); // true if relative
+```
+
+
+
+
