@@ -96,6 +96,7 @@
 <script type="text/javascript">
 
   var dpad0 = new DPad("dpad-0", {
+    relative: true,
     distance: { x: 10, y: 10},
     "directionchange": function(key, pressed) {
       console.log("Direction changed: " + key + " " + pressed);
@@ -108,6 +109,7 @@
     }
   });
   var dpad1 = new DPad("dpad-1", {
+    relative: true,
     distance: { x: 10, y: 10},
     "directionchange": function(key, pressed) {
       console.log("Direction changed: " + key + " " + pressed);
