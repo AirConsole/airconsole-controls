@@ -70,8 +70,6 @@ Button.prototype.down = function() {
  * Gets called when the button is released.
  */
 Button.prototype.up = function() {
-  this.container.className
-  this.container.className =
-      this.container.className.replace(/ button\-active/g, "");
+  this.container.className = this.container.className.replace(/ button\-active/g, "");
   this.up_cb();
 };

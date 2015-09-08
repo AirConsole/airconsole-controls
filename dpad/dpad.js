@@ -8,8 +8,10 @@
  * @property {DPad~touchEndCallback} touchend -
  *           The callback that gets called when the DPad is released
  * @property {number|DPad~Coordinate|undefined} distance - amount of pixels
- *           which the user needs to move the DPad before triggering a
- *           direction. Default: 10
+ *           which the user needs to move or tap the DPad before triggering a
+ *           direction. E.g: { x: 10, y: 10}
+ * @property {boolean|undefined} relative - If true, dpad works by relative swipe.
+             Default: false
  * @property {boolean|undefined} diagonal - If true, diagonal movement are
  *           possible and it becomes a 8-way DPad: For exmaple UP and RIGHT at
  *           the same time. Default: false
@@ -40,7 +42,7 @@
  */
 
 /**
- * A 4-way or 8-way relative swipe DPad usually used for movement,
+ * A 4-way or 8-way relative swipe or absolute tap DPad usually used for movement,
  * but also great if you want to have 4 buttons on a controller.
  * @param {HTMLElement|string} el - The HTML container element or its ID.
  * @param {DPadConfig} opts - Constructor config.
@@ -49,6 +51,7 @@
 function DPad(el, opts) {
   var me = this;
   opts = opts || {}
+  me.is_relative = opts.relative || false;
   opts.distance = opts.distance || { x: 10, y: 10};
   me.distance = {
     x: opts.distance.x || opts.distance,
@@ -76,45 +79,8 @@ function DPad(el, opts) {
   if (typeof el == "string") {
     el = document.getElementById(el);
   }
-
   me.container = el;
-  me.relative = me.container.getElementsByClassName("dpad-relative")[0];
-  if (me.relative) {
-    me.relative.style.position = "absolute";
-    me.placeRelative(0, 0);
-  }
 
-  me.container.addEventListener("touchstart", function(e) {
-    me.onStart(me.getRelativePos(e.targetTouches[0]));
-    e.preventDefault();
-  });
-  me.container.addEventListener("touchmove", function(e) {
-    me.onMove(me.getRelativePos(e.targetTouches[0]));
-    e.preventDefault();
-  });
-  me.container.addEventListener("touchend", function(e) {
-    me.onEnd();
-    e.preventDefault();
-  });
-  var mouse_down = false;
-  if (!("ontouchstart" in document.createElement("div"))) {
-    me.container.addEventListener("mousedown", function(e) {
-      me.onStart(me.getRelativePos(e));
-      mouse_down = true;
-      e.preventDefault();
-    });
-    me.container.addEventListener("mousemove", function(e) {
-      if (mouse_down) {
-        me.onMove(me.getRelativePos(e));
-      }
-      e.preventDefault();
-    });
-    me.container.addEventListener("mouseup", function(e) {
-      me.onEnd();
-      mouse_down = false;
-      e.preventDefault();
-    })
-  }
   me.state = {};
   me.state[DPad.UP] = false;
   me.state[DPad.DOWN] = false;
@@ -126,7 +92,79 @@ function DPad(el, opts) {
   me.elements[DPad.LEFT] = el.getElementsByClassName("dpad-arrow-left")[0];
   me.elements[DPad.RIGHT] = el.getElementsByClassName("dpad-arrow-right")[0];
   me.resetState();
-}
+
+  this.bindEvents();
+  this.setDpad(me.is_relative);
+};
+
+/**
+ * Setup relative or absolute DPad
+ * @param {Boolean} is_relative - Pass true if you want a relative Dpad
+ */
+DPad.prototype.setDpad = function(is_relative) {
+  this.is_relative = is_relative;
+  var container_class = null;
+  var class_name = is_relative ? 'relative' : 'absolute';
+  this.container.children[0].className = 'dpad-' + class_name;
+  if (is_relative) {
+    container_class = this.container.className.replace(/absolute/g, class_name);
+    this.setDpadRelative();
+  } else {
+    container_class = this.container.className.replace(/relative/g, class_name);
+  }
+  this.container.className = container_class;
+};
+
+/**
+ * Inits relative Dpad
+ */
+DPad.prototype.setDpadRelative = function() {
+  this.relative = this.container.getElementsByClassName("dpad-relative")[0];
+  if (this.relative) {
+    this.relative.style.position = "absolute";
+    this.placeRelative(0, 0);
+  }
+};
+
+/**
+ * Bind input events
+ */
+DPad.prototype.bindEvents = function() {
+  var me = this;
+  var mouse_down = false;
+
+  var onTouchStartHandler = function(e) {
+    var touch_start_fn = me.is_relative ? 'onStartRelative' : 'onStartAbsolute';
+    mouse_down = true;
+    me[touch_start_fn](me.getRelativePos(e));
+    e.preventDefault();
+  };
+
+  var onTouchMoveHandler = function(e) {
+    var touch_move_fn = me.is_relative ? 'onMoveRelative' : 'onMoveAbsolute';
+    if (mouse_down) {
+      me[touch_move_fn](me.getRelativePos(e));
+    }
+    e.preventDefault();
+  };
+
+  var onTouchEndHandler = function(e) {
+    mouse_down = false;
+    me.onEnd();
+    e.preventDefault();
+  };
+
+  me.container.addEventListener("touchstart", onTouchStartHandler);
+  me.container.addEventListener("touchmove", onTouchMoveHandler);
+  me.container.addEventListener("touchend", onTouchEndHandler);
+
+  // Mouse fallback
+  if (!("ontouchstart" in document.createElement("div"))) {
+    me.container.addEventListener("mousedown", onTouchStartHandler);
+    me.container.addEventListener("mousemove", onTouchMoveHandler);
+    me.container.addEventListener("mouseup", onTouchEndHandler);
+  }
+};
 
 /**
  * Direction up
@@ -193,7 +231,7 @@ DPad.prototype.setState = function(direction, active) {
  * Gets called when the DPad gets touched
  * @param {DPad~Coordinate} pos - The position of the initial touch.
  */
-DPad.prototype.onStart = function(pos) {
+DPad.prototype.onStartRelative = function(pos) {
   var me = this;
   me.base = pos;
   me.had_direction = false;
@@ -205,7 +243,7 @@ DPad.prototype.onStart = function(pos) {
  * Gets called when the DPad is moved.
  * @param {DPad~Coordinate} pos
  */
-DPad.prototype.onMove = function(pos) {
+DPad.prototype.onMoveRelative = function(pos) {
   var me = this;
   var dx = pos.x - me.base.x;
   var dy = pos.y - me.base.y;
@@ -288,7 +326,7 @@ DPad.prototype.placeRelative = function(dx, dy) {
 };
 
 /**
- * Gets called when the the DPad is released.
+ * Gets called when the DPad is released.
  */
 DPad.prototype.onEnd = function() {
   var me = this;
@@ -305,6 +343,78 @@ DPad.prototype.onEnd = function() {
  */
 DPad.prototype.getRelativePos = function(e) {
   var me = this;
+  var pos = this.getEventPoint(e);
   var rect = me.container.getBoundingClientRect();
-  return { "x": e.pageX - rect.left, "y": e.pageY - rect.top };
+  return { "x": pos.x - rect.left, "y": pos.y - rect.top };
+};
+
+/**
+ * Returns the event point coordinates considering both touch and mouse events
+ * @param {Event} e - An event
+ * @return {DPad~Coordinate}
+ */
+DPad.prototype.getEventPoint = function(e) {
+  var out = { x: 0, y: 0 };
+  if(e.touches && (e.type == 'touchstart' || e.type == 'touchmove' ||
+    e.type == 'touchend' || e.type == 'touchcancel')) {
+    var touch = e.targetTouches[0] || e.changedTouches[0] || e.touches[0];
+    out.x = touch.pageX;
+    out.y = touch.pageY;
+  } else if (e.type == 'mousedown' || e.type == 'mouseup' || e.type == 'mousemove' ||
+             e.type == 'mouseover'|| e.type=='mouseout' || e.type=='mouseenter' ||
+             e.type=='mouseleave') {
+    out.x = e.pageX;
+    out.y = e.pageY;
+  }
+  return out;
+};
+
+/**
+ * Gets called when the absolute DPad gets touched
+ * @param {DPad~Coordinate} pos - The position of the initial touch.
+ */
+DPad.prototype.onStartAbsolute = function(pos) {
+  this.onMoveAbsolute(pos);
+};
+
+/**
+ * Gets called when touch point is moving in the absolute DPad and changes the direction
+ * if another move button is entered
+ * @param {DPad~Coordinate} pos - The position of the current touch point
+ */
+DPad.prototype.onMoveAbsolute = function(pos) {
+  var container = this.container.getBoundingClientRect();
+  var w = container.width;
+  var h = container.height;
+
+  // Calculate reference angle between two vectors in radian
+  var vec = {
+    x: w / 2,
+    y: h / 2
+  };
+
+  var angle = Math.atan2(pos.y - vec.y, pos.x - vec.x);
+  if (angle < 0) {
+    angle += 2 * Math.PI;
+  }
+  // NOTE(andrin): This deadzone is the shape of a square instead of an elipse
+  //               for no good reason.
+  if (Math.abs(vec.x - pos.x) > this.distance.x ||
+      Math.abs(vec.y - pos.y) > this.distance.y ) {
+    var diagonal_extension = this.diagonal ? Math.PI / 8 : 0;
+    this.setState(DPad.RIGHT,
+      angle <= Math.PI/4 + diagonal_extension ||
+      angle > Math.PI*7/4-diagonal_extension);
+    this.setState(DPad.DOWN,
+      angle >= Math.PI/4 - diagonal_extension &&
+      angle < Math.PI*3/4 + diagonal_extension);
+    this.setState(DPad.LEFT,
+      angle >= Math.PI*3/4 - diagonal_extension &&
+      angle < Math.PI*5/4 + diagonal_extension);
+    this.setState(DPad.UP,
+      angle >= Math.PI*5/4 - diagonal_extension &&
+      angle < Math.PI*7/4 + diagonal_extension);
+  } else {
+    this.resetState();
+  }
 };
