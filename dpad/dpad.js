@@ -94,14 +94,16 @@ function DPad(el, opts) {
   me.resetState();
 
   this.bindEvents();
-  this.setDpad(me.is_relative);
+  var mode = me.is_relative ? DPad.SWIPE : DPad.TAP;
+  this.setMode(mode);
 };
 
 /**
- * Setup relative or absolute DPad
- * @param {Boolean} is_relative - Pass true if you want a relative Dpad
+ * Sets the mode of the Dpad
+ * @param {DPad~Mode} mode - Pass mode like DPad.SWIPE or DPAD.TAP
  */
-DPad.prototype.setDpad = function(is_relative) {
+DPad.prototype.setMode = function(mode) {
+  var is_relative = mode === DPad.SWIPE;
   this.is_relative = is_relative;
   var class_name = is_relative ? 'relative' : 'absolute';
   var container_class = 'dpad-' + class_name + '-container';
@@ -122,6 +124,22 @@ DPad.prototype.setDpad = function(is_relative) {
   }
 
   this.container.className = container_class;
+};
+
+/**
+ * Returns the current dpad mode (DPad.SWIPE or DPad.TAP)
+ * @return {DPad~Mode}
+ */
+DPad.prototype.getMode = function() {
+  return this.is_relative ? DPad.SWIPE : DPad.TAP;
+};
+
+/**
+ * Toggles mode between DPad.SWIPE or DPad.TAP
+ */
+DPad.prototype.toggleMode = function() {
+  var mode = !this.is_relative ? DPad.SWIPE : DPad.TAP;
+  this.setMode(mode);
 };
 
 /**
@@ -199,6 +217,20 @@ DPad.LEFT = "left";
  * @type {string}
  */
 DPad.RIGHT = "right";
+
+/**
+ * Swipe mode
+ * @constant
+ * @type {string}
+ */
+DPad.SWIPE = 'swipe';
+
+/**
+ * Tap mode
+ * @constant
+ * @type {string}
+ */
+DPad.TAP = 'tap';
 
 /**
  * Resets the internal state so no direction is active.
