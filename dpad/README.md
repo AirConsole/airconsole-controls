@@ -77,7 +77,7 @@ If you include ```dpad.css``` you will get a default DPad styled like in the exa
 or for a swipe-dpad:
 
 ```html
-<div id="my-dpad" class="dpad-relative-container">
+<div id="my-dpad">
   <div>
     <div class="dpad-instructions">SWIPE</div>
     <div class="dpad-arrow dpad-arrow-up"></div>
@@ -92,13 +92,9 @@ or for a swipe-dpad:
 
 ### Switch between DPad relative and absolute
 
-Call the setDpad() method if you want to turn your absolute Dpad into a relative Dpad.
+Call the ``toggleMode()`` method if you want to turn your absolute Dpad into a relative Dpad (or the other way).
 
 ```javascript
-  // Switch from absolute to relative:
-  absolute_dpad.setDpad(true); // true if relative
+  // Switch from Tap to Swipe:
+  absolute_dpad.toggleMode(DPad.SWIPE); // Or DPad.TAP
 ```
-
-
-
-
