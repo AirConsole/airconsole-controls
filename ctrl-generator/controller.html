@@ -1,0 +1,107 @@
+<html>
+<head>
+  <title>AirConsole Controller</title>
+  <link rel="stylesheet" href="../button/button.css">
+  <link rel="stylesheet" href="../dpad/dpad.css">
+  <link rel="stylesheet" href="controller.css">
+</head>
+<body>
+
+  <div id="container">
+    <div id="left"></div>
+    <div id="middle"></div>
+    <div id="right"></div>
+  </div>
+
+  <!-- TEMPLATES for elements -->
+  <div style="display: none;">
+    <div id="template-DPad">
+      <div>
+        <div class="dpad-arrow dpad-arrow-up"></div>
+        <div class="dpad-arrow dpad-arrow-down"></div>
+        <div class="dpad-arrow dpad-arrow-left"></div>
+        <div class="dpad-arrow dpad-arrow-right"></div>
+      </div>
+    </div>
+
+    <div id="template-Joystick" class="joystick">
+      <div class="joystick-relative"></div>
+    </div>
+
+    <div id="template-Button" class="button-300-150"><div class="button-text"></div></div>
+  </div>
+
+  <!-- Include libraries -->
+  <script type="text/javascript" src="http://www.airconsole.com/api/airconsole-1.2.1.js"></script>
+  <script type="text/javascript" src="../dpad/dpad.js"></script>
+  <script type="text/javascript" src="../button/button.js"></script>
+  <script type="text/javascript" src="../joystick/joystick.js"></script>
+  <script type="text/javascript" src="ctrl-generator.js"></script>
+
+  <!-- Config your controller -->
+  <script type="text/javascript">
+    /* ================================
+      * Available sides:
+        left (Dpad, Joystick, ButtonVertical)
+        middle (only an array of labels)
+        right (Dpad, Joystick, ButtonVertical)
+
+      * Side properties:
+        * type:
+          CtrlGenerator.Type.DPad
+          CtrlGenerator.Type.Joystick
+          CtrlGenerator.Type.ButtonVertical
+
+        * opts:
+          See DPad , Joystick, Button documentation
+
+        * Custom additional properties:
+          Buttons:
+            label <string> - The label to show on the button
+            key: <string> - An identifier which will be send to the AirConsole.Screen
+
+      * Params which will be send to AirConsole Screen on input event:
+        DPad:
+          - key: 'dpad-NUMBER'
+          - pressed: true|false
+          - params: { direction: 'left', 'top', 'right', 'bottom' }
+        Button:
+          - key: the key defined in the options properties 'key"
+          - pressed: true|false
+        Joystick:
+          - key: 'joystick-NUMBER'
+          - pressed: true
+          - params: point {x, y}
+    ================================ */
+    // Example:
+
+    var airconsole = new AirConsole({
+      orientation: AirConsole.ORIENTATION_LANDSCAPE
+    });
+
+    CtrlGenerator
+      // (Optional) Call this with true and check your browser console
+      .debug(true)
+      // Set airconsole, so that we can send input events to the screen
+      .setAirConsole(airconsole)
+      // Build a config and specify which elements you want to have on each side
+      .generate({
+        left: {
+          type: CtrlGenerator.Type.DPad,
+        },
+        right: [
+          {
+            type: CtrlGenerator.Type.ButtonVertical,
+            label: "Defend",
+            key: "a"
+          },
+          {
+            type: CtrlGenerator.Type.ButtonVertical,
+            label: "Shoot",
+            key: "b"
+          }
+        ]
+      });
+  </script>
+</body>
+</html>

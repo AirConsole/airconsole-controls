@@ -1,0 +1,73 @@
+body {
+  margin: 0;
+  padding: 0;
+  -ms-user-select: none;
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+#container {
+  position: relative;
+  background-color: #3b3b3b;
+  text-align: center;
+  font-family: sans-serif;
+  display: inline-block;
+  width: 100%;
+  height: 100%;
+  max-width: 900px;
+  max-height: 450px;
+}
+
+#left, #right {
+  position: relative;
+  width: 43%;
+  height: 100%;
+  overflow: hidden;
+}
+
+#left {
+  margin-left: 1%;
+  float: left;
+}
+
+#middle {
+  position: relative;
+  float: left;
+  width: 10%;
+  height: 100%;
+}
+
+#right {
+  margin-right: 1%;
+  float: right;
+}
+
+.dpad-absolute-container, .dpad-relative-container {
+  height: 100%;
+}
+
+.joystick {
+  position: absolute;
+  top: 5%;
+  width: 100%;
+  height: 90%;
+  border-radius: 100%;
+  background-color: black;
+}
+
+.joystick-relative {
+  border-radius: 100%;
+  background-color: #adee00;
+}
+
+.button-300-150 {
+  position: relative;
+  height: 100%;
+  width: 100%;
+  right: 0px;
+}
+
+.button-text {
+  width: 100%;
+}
