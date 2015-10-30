@@ -7,6 +7,12 @@ var CtrlGenerator = (function() {
   var middle_ele = document.getElementById('middle');
   var right_ele = document.getElementById('right');
 
+  var Side = {
+    left: 'left',
+    middle: 'middle',
+    right: 'right'
+  };
+
   var Element = {
     left: left_ele,
     middle: middle_ele,
@@ -16,13 +22,15 @@ var CtrlGenerator = (function() {
   var Type = {
     DPad: 'DPad',
     Joystick: 'Joystick',
-    ButtonVertical: 'Button'
+    ButtonVertical: 'Button',
+    ButtonMiddle: 'ButtonMiddle'
   };
 
   var GeneratorMap = {};
   GeneratorMap[Type.DPad] = generatePad;
   GeneratorMap[Type.Joystick] = generatePad;
   GeneratorMap[Type.ButtonVertical] = generateButtonVertical;
+  GeneratorMap[Type.ButtonMiddle] = generateButtonsMiddle;
 
   /**
    * Helper function to clone an element (deep clone)
@@ -110,6 +118,45 @@ var CtrlGenerator = (function() {
     var obj = new window[config.type](button_ele, params);
   }
 
+
+  /**
+   * Generates middle buttons
+   * @param {Array} opts - List of button option objects
+   * @param {Element.~} parent_ele - The middle dom node
+   */
+  function generateButtonsMiddle(opts, parent_ele) {
+    var num_of_buttons = opts.length;
+    var step = 100 / num_of_buttons;
+    var type = Type.ButtonMiddle;
+
+    for (var i = 0; i < num_of_buttons; i++) {
+      var bttn = opts[i];
+      var button_ele = cloneElement(type);
+      var button_text = button_ele.getElementsByClassName('button-text')[0];
+      button_text.innerHTML = bttn.label;
+      parent_ele.appendChild(button_ele);
+      button_ele.style.top = (step * i) + "%";
+      button_ele.style.height = (step) + "%";
+
+      var params = bttn.opts || {};
+      (function(bttn) {
+        if (!params.down) {
+          params.down = function() {
+            sendInputEvent(bttn.key, true);
+          }
+        }
+        if (!params.up) {
+          params.up = function() {
+            if (bttn.on_up_message) {
+              sendInputEvent(bttn.key, false);
+            }
+          }
+        }
+        var obj = new Button(button_ele, params);
+      })(bttn);
+    }
+  };
+
   /**
    * Send AirConsole message
    * @param {String} key - An identifier for the input element
@@ -121,7 +168,7 @@ var CtrlGenerator = (function() {
     var message = {
       key: key,
       pressed: pressed,
-      params: params
+      message: params
     };
 
     if (!airconsole_obj) {
@@ -173,12 +220,16 @@ var CtrlGenerator = (function() {
           opts = [opts];
         }
 
-        for (var i = 0; i < opts.length; i++) {
-          var opt = opts[i];
-          if (!opt.type || !GeneratorMap[opt.type]) {
-            throw "You passed an unknow type in the config properties. Use one of CtrlGenerator.Type.*";
+        if (side !== Side.middle) {
+          for (var i = 0; i < opts.length; i++) {
+            var opt = opts[i];
+            if (!opt.type || !GeneratorMap[opt.type]) {
+              throw "You passed an unknow type in the config properties. Use one of CtrlGenerator.Type.*";
+            }
+            GeneratorMap[opt.type](opt, ele, opts);
           }
-          GeneratorMap[opt.type](opt, ele, opts);
+        } else {
+          GeneratorMap[Type.ButtonMiddle](opts, ele);
         }
       }
     }

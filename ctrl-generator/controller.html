@@ -29,6 +29,8 @@
     </div>
 
     <div id="template-Button" class="button-300-150"><div class="button-text"></div></div>
+
+    <div id="template-ButtonMiddle" class="button-80"><div class="button-text">START</div></div>
   </div>
 
   <!-- Include libraries -->
@@ -43,7 +45,7 @@
     /* ================================
       * Available sides:
         left (Dpad, Joystick, ButtonVertical)
-        middle (only an array of labels)
+        middle (only an array of ButtonMiddle)
         right (Dpad, Joystick, ButtonVertical)
 
       * Side properties:
@@ -51,9 +53,14 @@
           CtrlGenerator.Type.DPad
           CtrlGenerator.Type.Joystick
           CtrlGenerator.Type.ButtonVertical
+          CtrlGenerator.Type.ButtonMiddle
 
         * opts:
-          See DPad , Joystick, Button documentation
+          The option params to initiate DPad, Joystick, Button. See their documentation.
+
+        * on_up_message:
+          Boolean (Def: true) - Allow to send AirConsle message on an input up event
+                                (on release, touchend, etc)
 
         * Custom additional properties:
           Buttons:
@@ -61,20 +68,17 @@
             key: <string> - An identifier which will be send to the AirConsole.Screen
 
       * Params which will be send to AirConsole Screen on input event:
-        All:
-          - on_up_message: Boolean (Def: true) - Allow to send AirConsle message on input
-                                                 up event (on release, touchend, etc)
         DPad:
           - key: 'dpad-NUMBER'
           - pressed: true|false
-          - params: { direction: 'left', 'top', 'right', 'bottom' }
-        Button:
+          - message: { direction: 'left', 'top', 'right', 'bottom' }
+        ButtonVertical / ButtonMiddle:
           - key: the key defined in the options properties 'key"
           - pressed: true|false
         Joystick:
           - key: 'joystick-NUMBER'
           - pressed: true
-          - params: point {x, y}
+          - message: point {x, y}
     ================================ */
     // Example:
 
@@ -92,6 +96,20 @@
         left: {
           type: CtrlGenerator.Type.DPad,
         },
+        middle: [
+          {
+            label: 'START',
+            key: 'start'
+          },
+          {
+            label: 'RESET',
+            key: 'reset'
+          },
+          {
+            label: 'PIZZA',
+            key: 'pizza'
+          }
+        ],
         right: [
           {
             type: CtrlGenerator.Type.ButtonVertical,
