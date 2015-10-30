@@ -1,3 +1,9 @@
+/**
+ * A generator for an AirConsole controller with 3-sections left, middle, right - in which
+ * you can place input elements such as DPad, Joystick and Buttons. On an input event it
+ * sends a message to the AirConsole.Screen
+ * @constructor
+ */
 var CtrlGenerator = (function() {
   var id_counter = 0;
   var airconsole_obj = null;
@@ -117,7 +123,6 @@ var CtrlGenerator = (function() {
 
     var obj = new window[config.type](button_ele, params);
   }
-
 
   /**
    * Generates middle buttons
