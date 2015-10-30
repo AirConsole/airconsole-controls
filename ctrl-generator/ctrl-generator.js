@@ -65,7 +65,9 @@ var CtrlGenerator = (function() {
 
       if (!params.touchend) {
         params.touchend = function() {
-          sendInputEvent(id, false);
+          if (config.on_up_message) {
+            sendInputEvent(id, false);
+          }
         }
       }
     }
@@ -91,6 +93,7 @@ var CtrlGenerator = (function() {
 
     // AirConsole send methods
     var params = config.opts || {};
+
     if (!params.down) {
       params.down = function() {
         sendInputEvent(config.key, true);
@@ -98,7 +101,9 @@ var CtrlGenerator = (function() {
     }
     if (!params.up) {
       params.up = function() {
-        sendInputEvent(config.key, false);
+        if (config.on_up_message) {
+          sendInputEvent(config.key, false);
+        }
       }
     }
 
@@ -120,15 +125,13 @@ var CtrlGenerator = (function() {
     };
 
     if (!airconsole_obj) {
-      console.warn("You have to call CtrlGenerator.setAirConsole and pass the airconsole instance!", airconsole_obj);
-      return;
+      console.warn("You have to call CtrlGenerator.setAirConsole and pass the airconsole instance!");
+    } else {
+      if (debug) {
+        console.info("Send", message);
+      }
+      airconsole_obj.message(airconsole_obj.SCREEN, message);
     }
-
-    if (debug) {
-      console.info("Send", message);
-    }
-
-    airconsole_obj.message(airconsole_obj.SCREEN, message);
   }
 
   return {
@@ -143,7 +146,7 @@ var CtrlGenerator = (function() {
     debug: function(state) {
       debug = state;
       if (state) {
-        console.info("DEBUG MODE ACTIVATED - press some buttons :)");
+        console.info("CTRL DEBUG MODE ACTIVATED - press some buttons :)");
       }
       return this;
     },

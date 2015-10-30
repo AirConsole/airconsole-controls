@@ -61,6 +61,9 @@
             key: <string> - An identifier which will be send to the AirConsole.Screen
 
       * Params which will be send to AirConsole Screen on input event:
+        All:
+          - on_up_message: Boolean (Def: true) - Allow to send AirConsle message on input
+                                                 up event (on release, touchend, etc)
         DPad:
           - key: 'dpad-NUMBER'
           - pressed: true|false
@@ -98,7 +101,8 @@
           {
             type: CtrlGenerator.Type.ButtonVertical,
             label: "Shoot",
-            key: "b"
+            key: "b",
+            on_up_message: true
           }
         ]
       });
