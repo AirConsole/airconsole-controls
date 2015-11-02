@@ -8,7 +8,11 @@ var CtrlGenerator = (function() {
   var id_counter = 0;
   var airconsole_obj = null;
   var debug = false;
-
+  var generated_config = {
+    left: null,
+    middle: null,
+    right: null
+  };
   var left_ele = document.getElementById('left');
   var middle_ele = document.getElementById('middle');
   var right_ele = document.getElementById('right');
@@ -26,6 +30,7 @@ var CtrlGenerator = (function() {
   };
 
   var Type = {
+    EMPTY: 'EMPTY',
     DPad: 'DPad',
     Joystick: 'Joystick',
     ButtonVertical: 'Button',
@@ -37,6 +42,7 @@ var CtrlGenerator = (function() {
   GeneratorMap[Type.Joystick] = generatePad;
   GeneratorMap[Type.ButtonVertical] = generateButtonVertical;
   GeneratorMap[Type.ButtonMiddle] = generateButtonsMiddle;
+  GeneratorMap[Type.EMPTY] = function() {};
 
   /**
    * Helper function to clone an element (deep clone)
@@ -55,7 +61,7 @@ var CtrlGenerator = (function() {
    * @param {Element.~} ele - The side element (left, middle or right)
    * @param {Options} side_options - All options of the side
    */
-  function generatePad(config, ele, side_options) {
+  function generatePad(config, ele, side_options, side_id) {
     var dpad_ele = cloneElement(config.type);
     ele.appendChild(dpad_ele);
 
@@ -87,6 +93,12 @@ var CtrlGenerator = (function() {
     }
 
     var obj = new window[config.type](dpad_ele, params);
+    params.key = id;
+    generated_config[side_id] = {
+      ele: dpad_ele,
+      obj: obj,
+      params: params
+    };
   }
 
   /**
@@ -95,7 +107,7 @@ var CtrlGenerator = (function() {
    * @param {Element.~} ele - The side element (left, middle or right)
    * @param {Options} side_options - All options of the side
    */
-  function generateButtonVertical(config, ele, side_options) {
+  function generateButtonVertical(config, ele, side_options, side_id) {
     var num_of_buttons = side_options.length;
     var height = Math.round(100 / num_of_buttons);
 
@@ -122,6 +134,15 @@ var CtrlGenerator = (function() {
     }
 
     var obj = new window[config.type](button_ele, params);
+    if (!generated_config[side_id] || generated_config[side_id] === Type.EMPTY) {
+      generated_config[side_id] = [];
+    }
+    params.key = config.key;
+    generated_config[side_id].push({
+      ele: button_ele,
+      obj: obj,
+      params: params
+    });
   }
 
   /**
@@ -190,6 +211,9 @@ var CtrlGenerator = (function() {
     Type: Type,
     Element: Element,
     sendInputEvent: sendInputEvent,
+    getGeneratedObjects: function() {
+      return generated_config;
+    },
 
     /**
      * Set to true to have debug output in the console
@@ -213,14 +237,27 @@ var CtrlGenerator = (function() {
     },
 
     /**
+     * Empties all parent elements
+     */
+    clear: function() {
+      id_counter = 0;
+      for (var ele in Element) {
+        Element[ele].innerHTML = "";
+      }
+      generated_config = {};
+    },
+
+    /**
      * Generates the controller by passed config
      * @param {Object} config
      */
     generate: function (config) {
+      this.clear();
       for (var side in config) {
         var opts = config[side];
         var ele = Element[side];
 
+        if (!opts) continue;
         if (!(opts instanceof Array)) {
           opts = [opts];
         }
@@ -228,10 +265,11 @@ var CtrlGenerator = (function() {
         if (side !== Side.middle) {
           for (var i = 0; i < opts.length; i++) {
             var opt = opts[i];
+            if (!opt || opt === Type.EMPTY) continue;
             if (!opt.type || !GeneratorMap[opt.type]) {
               throw "You passed an unknow type in the config properties. Use one of CtrlGenerator.Type.*";
             }
-            GeneratorMap[opt.type](opt, ele, opts);
+            GeneratorMap[opt.type](opt, ele, opts, side);
           }
         } else {
           GeneratorMap[Type.ButtonMiddle](opts, ele);

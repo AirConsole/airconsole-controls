@@ -4,14 +4,103 @@
   <link rel="stylesheet" href="../button/button.css">
   <link rel="stylesheet" href="../dpad/dpad.css">
   <link rel="stylesheet" href="controller.css">
+  <link rel="stylesheet" href="ui-ctrl-generator.css">
 </head>
 <body>
 
-  <div id="container">
-    <div id="left"></div>
-    <div id="middle"></div>
-    <div id="right"></div>
+<div class="container">
+
+  <h1>AirConsole Controller Generator</h1>
+
+  <div class="gamepad_container">
+    <div id="left" class="left"></div>
+    <div id="middle" class="middle"></div>
+    <div id="right" class="right"></div>
   </div>
+
+  <!-- UI Generator -->
+  <div class="generator_container">
+    <div class="left">
+      <select class="ui_select" data-id="left"></select>
+      <div class="info_container"></div>
+      <div class="form_container"></div>
+    </div>
+    <div data-id="middle" class="middle">
+      <input type="text" id="middle_bttn_label" placeholder="Middle button caption">
+      <button type="button" id="middle_bttn_add">&plus; Add</button>
+      <button type="button" id="middle_bttn_remove">Clear</button>
+    </div>
+    <div class="right">
+      <select class="ui_select" data-id="right"></select>
+      <div class="info_container"></div>
+      <div class="form_container"></div>
+    </div>
+  </div>
+
+  <h4 class="output">Config code:</h4>
+  <textarea id="output" readonly="readonly"></textarea>
+
+  <div id="info-ButtonVertical" class="info">
+    Buttons send:
+<code><pre>
+  {
+    key: &lt;the-defined-key&gt;,
+    pressed: true|false
+  }
+</pre></code>
+  </div>
+
+  <div id="info-DPad" class="info">
+    DPad will send to the screen:
+<code><pre>
+  {
+    key: "<span class="key"></span>",
+    // Directions 'left', 'top', 'right', 'bottom'
+    message: { direction: &lt;String&gt; }
+  }
+</pre></code>
+  </div>
+
+  <div id="info-Joystick" class="info">
+    Joystick will send to the screen:
+<code><pre>
+  {
+    key: "<span class="key"></span>",
+    pressed: true|false,
+    message: { x: Number, y: Number }
+  }
+</pre></code>
+  </div>
+
+  <div id="template_button_form" class="template_button_form">
+    <h4>Add button:</h4>
+    <table>
+      <tr>
+        <td>
+          Label:
+        </td>
+        <td>
+          <input type="text" placeholder="Caption of the button" class="button_form_label">
+        </td>
+      </tr>
+      <tr>
+        <td>
+          Key to send:
+        </td>
+        <td>
+          <input type="text" placeholder="Key to send to screen" class="button_form_key">
+        </td>
+      </tr>
+      <tr>
+        <td colspan="2">
+          <input type="checkbox" class="button_form_on_button_up"> Also send on button-up event
+        </td>
+      </tr>
+    </table>
+    <button class="add_bttn">Add button</button>
+  </div>
+
+</div>
 
   <!-- TEMPLATES for elements -->
   <div style="display: none;">
@@ -35,10 +124,12 @@
 
   <!-- Include libraries -->
   <script type="text/javascript" src="http://www.airconsole.com/api/airconsole-1.2.1.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
   <script type="text/javascript" src="../dpad/dpad.js"></script>
   <script type="text/javascript" src="../button/button.js"></script>
   <script type="text/javascript" src="../joystick/joystick.js"></script>
   <script type="text/javascript" src="ctrl-generator.js"></script>
+  <script type="text/javascript" src="ui-ctrl-generator.js"></script>
 
   <!-- Config your controller -->
   <script type="text/javascript">
@@ -91,39 +182,8 @@
       .debug(true)
       // Set airconsole, so that we can send input events to the screen
       .setAirConsole(airconsole)
-      // Build a config and specify which elements you want to have on each side
-      .generate({
-        left: {
-          type: CtrlGenerator.Type.DPad,
-        },
-        middle: [
-          {
-            label: 'START',
-            key: 'start'
-          },
-          {
-            label: 'RESET',
-            key: 'reset'
-          },
-          {
-            label: 'PIZZA',
-            key: 'pizza'
-          }
-        ],
-        right: [
-          {
-            type: CtrlGenerator.Type.ButtonVertical,
-            label: "Defend",
-            key: "a"
-          },
-          {
-            type: CtrlGenerator.Type.ButtonVertical,
-            label: "Shoot",
-            key: "b",
-            on_up_message: true
-          }
-        ]
-      });
+      // Load a default config for presentation purposes
+      .generate(UICtrlGenerator.ctrl_config);
   </script>
 </body>
 </html>
