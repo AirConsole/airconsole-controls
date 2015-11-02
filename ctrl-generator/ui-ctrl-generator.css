@@ -8,6 +8,15 @@ body {
   overflow: hidden;
 }
 
+.generator_container {
+  position: relative;
+  box-sizing: border-box;
+  overflow: hidden;
+  max-width: 900px;
+  background: #545454;
+  padding: 15px;
+}
+
 #output {
   width: 900px;
   min-height: 220px;

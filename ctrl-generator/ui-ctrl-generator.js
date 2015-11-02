@@ -13,6 +13,7 @@ var output = "";
 output = "<html>\n<head>\n";
 output += outputAddStyle('button/button.css');
 output += outputAddStyle('dpad/dpad.css');
+output += outputAddStyle('joystick/joystick.css');
 output += outputAddStyle('ctrl-generator/controller.css');
 output += "</head>\n<body>\n";
 output += $('#gamepad_code').html();
