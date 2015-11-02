@@ -1,10 +1,37 @@
-// var output = '<div class="gamepad_container">
-//     <div id="left" class="left"></div>
-//     <div id="middle" class="middle"></div>
-//     <div id="right" class="right"></div>
-//   </div>';
+// ========================================================
+// DEFAULT OUTPUT DEFINED HERE
+// ========================================================
+var outputAddScript = function(path) {
+  return '<script type="text/javascript" src="' + path + '"></script>' + "\n";
+};
 
+var outputAddStyle = function(path) {
+  return '<link rel="stylesheet" href="' + path + '">' + "\n";
+};
 
+var output = "";
+output = "<html>\n<head>\n";
+output += outputAddStyle('button/button.css');
+output += outputAddStyle('dpad/dpad.css');
+output += outputAddStyle('ctrl-generator/controller.css');
+output += "</head>\n<body>\n";
+output += $('#gamepad_code').html();
+output += "\n";
+output += $('#templates').html();
+output += "\n";
+output += outputAddScript('http://www.airconsole.com/api/airconsole-1.2.1.js');
+output += outputAddScript('dpad/dpad.js');
+output += outputAddScript('joystick/joystick.js');
+output += outputAddScript('button/button.js');
+output += outputAddScript('ctrl-generator/ctrl-generator.js');
+output += '<script type="text/javascript">'+ "\n";
+output += '{{CONFIG_CODE}}';
+output += "\n" + '</script>';
+output += "</body></html>";
+
+// ========================================================
+// UI GENERATOR
+// ========================================================
 var UICtrlGenerator = (function(ctrl_generator) {
 
   var ctrl_generator = ctrl_generator;
@@ -53,8 +80,11 @@ var UICtrlGenerator = (function(ctrl_generator) {
   };
 
   var printCode = function() {
-    var code = "CtrlGenerator.generate(" + JSON.stringify(ctrl_config) + ");";
-    code_output.val(code);
+    var code = 'var airconsole = new AirConsole({orientation: AirConsole.ORIENTATION_LANDSCAPE});';
+    code += 'CtrlGenerator.setAirConsole(airconsole);';
+    code += "CtrlGenerator.generate(" + JSON.stringify(ctrl_config) + ");";
+    var output_code = output.replace(/{{CONFIG_CODE}}/, code);
+    code_output.val(output_code);
   };
 
   var generate = function () {

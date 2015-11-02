@@ -12,34 +12,51 @@
 
   <h1>AirConsole Controller Generator</h1>
 
-  <div class="gamepad_container">
-    <div id="left" class="left"></div>
-    <div id="middle" class="middle"></div>
-    <div id="right" class="right"></div>
-  </div>
-
-  <!-- UI Generator -->
-  <div class="generator_container">
-    <div class="left">
-      <select class="ui_select" data-id="left"></select>
-      <div class="info_container"></div>
-      <div class="form_container"></div>
-    </div>
-    <div data-id="middle" class="middle">
-      <input type="text" id="middle_bttn_label" placeholder="Middle button caption">
-      <button type="button" id="middle_bttn_add">&plus; Add</button>
-      <button type="button" id="middle_bttn_remove">Clear</button>
-    </div>
-    <div class="right">
-      <select class="ui_select" data-id="right"></select>
-      <div class="info_container"></div>
-      <div class="form_container"></div>
+  <div id="gamepad_code">
+    <div class="gamepad_container">
+      <div id="left" class="left"></div>
+      <div id="middle" class="middle"></div>
+      <div id="right" class="right"></div>
     </div>
   </div>
 
-  <h4 class="output">Config code:</h4>
-  <textarea id="output" readonly="readonly"></textarea>
+    <!-- UI Generator -->
+    <div class="generator_container">
+      <div class="left">
+        <select class="ui_select" data-id="left"></select>
+        <div class="info_container"></div>
+        <div class="form_container"></div>
+      </div>
+      <div data-id="middle" class="middle">
+        <input type="text" id="middle_bttn_label" placeholder="Middle button caption">
+        <button type="button" id="middle_bttn_add">&plus; Add</button>
+        <button type="button" id="middle_bttn_remove">Clear</button>
+      </div>
+      <div class="right">
+        <select class="ui_select" data-id="right"></select>
+        <div class="info_container"></div>
+        <div class="form_container"></div>
+      </div>
+    </div>
 
+    <h4 class="output">Controller.html:</h4>
+    <textarea id="output" readonly="readonly"></textarea>
+    <p>
+      <b>Make sure</b> you have downloaded and included the following files in your project directory:
+      <br>(We assume your project root dir looks like that)
+      <ul>
+        <li>button/button.css</li>
+        <li>button/button.js</li>
+        <li>dpad/dpad.css</li>
+        <li>dpad/dpad.js</li>
+        <li>dpad/joystick.js</li>
+        <li>ctrl-generator/ctrl-generator.js</li>
+        <li>ctrl-generator/ctrl-generator.css</li>
+      </ul>
+    </p>
+  </div>
+
+  <!-- Info divs -->
   <div id="info-ButtonVertical" class="info">
     Buttons send:
 <code><pre>
@@ -103,23 +120,25 @@
 </div>
 
   <!-- TEMPLATES for elements -->
-  <div style="display: none;">
-    <div id="template-DPad">
-      <div>
-        <div class="dpad-arrow dpad-arrow-up"></div>
-        <div class="dpad-arrow dpad-arrow-down"></div>
-        <div class="dpad-arrow dpad-arrow-left"></div>
-        <div class="dpad-arrow dpad-arrow-right"></div>
+  <div id="templates">
+    <div style="display: none;">
+      <div id="template-DPad">
+        <div>
+          <div class="dpad-arrow dpad-arrow-up"></div>
+          <div class="dpad-arrow dpad-arrow-down"></div>
+          <div class="dpad-arrow dpad-arrow-left"></div>
+          <div class="dpad-arrow dpad-arrow-right"></div>
+        </div>
       </div>
+
+      <div id="template-Joystick" class="joystick">
+        <div class="joystick-relative"></div>
+      </div>
+
+      <div id="template-Button" class="button-300-150"><div class="button-text"></div></div>
+
+      <div id="template-ButtonMiddle" class="button-80"><div class="button-text">START</div></div>
     </div>
-
-    <div id="template-Joystick" class="joystick">
-      <div class="joystick-relative"></div>
-    </div>
-
-    <div id="template-Button" class="button-300-150"><div class="button-text"></div></div>
-
-    <div id="template-ButtonMiddle" class="button-80"><div class="button-text">START</div></div>
   </div>
 
   <!-- Include libraries -->
