@@ -42,11 +42,7 @@ var UICtrlGenerator = (function(ctrl_generator) {
   var middle_bttn_add = $('#middle_bttn_add');
   var middle_bttn_remove = $('#middle_bttn_remove');
 
-  var DefaultButtonLabel = {
-    left: [ ['A', 'a'], ['B', 'b'] ],
-    right: [ ['C', 'c'], ['D', 'd'] ]
-  };
-
+  // A default config
   var ctrl_config = {
     left: {
       type: CtrlGenerator.Type.DPad,
@@ -198,7 +194,13 @@ var UICtrlGenerator = (function(ctrl_generator) {
       var $ele = $(this);
       for (var type in ctrl_generator.Type) {
         if (type === ctrl_generator.Type.ButtonMiddle) continue;
-        $ele.append('<option value=' + type + '>' + type + '</option>');
+        var opt = $('<option value=' + type + '>' + type + '</option>');
+        var side_id = $ele.attr('data-id');
+        if (type === ctrl_config[side_id].type ||
+            (ctrl_config[side_id] instanceof Array && type === 'ButtonVertical')) {
+          opt.attr('selected', 'selected');
+        }
+        $ele.append(opt);
       }
     });
 
@@ -216,7 +218,8 @@ var UICtrlGenerator = (function(ctrl_generator) {
   })();
 
   return {
-    ctrl_config: ctrl_config
+    ctrl_config: ctrl_config,
+    generate: generate
   };
 
 })(CtrlGenerator);

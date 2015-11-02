@@ -85,9 +85,7 @@ var CtrlGenerator = (function() {
 
       if (!params.touchend) {
         params.touchend = function() {
-          if (config.on_up_message) {
-            sendInputEvent(id, false);
-          }
+          sendInputEvent(id, false);
         }
       }
     }

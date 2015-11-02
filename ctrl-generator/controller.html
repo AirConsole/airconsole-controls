@@ -207,9 +207,10 @@
       // (Optional) Call this with true and check your browser console
       .debug(true)
       // Set airconsole, so that we can send input events to the screen
-      .setAirConsole(airconsole)
-      // Load a default config for presentation purposes
-      .generate(UICtrlGenerator.ctrl_config);
+      .setAirConsole(airconsole);
+
+    // Load a default config for presentation reasons
+    UICtrlGenerator.generate();
   </script>
 </body>
 </html>
