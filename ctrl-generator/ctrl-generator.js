@@ -66,7 +66,7 @@ var CtrlGenerator = (function() {
     ele.appendChild(dpad_ele);
 
     var params = config.opts || {};
-    var id = config.key || dpad_ele.id;
+    var id = config.key || config.type.toLowerCase() + '-' + side_id;
 
     if (config.type === Type.DPad) {
       if (!params.directionchange) {
