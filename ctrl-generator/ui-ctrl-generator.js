@@ -76,6 +76,19 @@ var UICtrlGenerator = (function(ctrl_generator) {
     ]
   };
 
+  var clear = function() {
+    ctrl_config = {
+      left: null,
+      middle: [],
+      right: null
+    };
+    ui_selects_ele.each(function() {
+      var $ele = $(this);
+      $ele.find('option').first().attr('selected', 'selected');
+    });
+    generate();
+  };
+
   var printCode = function() {
     var code = 'var airconsole = new AirConsole({orientation: AirConsole.ORIENTATION_LANDSCAPE});' + "\n";
     code += 'CtrlGenerator.setAirConsole(airconsole);' + "\n";
@@ -199,7 +212,7 @@ var UICtrlGenerator = (function(ctrl_generator) {
         if (type === ctrl_config[side_id].type ||
             (ctrl_config[side_id] instanceof Array && type === 'ButtonVertical')) {
           opt.attr('selected', 'selected');
-          showInfo($ele.parent(), type, side_id);
+          //showInfo($ele.parent(), type, side_id);
         }
         $ele.append(opt);
       }
@@ -212,6 +225,12 @@ var UICtrlGenerator = (function(ctrl_generator) {
   middle_bttn_remove.on('click', function() {
     ctrl_config['middle'] = [];
     generate();
+  });
+
+  $(".get_started_container").on('click', function() {
+    $(this).addClass('hide');
+    $('.generator_container').removeClass('hide');
+    clear();
   });
 
   (function() {

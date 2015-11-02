@@ -2,6 +2,10 @@ body {
   font-family: 'Play', Helvetica, Verdana, sans-serif;
 }
 
+.hide {
+  display: none;
+}
+
 .container {
   width: 900px;
   margin: auto;
@@ -15,6 +19,17 @@ body {
   max-width: 900px;
   background: #545454;
   padding: 15px;
+}
+
+.get_started_container {
+  background: #3498db;
+  color: #FFFFFF;
+  text-align: center;
+  margin: 10px 0;
+  font-size: 20px;
+  border-radius: 4px;
+  padding: 14px;
+  box-sizing: border-box;
 }
 
 #output {
