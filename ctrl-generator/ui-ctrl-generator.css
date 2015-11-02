@@ -1,3 +1,7 @@
+body {
+  font-family: 'Play', Helvetica, Verdana, sans-serif;
+}
+
 .container {
   width: 900px;
   margin: auto;

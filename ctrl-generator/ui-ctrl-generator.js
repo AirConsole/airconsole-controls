@@ -80,8 +80,8 @@ var UICtrlGenerator = (function(ctrl_generator) {
   };
 
   var printCode = function() {
-    var code = 'var airconsole = new AirConsole({orientation: AirConsole.ORIENTATION_LANDSCAPE});';
-    code += 'CtrlGenerator.setAirConsole(airconsole);';
+    var code = 'var airconsole = new AirConsole({orientation: AirConsole.ORIENTATION_LANDSCAPE});' + "\n";
+    code += 'CtrlGenerator.setAirConsole(airconsole);' + "\n";
     code += "CtrlGenerator.generate(" + JSON.stringify(ctrl_config) + ");";
     var output_code = output.replace(/{{CONFIG_CODE}}/, code);
     code_output.val(output_code);
