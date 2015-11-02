@@ -199,6 +199,7 @@ var UICtrlGenerator = (function(ctrl_generator) {
         if (type === ctrl_config[side_id].type ||
             (ctrl_config[side_id] instanceof Array && type === 'ButtonVertical')) {
           opt.attr('selected', 'selected');
+          showInfo($ele.parent(), type, side_id);
         }
         $ele.append(opt);
       }
