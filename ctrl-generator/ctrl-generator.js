@@ -111,6 +111,10 @@ var CtrlGenerator = (function() {
 
     var button_ele = cloneElement(config.type);
     button_ele.style.height = height + "%";
+    if (num_of_buttons === 1) {
+      button_ele.className = "button-300-300";
+    }
+
     var button_text = button_ele.getElementsByClassName('button-text')[0];
     button_text.innerHTML = config.label;
     ele.appendChild(button_ele);
