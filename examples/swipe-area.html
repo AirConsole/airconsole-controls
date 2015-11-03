@@ -1,0 +1,70 @@
+<html>
+<head>
+  <meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
+  <script type="text/javascript" src="../swipe-area/swipe-area.js"></script>
+  <link rel="stylesheet" href="../button/button.css">
+  <style type="text/css">
+    body {
+      -ms-user-select: none;
+      -moz-user-select: none;
+      -webkit-user-select: none;
+      user-select: none;
+    }
+
+    .example-container {
+      position: relative;
+      background-color: #3b3b3b;
+      text-align: center;
+      font-family: sans-serif;
+      display: inline-block;
+      width: 100%;
+      height: 100%;
+      max-width: 300px;
+      max-height: 300px;
+    }
+
+    /* You need to explicitly position your dpads */
+    #swipe-area-0 {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      top: 0px;
+      left: 0;
+    }
+  </style>
+</head>
+<body>
+<div class="example-container">
+  <div id="swipe-area-0" class="button-300-300"></div>
+</div>
+
+<div id="info"></div>
+<script type="text/javascript">
+
+  var info = document.getElementById('info');
+
+  var swipe_area = new SwipeArea("swipe-area-0", {
+    allowed_directions: SwipeArea.AllowDirections.All,
+    diagonal: false,
+    min_swiped_distance: 30,
+    "touchstart": function() {
+      console.log("Touch start");
+    },
+    "touchend": function() {
+      console.log("Touch end");
+    },
+    // Directions: {down: <Boolean>, left: <Boolean>, up: <Boolean>, right: <Boolean>}
+    "onTrigger": function(directions) {
+      var d = document.createElement('DIV');
+      d.innerHTML = "";
+      for (var dir in directions) {
+        if (directions[dir] === true) {
+          d.innerHTML += dir + " ";
+        }
+      }
+      info.appendChild(d);
+    }
+  });
+</script>
+</body>
+</html>
