@@ -10,19 +10,26 @@ A pattern of circles, which you can connect by swiping.
 
 ```javascript
   // The first argument can be an html element or and element id. The second argument are options.
-  new DPad("my-dpad", {
-      // Gets called when the amount of pixels swiped has been exceeded
-      // Param is active directions {down: <Boolean>, left: <Boolean>, up: <Boolean>, right: <Boolean>}
-      "onTrigger": function(direction_map) {},
-      // Gets called when the DPad is touched.
-      "touchstart": function() {},
-      // Gets called when the DPad is released.
-      "touchend": function(had_direction) {},
-      // (Optional) Minimum distance (px) to swipe until triggering the onTrigger function
-      "min_swiped_distance": 30,
-      // (Optional) allowed_directions: All, Horizontal or Vertical
-      "allowed_directions": SwipeArea.AllowDirections.All
-      // (Optional) diagonal: For All-Directions, enables diagonal swipe detection
-      "diagonal": false
+  new SwipePattern("my-swipe-container", {
+      // Coordinates and options of the circle list
+      circles: [
+        [
+          { x: 50, y: 60 },
+          {
+            id: 'myCustomId',
+            radius: 30,
+            x: 150, // Mandatory
+            y: 150, // Mandatory
+            // Custom style for this circle
+            style: {
+              fill_color: '#f1c40f'
+            }
+          },
+        ]
+      ],
+      // Gets called when the swipe area is released. Passes all touched circles
+      "touchend": function(touched_circles) {},
+      // Called when a circle has been touched
+      "onTouchCircle": function(circle) {}
     });
 ```

@@ -163,7 +163,7 @@ SwipePattern.prototype = {
    */
   onTouchMoveHandler: function(e) {
     if (this.is_mousedown) {
-      var point = this.getEventPoint(e);
+      var point = this.getRelativePos(e);
       var circle = this.mousePointInCircle(point);
       if (circle) {
         this.addConnectionLine(circle);
@@ -183,10 +183,14 @@ SwipePattern.prototype = {
     if (this.touchend_cb) {
       this.touchend_cb(this.touched_circles);
     }
+    this.clearTouchedCircles();
+    e.preventDefault();
+  },
+
+  clearTouchedCircles: function() {
     this.touched_circles = [];
     this.clearCanvas();
     this.drawCircles();
-    e.preventDefault();
   },
 
   // ======================================================
@@ -349,7 +353,7 @@ SwipePattern.prototype = {
   getRelativePos: function(e) {
     var pos = this.getEventPoint(e);
     var rect = this.container.getBoundingClientRect();
-    return { "x": pos.x - rect.left, "y": pos.y - rect.top };
+    return { "x": pos.x - rect.left - window.scrollX, "y": pos.y - rect.top - window.scrollY };
   },
 
   /**
