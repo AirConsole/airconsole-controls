@@ -11,6 +11,7 @@ var outputAddStyle = function(path) {
 
 var output = "";
 output = "<html>\n<head>\n";
+output += '<meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1.0, maximum-scale=1.0"/>';
 output += outputAddStyle('button/button.css');
 output += outputAddStyle('dpad/dpad.css');
 output += outputAddStyle('joystick/joystick.css');
