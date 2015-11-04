@@ -19,6 +19,7 @@ var SwipePattern = function(el, opts) {
   //
   this.circles = [];
   this.touched_circles = [];
+  this.current_line = null;
   this.canvas = null;
   this.ctx = null;
   this.is_mousedown = false;
@@ -54,8 +55,7 @@ SwipePattern.prototype = {
     }
   },
 
-  mousePointInCircle: function(e) {
-    var point = this.getEventPoint(e);
+  mousePointInCircle: function(point) {
     var is_in = null;
     for (var i = 0; i < this.circles.length; i++) {
       var circle = this.circles[i];
@@ -73,6 +73,7 @@ SwipePattern.prototype = {
     if ((last_circle && last_circle.id !== circle.id) || !last_circle) {
       this.addTouchedCircle(circle);
       if (last_circle) {
+        this.current_line = null;
         this.drawConnections();
       }
     }
@@ -93,9 +94,12 @@ SwipePattern.prototype = {
 
   onTouchMoveHandler: function(e) {
     if (this.is_mousedown) {
-      var circle = this.mousePointInCircle(e);
+      var point = this.getEventPoint(e);
+      var circle = this.mousePointInCircle(point);
       if (circle) {
         this.addConnectionLine(circle);
+      } else {
+        this.current_line = {x: point.x, y: point.y};
       }
     }
     e.preventDefault();
@@ -108,6 +112,7 @@ SwipePattern.prototype = {
     }
     this.touched_circles = [];
     this.clearCanvas();
+    this.drawCircles();
     e.preventDefault();
   },
 
@@ -115,10 +120,20 @@ SwipePattern.prototype = {
 
   clearCanvas: function() {
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-    this.drawCircles();
   },
 
   draw: function() {
+    this.clearCanvas();
+    this.drawCircles();
+    this.drawConnections();
+    this.drawDragLine();
+  },
+
+  drawDragLine: function() {
+    var last_circle = this.touched_circles[this.touched_circles.length - 1];
+    if (last_circle && this.current_line) {
+      this.drawLine(last_circle, this.current_line);
+    }
   },
 
   update: function() {
@@ -136,7 +151,6 @@ SwipePattern.prototype = {
 
   drawConnections: function(connections) {
     connections = connections || this.touched_circles;
-    this.clearCanvas();
     for (var i = 0; i < connections.length; i++) {
       var circle = connections[i];
       if (i === 0) continue;
