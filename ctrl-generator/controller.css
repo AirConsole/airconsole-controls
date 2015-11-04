@@ -71,3 +71,22 @@ body {
   margin-left: -40%;
   font-size: 10px;
 }
+
+.swipe-area {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0px;
+  left: 0;
+}
+
+.swipe-pattern-container {
+  text-align: center;
+  font-family: sans-serif;
+  display: inline-block;
+  width: 100%;
+  height: 100%;
+  max-width: 300px;
+  max-height: 300px;
+  position: relative;
+}

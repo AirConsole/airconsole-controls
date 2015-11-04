@@ -49,9 +49,9 @@ var SwipePattern = function(el, opts) {
   this.onTouchCircle = opts.onTouchCircle || null;
   this.style = opts.style || {
     circle: {
-      fill_color: '#ADEE00',
-      stroke_color: "#222222",
-      stroke_width: 10
+      fill_color: '#222222',
+      stroke_color: "#ADEE00",
+      stroke_width: 2
     },
     line: {
       stroke_color: "#54D7FF",
@@ -59,6 +59,8 @@ var SwipePattern = function(el, opts) {
     }
   };
   //
+  this.scale = 1;
+  this.circle_opts = opts.circles || [];
   this.circles = [];
   this.touched_circles = [];
   this.current_line = null;
@@ -78,14 +80,43 @@ SwipePattern.prototype = {
   setup: function(opts) {
     this.canvas = document.createElement("canvas");
     var container_rect = this.container.getBoundingClientRect();
-    this.canvas.width = container_rect.width;
-    this.canvas.height = container_rect.height;
     this.canvas.className = 'swipe-pattern-canvas';
     this.container.appendChild(this.canvas);
     this.ctx = this.canvas.getContext("2d");
     this.bindEvents();
-    this.createCircleObjects(opts.circles || []);
+    this.build();
+  },
+
+  build: function() {
+    this.clearTouchedCircles();
+    this.createCircleObjects(this.circle_opts);
     this.drawCircles();
+  },
+
+  checkResize: function(most_right_circle, most_bottom_circle) {
+    var need_width = most_right_circle.x + most_right_circle.radius + 10;
+    var need_height = most_bottom_circle.y + most_bottom_circle.radius + 10;
+    var container_rect = this.container.getBoundingClientRect();
+    var parent_rect = container_rect;
+    // We need to scale
+    if (need_width > container_rect.width || need_height > container_rect.height) {
+      this.canvas.width = Math.max(need_width, container_rect.width);
+      this.canvas.height = Math.max(need_height, container_rect.height);
+      var scale = Math.min(container_rect.width / (need_width), container_rect.height / need_height);
+      this.canvas.style.transformOrigin = "left top";
+      this.canvas.style.webkitTransform = "scale(" + scale + ", " + scale + ")";
+      this.canvas.style.transform = "scale(" + scale + ", " + scale + ")";
+      this.canvas.style.msTransform = "scale(" + scale + ", " + scale + ")";
+      this.canvas.style.OTransform = "scale(" + scale + ", " + scale + ")";
+      this.scale = scale;
+    } else {
+      this.canvas.width = Math.min(need_width, container_rect.width);
+      this.canvas.height = Math.min(need_height, container_rect.height);
+      parent_rect = this.container.parentNode.getBoundingClientRect();
+    }
+
+    var offset_y = Math.max(0, (parent_rect.height - container_rect.height) / 2);
+    this.container.style.marginTop = offset_y + "px";
   },
 
   /**
@@ -102,6 +133,8 @@ SwipePattern.prototype = {
       this.container.addEventListener("mousemove", this.onTouchMoveHandler.bind(this));
       this.container.addEventListener("mouseup", this.onTouchEndHandler.bind(this));
     }
+
+    window.addEventListener('resize', this.build.bind(this));
   },
 
   /**
@@ -262,6 +295,8 @@ SwipePattern.prototype = {
    * @param {Array} circles - A list of circles
    */
   createCircleObjects: function(circles) {
+    var most_right = null;
+    var most_bottom = null;
     for (var i = 0; i < circles.length; i++) {
       var p = circles[i];
       var opts = {
@@ -271,8 +306,15 @@ SwipePattern.prototype = {
         radius: p.radius || 30,
         style: p.style || null
       };
+      if (!most_bottom || p.y > most_bottom.y) {
+        most_bottom = opts;
+      }
+      if (!most_right || p.x > most_right.x) {
+        most_right = opts;
+      }
       this.circles.push(opts);
     }
+    this.checkResize(most_right, most_bottom);
   },
 
   /**
@@ -352,8 +394,10 @@ SwipePattern.prototype = {
    */
   getRelativePos: function(e) {
     var pos = this.getEventPoint(e);
-    var rect = this.container.getBoundingClientRect();
-    return { "x": pos.x - rect.left - window.scrollX, "y": pos.y - rect.top - window.scrollY };
+    var rect = this.canvas.getBoundingClientRect();
+    var x = (pos.x - rect.left - window.scrollX) / this.scale;
+    var y = ( pos.y - rect.top - window.scrollY) / this.scale;
+    return { x: x, y: y };
   },
 
   /**

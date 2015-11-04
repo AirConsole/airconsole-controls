@@ -11,35 +11,39 @@
         margin: 0;
       }
 
-      #canvas_container_left {
+      .container {
+        position: relative;
         background-color: #3b3b3b;
-        text-align: center;
-        font-family: sans-serif;
         display: inline-block;
         width: 100%;
         height: 100%;
-        max-width: 300px;
-        max-height: 300px;
-        position: relative;
+        max-width: 900px;
+        max-height: 360px;
+        overflow: hidden;
+      }
+
+      #canvas_container_left {
+        vertical-align: top;
+        background-color: #222;
+        text-align: center;
+        width: 50%;
+        height: 100%;
+        display: inline-block;
       }
 
       #canvas_container_right {
+        vertical-align: top;
         background-color: #3b3b3b;
         text-align: center;
-        font-family: sans-serif;
-        display: inline-block;
-        width: 100%;
+        width: 49%;
         height: 100%;
-        max-width: 300px;
-        max-height: 300px;
-        position: relative;
+        display: inline-block;
       }
 
     </style>
   </head>
   <body>
-    <div id="canvas_container_left"></div>
-    <div id="canvas_container_right"></div>
+    <div class="container"><div id="canvas_container_left"></div><div id="canvas_container_right"></div></div>
 
     <script type="text/javascript" src="../swipe-pattern/swipe-pattern.js"></script>
     <script type="text/javascript">

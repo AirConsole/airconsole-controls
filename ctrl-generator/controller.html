@@ -54,15 +54,7 @@
       Create a new file called controller.html and paste the output code into it.
     </p>
     <p>
-      <b>Make sure</b> you have downloaded and included the following dirs and files from the <a href="https://github.com/AirConsole/airconsole-controls/tree/francois_controller_generator" target="_blank">AirConsole-Controls</a> project in your directory:
-      <br>(We assume your project root dir looks like that)
-      <ul>
-        <li>button</li>
-        <li>dpad</li>
-        <li>joystick</li>
-        <li>ctrl-generator/ctrl-generator.js</li>
-        <li>ctrl-generator/ctrl-generator.css</li>
-      </ul>
+      <b>Make sure</b> you have downloaded and included the project of <a href="https://github.com/AirConsole/airconsole-controls/tree/master" target="_blank">AirConsole-Controls</a> in your directory.
     </p>
   </div>
 
@@ -98,6 +90,36 @@
   }
 </pre></code>
   </div>
+
+    <div id="info-SwipeArea" class="info">
+      SwipeArea will send to the screen:
+  <code><pre>
+    {
+      key: "<span class="key"></span>",
+      pressed: true|false,
+      // Directions-Object: {
+      // left: &lt;Boolean&gt;,
+      // top: &lt;Boolean&gt;,
+      // right: &lt;Boolean&gt;,
+      // bottom: &lt;Boolean&gt;
+      // }
+      message: directions (Object)
+    }
+  </pre></code>
+    </div>
+
+  <div id="info-SwipePattern" class="info">
+      SwipePattern will send to the screen:
+  <code><pre>
+    {
+      key: "<span class="key"></span>",
+      pressed: true|false,
+      // Message contains an array of circle
+      // which were touched
+      message: &lt;Array&gt;
+    }
+  </pre></code>
+    </div>
 
   <div id="template_button_form" class="template_button_form">
     <h4>Add button:</h4>
@@ -145,6 +167,10 @@
         <div class="joystick-relative"></div>
       </div>
 
+      <div id="template-SwipeArea" class="button-300-300 swipe-area"></div>
+
+      <div id="template-SwipePattern" class="swipe-pattern-container"></div>
+
       <div id="template-Button" class="button-300-150"><div class="button-text"></div></div>
 
       <div id="template-ButtonMiddle" class="button-80"><div class="button-text">START</div></div>
@@ -157,6 +183,8 @@
   <script type="text/javascript" src="../dpad/dpad.js"></script>
   <script type="text/javascript" src="../button/button.js"></script>
   <script type="text/javascript" src="../joystick/joystick.js"></script>
+  <script type="text/javascript" src="../swipe-area/swipe-area.js"></script>
+  <script type="text/javascript" src="../swipe-pattern/swipe-pattern.js"></script>
   <script type="text/javascript" src="ctrl-generator.js"></script>
   <script type="text/javascript" src="ui-ctrl-generator.js"></script>
 
