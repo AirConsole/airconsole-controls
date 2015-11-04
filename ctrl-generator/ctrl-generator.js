@@ -151,12 +151,12 @@ var CtrlGenerator = (function() {
     };
 
     // Center
-    var parent_rect = parent_ele.getBoundingClientRect();
-    var ele_rect = swipe_ele.getBoundingClientRect();
-    if (parent_rect.height > ele_rect.height) {
-      var offset_y = (parent_rect.height - ele_rect.height) / 2;
-      swipe_ele.style.marginTop = offset_y + "px";
-    }
+    // var parent_rect = parent_ele.getBoundingClientRect();
+    // var ele_rect = swipe_ele.getBoundingClientRect();
+    // if (parent_rect.height > ele_rect.height) {
+    //   var offset_y = (parent_rect.height - ele_rect.height) / 2;
+    //   swipe_ele.style.marginTop = offset_y + "px";
+    // }
   }
 
   /**
