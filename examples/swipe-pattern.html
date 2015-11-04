@@ -38,18 +38,30 @@
           {x: 150, y: 60},
           {x: 250, y: 60},
           {x: 50, y: 150},
-          {x: 150, y: 150},
+          {
+            id: 'customId',
+            x: 150,
+            y: 150,
+            // Custom style
+            style: {
+              fill_color: '#f1c40f'
+            }
+          },
           {x: 250, y: 150},
           {x: 50, y: 240},
           {x: 150, y: 240},
           {x: 250, y: 240}
         ],
+
+        // Called when touching a new circle
         onTouchCircle: function(circle) {
           console.log("Touched circle", circle);
         },
+
+        // Called on touch ends. Passes an array of touched circles
         touchend: function(touched_circles) {
-          if (this.pathIsTouched([2, 5, 8], true)) {
-            console.log("2, 5, 8 Pattern MATCHES");
+          if (this.pathIsTouched([2, 'customId', 8], true)) {
+            console.log("2, customId, 8 Pattern MATCHES", touched_circles);
           }
         }
       });

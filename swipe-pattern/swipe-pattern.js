@@ -5,6 +5,17 @@ var SwipePattern = function(el, opts) {
   this.container = el;
   this.touchend_cb = opts.touchend || null;
   this.onTouchCircle = opts.onTouchCircle || null;
+  this.style = opts.style || {
+    circle: {
+      fill_color: '#ADEE00',
+      stroke_color: "#222222",
+      stroke_width: 10
+    },
+    line: {
+      stroke_color: "#54D7FF",
+      stroke_width: 8
+    }
+  };
   //
   this.circles = [];
   this.touched_circles = [];
@@ -123,12 +134,13 @@ SwipePattern.prototype = {
     }
   },
 
-  drawConnections: function() {
+  drawConnections: function(connections) {
+    connections = connections || this.touched_circles;
     this.clearCanvas();
-    for (var i = 0; i < this.touched_circles.length; i++) {
-      var circle = this.touched_circles[i];
+    for (var i = 0; i < connections.length; i++) {
+      var circle = connections[i];
       if (i === 0) continue;
-      var prev = this.touched_circles[i - 1];
+      var prev = connections[i - 1];
       if (prev) {
         this.drawLine(circle, prev);
       }
@@ -142,7 +154,8 @@ SwipePattern.prototype = {
         id: p.id || (i + 1),
         x: p.x,
         y: p.y,
-        radius: p.radius || 30
+        radius: p.radius || 30,
+        style: p.style || null
       };
       this.circles.push(opts);
     }
@@ -175,24 +188,26 @@ SwipePattern.prototype = {
 
   // ======================================================
 
-  drawCircle: function(point) {
+  drawCircle: function(circle) {
     this.ctx.beginPath();
-    this.ctx.arc(point.x, point.y, point.radius, 0, 2 * Math.PI, false);
-    this.ctx.fillStyle = '#ADEE00';
+    this.ctx.arc(circle.x, circle.y, circle.radius, 0, 2 * Math.PI, false);
+    var style = circle.style || this.style.circle;
+    this.ctx.fillStyle = style.fill_color;
     this.ctx.fill();
-    this.ctx.lineWidth = 10;
-    this.ctx.strokeStyle = '#222222';
+    this.ctx.lineWidth = style.stroke_width;
+    this.ctx.strokeStyle = style.stroke_color;
     this.ctx.stroke();
   },
 
   drawLine: function(start, end) {
+    var style = this.style.line;
     this.ctx.beginPath();
     this.ctx.moveTo(start.x, start.y);
     this.ctx.lineTo(end.x, end.y);
     this.ctx.closePath();
-    this.ctx.lineWidth = 8;
+    this.ctx.lineWidth = style.stroke_width;
     // set line color
-    this.ctx.strokeStyle = '#54D7FF';
+    this.ctx.strokeStyle = style.stroke_color;
     this.ctx.stroke();
   },
 
