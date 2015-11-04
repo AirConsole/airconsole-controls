@@ -7,10 +7,10 @@
  *           The callback that gets called when the SwipeArea is touched
  * @property {SwipeArea~touchEndCallback} touchend -
  *           The callback that gets called when the SwipeArea is released
- * @property {number|undefined} min_swiped_distance - amount of pixels
+ * @property {number|undefined} min_swipe_distance - amount of pixels
  *           which the user needs to move or tap the SwipeArea before triggering a
  *           direction. E.g: 20
- * @property {SwipeArea~AllowDirections|undefined} allowed_directions - If to allow all
+ * @property {SwipeArea~ALLOWED_DIRECTIONS|undefined} allowed_directions - If to allow all
              directions or simply vertical or horizontal
  * @property {boolean|undefined} diagonal - If true, diagonal movement are
  *           possible and it becomes a 8-way SwipeArea: For exmaple UP and RIGHT at
@@ -20,7 +20,7 @@
 
 /**
  * This callback is called when the amount of pixels swiped exceeds the
- * min_swiped_distance
+ * min_swipe_distance
  * @callback SwipeArea~onTrigger
  * @param {SwipeArea~ActiveDirection} directions - An object. Active directions are true
  *         E.g {left: true, top: false, ... }
@@ -35,9 +35,9 @@
  */
 var SwipeArea = function(el, opts) {
   opts = opts || {}
-  this.min_swiped_distance = opts.min_swiped_distance || 30;
+  this.min_swipe_distance = opts.min_swipe_distance || 30;
   this.diagonal = opts.diagonal || false;
-  this.allowed_directions = opts.allowed_directions || SwipeArea.AllowDirections.All;
+  this.allowed_directions = opts.allowed_directions || SwipeArea.ALLOWED_DIRECTIONS.All;
   this.is_touch_down = false;
   this.has_triggered_for_current_swipe = false;
   this.start_position = {
@@ -76,10 +76,10 @@ var SwipeArea = function(el, opts) {
   this.bindEvents();
 };
 
-SwipeArea.AllowDirections = {
-  All: 'all',
-  Horizontal: 'horizontal',
-  Vertical: 'vertical'
+SwipeArea.ALLOWED_DIRECTIONS = {
+  ALL: 'all',
+  HORIZONTAL: 'horizontal',
+  VERTICAL: 'vertical'
 };
 
 /**
@@ -199,13 +199,13 @@ SwipeArea.prototype = {
     var pos = this.getRelativePos(e);
     var vec = this.start_position;
     var has_directions = false;
-    var is_all = this.allowed_directions === SwipeArea.AllowDirections.All;
-    var is_horizontal = this.allowed_directions === SwipeArea.AllowDirections.Horizontal;
-    var is_vertical = this.allowed_directions === SwipeArea.AllowDirections.Vertical;
+    var is_all = this.allowed_directions === SwipeArea.ALLOWED_DIRECTIONS.ALL;
+    var is_horizontal = this.allowed_directions === SwipeArea.ALLOWED_DIRECTIONS.HORIZONTAL;
+    var is_vertical = this.allowed_directions === SwipeArea.ALLOWED_DIRECTIONS.VERTICAL;
 
     // Check if distance has been exceeded
     var distance = this.getDistanceBetweenTwoPoints(pos, vec);
-    if (distance >= this.min_swiped_distance) {
+    if (distance >= this.min_swipe_distance) {
       // Calculate reference angle between start vector and current pos in radian
       // to get the swipe direction
       var angle = Math.atan2(pos.y - vec.y, pos.x - vec.x);

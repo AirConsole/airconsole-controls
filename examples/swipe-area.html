@@ -44,9 +44,9 @@
   var info = document.getElementById('info');
 
   var swipe_area = new SwipeArea("swipe-area-0", {
-    allowed_directions: SwipeArea.AllowDirections.All,
+    allowed_directions: SwipeArea.ALLOWED_DIRECTIONS.ALL,
     diagonal: false,
-    min_swiped_distance: 30,
+    min_swipe_distance: 30,
     "touchstart": function() {
       console.log("Touch start");
     },
