@@ -1,3 +1,45 @@
+/**
+ * An object containing a configuration for the SwipePattern constructor.
+ * @typedef {object} SwipePatternConfig
+ * @property {Function} onTouchCircle -
+ *           The callback that gets called when a circle was touched
+ * @property {Function} touchend -
+ *           The callback that gets called when the SwipePattern is released
+ * @property {number} circles - A list of SwipePattern~Circle
+ * @property {SwipePattern~Style} style - A configuration style object
+ */
+
+/**
+ * A circle is an object with an x, y and radius property.
+ * @typedef {object} SwipePattern~Circle
+ * @param {number} x - The x coordinate
+ * @param {number} y - The y coordinate
+ * @param {number} radius - The radius of the circle
+ * @param {mixed} id - (Optional) The id to identify the circle
+ * @param {object} style - (Optional) The style object to style a circle individually
+ *                         {fill_color <Color>, stroke_width <Number> ,stroke_color <Color>}
+ */
+
+/**
+ * A coordinate is an object with an x and y property.
+ * @typedef {object} SwipePattern~Coordinate
+ * @param {number} x - The x coordinate
+ * @param {number} y - The y coordinate
+ */
+
+/**
+ * A style object to set a global style for circles and lines
+ * @typedef {object} SwipePattern~Style
+ * @param {object} circle - Styles applied to all circles ({fill_color, stroke_width,stroke_color})
+ * @param {number} line - Style to apply to lines ({stroke_width, stroke_color})
+ */
+
+/**
+ * A pattern of circles, which you can connect by swiping.
+ * @param {HTMLElement|string} el - The HTML container element or its ID.
+ * @param {SwipePatternConfig} opts - Constructor config.
+ * @constructor
+ */
 var SwipePattern = function(el, opts) {
   var me = this;
   opts = opts || {}
@@ -29,6 +71,10 @@ var SwipePattern = function(el, opts) {
 
 SwipePattern.prototype = {
 
+  /**
+   * Setups up canvas and circles
+   * @param {Object} opts - Passed opts of the constructor
+   */
   setup: function(opts) {
     this.canvas = document.createElement("canvas");
     var container_rect = this.container.getBoundingClientRect();
@@ -42,6 +88,9 @@ SwipePattern.prototype = {
     this.drawCircles();
   },
 
+  /**
+   * Bind input events to handlers
+   */
   bindEvents: function() {
     this.container.addEventListener("touchstart", this.onTouchStartHandler.bind(this));
     this.container.addEventListener("touchmove", this.onTouchMoveHandler.bind(this));
@@ -55,6 +104,10 @@ SwipePattern.prototype = {
     }
   },
 
+  /**
+   * Returns circle object if touch point is touching a circle
+   * @return {SwipePattern~Circle}
+   */
   mousePointInCircle: function(point) {
     var is_in = null;
     for (var i = 0; i < this.circles.length; i++) {
@@ -67,6 +120,10 @@ SwipePattern.prototype = {
     return is_in;
   },
 
+  /**
+   * Check if to add a circle to the touched circles
+   * @param {SwipePattern~Circle} circle
+   */
   addConnectionLine: function(circle) {
     var last_circle = this.touched_circles[this.touched_circles.length - 1];
     // Set next link if it is not the same circle
@@ -79,6 +136,10 @@ SwipePattern.prototype = {
     }
   },
 
+  /**
+   * Adds a touched circle to the touched circles list
+   * @param {SwipePattern~Circle} circle
+   */
   addTouchedCircle: function(circle) {
     this.touched_circles.push(circle);
     if (this.onTouchCircle) {
@@ -86,12 +147,20 @@ SwipePattern.prototype = {
     }
   },
 
+  /**
+   * Called on touch start
+   * @param {Event} e
+   */
   onTouchStartHandler: function(e) {
     this.is_mousedown = true;
     this.update();
     e.preventDefault();
   },
 
+  /**
+   * Called on touch move
+   * @param {Event} e
+   */
   onTouchMoveHandler: function(e) {
     if (this.is_mousedown) {
       var point = this.getEventPoint(e);
@@ -105,6 +174,10 @@ SwipePattern.prototype = {
     e.preventDefault();
   },
 
+  /**
+   * Called on touch end
+   * @param {Event} e
+   */
   onTouchEndHandler: function(e) {
     this.is_mousedown = false;
     if (this.touchend_cb) {
@@ -118,10 +191,16 @@ SwipePattern.prototype = {
 
   // ======================================================
 
+  /**
+   * Clears the canvas
+   */
   clearCanvas: function() {
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
   },
 
+  /**
+   * Draw method to draw all objects
+   */
   draw: function() {
     this.clearCanvas();
     this.drawCircles();
@@ -129,6 +208,9 @@ SwipePattern.prototype = {
     this.drawDragLine();
   },
 
+  /**
+   * Draw the current line
+   */
   drawDragLine: function() {
     var last_circle = this.touched_circles[this.touched_circles.length - 1];
     if (last_circle && this.current_line) {
@@ -136,12 +218,18 @@ SwipePattern.prototype = {
     }
   },
 
+  /**
+   * Update tick method
+   */
   update: function() {
     if (!this.is_mousedown) return;
     this.draw();
     requestAnimationFrame(this.update.bind(this));
   },
 
+  /**
+   * Draws all circles
+   */
   drawCircles: function() {
     for (var i = 0; i < this.circles.length; i++) {
       var circle = this.circles[i];
@@ -149,6 +237,10 @@ SwipePattern.prototype = {
     }
   },
 
+  /**
+   * Draws all connections
+   * @param {Array|undefined} connects - A list of line segments or default the touched circles
+   */
   drawConnections: function(connections) {
     connections = connections || this.touched_circles;
     for (var i = 0; i < connections.length; i++) {
@@ -161,6 +253,10 @@ SwipePattern.prototype = {
     }
   },
 
+  /**
+   * Creates circle objects
+   * @param {Array} circles - A list of circles
+   */
   createCircleObjects: function(circles) {
     for (var i = 0; i < circles.length; i++) {
       var p = circles[i];
@@ -175,10 +271,19 @@ SwipePattern.prototype = {
     }
   },
 
+  /**
+   * Returns true if a sequence of ids has been touched
+   * @param {Array} sequence - A list of circle ids: E.g. [1, 5, 7] (or own specified ids)
+   * @param {Boolean} order_matters - If true check if the order is the same as in the
+   *                                  touched circles, or (false) just check if these
+   *                                  circles have been touched.
+   * @return {Boolean}
+   */
   pathIsTouched: function(sequence, order_matters) {
     if (!this.touched_circles.length) return false;
     var len = sequence.length;
     var counter = 0;
+    var result = false;
     for (var i = 0; i < sequence.length; i++) {
       // Order matters
       if (order_matters) {
@@ -187,6 +292,7 @@ SwipePattern.prototype = {
             counter++;
           }
         }
+        result = counter === len;
       // Order does not matter, just check if they are touched
       } else {
         for (var t = 0; t < this.touched_circles.length; t++) {
@@ -195,13 +301,18 @@ SwipePattern.prototype = {
             break;
           }
         }
+        result = counter === len && this.touched_circles.length == len;
       }
     }
-    return counter === len;
+    return result;
   },
 
   // ======================================================
 
+  /**
+   * Draws a circle on the canvas
+   * @param {SwipePatter~Circle} circle
+   */
   drawCircle: function(circle) {
     this.ctx.beginPath();
     this.ctx.arc(circle.x, circle.y, circle.radius, 0, 2 * Math.PI, false);
@@ -213,6 +324,11 @@ SwipePattern.prototype = {
     this.ctx.stroke();
   },
 
+  /**
+   * Draws a line between two points
+   * @return {SwipePattern~Coordinate} start
+   * @return {SwipePattern~Coordinate} end
+   */
   drawLine: function(start, end) {
     var style = this.style.line;
     this.ctx.beginPath();
@@ -225,12 +341,22 @@ SwipePattern.prototype = {
     this.ctx.stroke();
   },
 
+  /**
+   * Returns point
+   * @param {Event} e
+   * @return {SwipePattern~Coordinate}
+   */
   getRelativePos: function(e) {
     var pos = this.getEventPoint(e);
     var rect = this.container.getBoundingClientRect();
     return { "x": pos.x - rect.left, "y": pos.y - rect.top };
   },
 
+  /**
+   * Returns true if a point is in a circle
+   * @return {SwipePattern~Coordinate} point
+   * @param {SwipePattern~Circle} circle
+   */
   pointInCircle: function(point, circle) {
     var distance = Math.pow(circle.x - point.x, 2) + Math.pow(circle.y - point.y, 2);
     return distance <= (circle.radius * circle.radius);
@@ -239,7 +365,7 @@ SwipePattern.prototype = {
   /**
    * Returns the event point coordinates considering both touch and mouse events
    * @param {Event} e - An event
-   * @return {DPad~Coordinate}
+   * @return {SwipePattern~Coordinate}
    */
   getEventPoint: function(e) {
     var out = { x: 0, y: 0 };
