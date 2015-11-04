@@ -34,7 +34,9 @@ var CtrlGenerator = (function() {
     DPad: 'DPad',
     Joystick: 'Joystick',
     ButtonVertical: 'Button',
-    ButtonMiddle: 'ButtonMiddle'
+    ButtonMiddle: 'ButtonMiddle',
+    SwipeArea: 'SwipeArea',
+    SwipePattern: 'SwipePattern'
   };
 
   var GeneratorMap = {};
@@ -42,6 +44,8 @@ var CtrlGenerator = (function() {
   GeneratorMap[Type.Joystick] = generatePad;
   GeneratorMap[Type.ButtonVertical] = generateButtonVertical;
   GeneratorMap[Type.ButtonMiddle] = generateButtonsMiddle;
+  GeneratorMap[Type.SwipeArea] = generateSwipeArea;
+  GeneratorMap[Type.SwipePattern] = generateSwipePattern;
   GeneratorMap[Type.EMPTY] = function() {};
 
   /**
@@ -94,6 +98,96 @@ var CtrlGenerator = (function() {
     params.key = id;
     generated_config[side_id] = {
       ele: dpad_ele,
+      obj: obj,
+      params: params
+    };
+  }
+
+  /**
+   * Create swipe pattern element
+   * @param {Object} config
+   * @param {Element.~} ele - The side element (left, middle or right)
+   * @param {Options} side_options - All options of the side
+   */
+  function generateSwipePattern(config, parent_ele, side_options, side_id) {
+    var swipe_ele = cloneElement(config.type);
+    parent_ele.appendChild(swipe_ele);
+
+    var params = config.opts || {};
+    var id = config.key || config.type.toLowerCase() + '-' + side_id;
+
+    if (!params.onTouchCircle) {
+      params.onTouchCircle = function(circle) {
+        sendInputEvent(id, true, circle);
+      }
+    }
+
+    if (!params.touchend) {
+      params.touchend = function(touched_circles) {
+        sendInputEvent(id, false, touched_circles);
+      }
+    }
+
+    if (!params.circles) {
+      params.circles = [
+        {x: 50, y: 60},
+        {x: 150, y: 60},
+        {x: 250, y: 60},
+        {x: 50, y: 150},
+        { x: 150, y: 150},
+        {x: 250, y: 150},
+        {x: 50, y: 240},
+        {x: 150, y: 240},
+        {x: 250, y: 240}
+      ];
+    }
+
+    var obj = new window[config.type](swipe_ele, params);
+    params.key = id;
+    generated_config[side_id] = {
+      ele: swipe_ele,
+      obj: obj,
+      params: params
+    };
+
+    // Center
+    var parent_rect = parent_ele.getBoundingClientRect();
+    var ele_rect = swipe_ele.getBoundingClientRect();
+    if (parent_rect.height > ele_rect.height) {
+      var offset_y = (parent_rect.height - ele_rect.height) / 2;
+      swipe_ele.style.marginTop = offset_y + "px";
+    }
+  }
+
+  /**
+   * Create swipe area element
+   * @param {Object} config
+   * @param {Element.~} ele - The side element (left, middle or right)
+   * @param {Options} side_options - All options of the side
+   */
+  function generateSwipeArea(config, ele, side_options, side_id) {
+    var swipe_ele = cloneElement(config.type);
+    ele.appendChild(swipe_ele);
+
+    var params = config.opts || {};
+    var id = config.key || config.type.toLowerCase() + '-' + side_id;
+
+    if (!params.onTrigger) {
+      params.onTrigger = function(active_directions) {
+        sendInputEvent(id, true, active_directions);
+      }
+    }
+
+    if (!params.touchend) {
+      params.touchend = function() {
+        sendInputEvent(id, false);
+      }
+    }
+
+    var obj = new window[config.type](swipe_ele, params);
+    params.key = id;
+    generated_config[side_id] = {
+      ele: swipe_ele,
       obj: obj,
       params: params
     };

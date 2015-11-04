@@ -49,9 +49,9 @@ var SwipePattern = function(el, opts) {
   this.onTouchCircle = opts.onTouchCircle || null;
   this.style = opts.style || {
     circle: {
-      fill_color: '#ADEE00',
-      stroke_color: "#222222",
-      stroke_width: 10
+      fill_color: '#222222',
+      stroke_color: "#ADEE00",
+      stroke_width: 2
     },
     line: {
       stroke_color: "#54D7FF",

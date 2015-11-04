@@ -24,6 +24,8 @@ output += outputAddScript('http://www.airconsole.com/api/airconsole-1.2.1.js');
 output += outputAddScript('dpad/dpad.js');
 output += outputAddScript('joystick/joystick.js');
 output += outputAddScript('button/button.js');
+output += outputAddScript('swipe-area/swipe-area.js');
+output += outputAddScript('swipe-pattern/swipe-pattern.js');
 output += outputAddScript('ctrl-generator/ctrl-generator.js');
 output += '<script type="text/javascript">'+ "\n";
 output += '{{CONFIG_CODE}}';
@@ -174,19 +176,21 @@ var UICtrlGenerator = (function(ctrl_generator) {
 
     // DPad or Joystick
     if (selected_type === ctrl_generator.Type.DPad ||
-        selected_type === ctrl_generator.Type.Joystick) {
+        selected_type === ctrl_generator.Type.Joystick ||
+        selected_type === ctrl_generator.Type.SwipeArea ||
+        selected_type === ctrl_generator.Type.SwipePattern) {
       ctrl_config[side_id] = {
         type: ctrl_generator.Type[selected_type]
       };
 
-    // EMPTY
-    } else if (selected_type === ctrl_generator.Type.EMPTY) {
-      ctrl_config[side_id] = ctrl_generator.Type.EMPTY;
-
-    // ButtonVertical
-    } else {
+      // ButtonVertical
+    } else if (selected_type === 'ButtonVertical') {
       ctrl_config[side_id] = ctrl_generator.Type.EMPTY;
       addButtonForm(form_ele, side_id, selected_type, side_ele);
+
+    // EMPTY
+    } else {
+      ctrl_config[side_id] = ctrl_generator.Type.EMPTY;
     }
     generate();
     showInfo(side_ele, selected_type, side_id);
