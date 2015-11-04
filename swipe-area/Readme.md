@@ -20,9 +20,9 @@ amount of pixel has been swiped
       // Gets called when the DPad is released.
       "touchend": function(had_direction) {},
       // (Optional) Minimum distance (px) to swipe until triggering the onTrigger function
-      "min_swiped_distance": 30,
-      // (Optional) allowed_directions: All, Horizontal or Vertical
-      "allowed_directions": SwipeArea.AllowDirections.All
+      "min_swipe_distance": 30,
+      // (Optional) allowed_directions: ALL, HORIZONTAL or VERTICAL
+      "allowed_directions": SwipeArea.ALLOWED_DIRECTIONS.ALL
       // (Optional) diagonal: For All-Directions, enables diagonal swipe detection
       "diagonal": false
     });
