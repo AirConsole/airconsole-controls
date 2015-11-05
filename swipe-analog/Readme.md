@@ -15,11 +15,11 @@ vector.
   new SwipeAnalog("my-swipe-analog", {
       // Gets called when the amount of pixels swiped has been exceeded
       // Param is the direction vector
-      "onTrigger": function(direction_map) {},
+      "onTrigger": function(direction_vector) {},
       // Gets called when the SwipeAnalog is touched.
       "touchstart": function() {},
       // Gets called when the SwipeAnalog is released.
-      "touchend": function(had_direction) {},
+      "touchend": function() {},
       // (Optional) Minimum distance (px) to swipe until triggering the onTrigger function
       "min_swipe_distance": 30
     });
