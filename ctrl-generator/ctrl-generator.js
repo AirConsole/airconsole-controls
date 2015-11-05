@@ -36,6 +36,7 @@ var CtrlGenerator = (function() {
     ButtonVertical: 'Button',
     ButtonMiddle: 'ButtonMiddle',
     SwipeDigital: 'SwipeDigital',
+    SwipeAnalog: 'SwipeAnalog',
     SwipePattern: 'SwipePattern'
   };
 
@@ -44,7 +45,8 @@ var CtrlGenerator = (function() {
   GeneratorMap[Type.Joystick] = generatePad;
   GeneratorMap[Type.ButtonVertical] = generateButtonVertical;
   GeneratorMap[Type.ButtonMiddle] = generateButtonsMiddle;
-  GeneratorMap[Type.SwipeDigital] = generateSwipeDigital;
+  GeneratorMap[Type.SwipeDigital] = generateSwipeArea;
+  GeneratorMap[Type.SwipeAnalog] = generateSwipeArea;
   GeneratorMap[Type.SwipePattern] = generateSwipePattern;
   GeneratorMap[Type.EMPTY] = function() {};
 
@@ -165,7 +167,7 @@ var CtrlGenerator = (function() {
    * @param {Element.~} ele - The side element (left, middle or right)
    * @param {Options} side_options - All options of the side
    */
-  function generateSwipeDigital(config, ele, side_options, side_id) {
+  function generateSwipeArea(config, ele, side_options, side_id) {
     var swipe_ele = cloneElement(config.type);
     ele.appendChild(swipe_ele);
 
@@ -173,8 +175,8 @@ var CtrlGenerator = (function() {
     var id = config.key || config.type.toLowerCase() + '-' + side_id;
 
     if (!params.onTrigger) {
-      params.onTrigger = function(active_directions) {
-        sendInputEvent(id, true, active_directions);
+      params.onTrigger = function(param_obj) {
+        sendInputEvent(id, true, param_obj);
       }
     }
 
