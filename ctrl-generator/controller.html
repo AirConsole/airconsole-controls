@@ -91,8 +91,8 @@
 </pre></code>
   </div>
 
-    <div id="info-SwipeArea" class="info">
-      SwipeArea will send to the screen:
+    <div id="info-SwipeDigital" class="info">
+      SwipeDigital will send to the screen:
   <code><pre>
     {
       key: "<span class="key"></span>",
@@ -107,6 +107,23 @@
     }
   </pre></code>
     </div>
+
+  <div id="info-SwipeAnalog" class="info">
+      SwipeAnalog will send to the screen:
+  <code><pre>
+    {
+      key: "<span class="key"></span>",
+      pressed: true|false,
+      // Direction-Vector-Object: {
+      // x: &lt;Number&gt;,
+      // y: &lt;Number&gt;,
+      // angle: &lt;Number&gt;,
+      // degree: &lt;Number&gt;
+      // }
+      message: (Vec-Object)
+    }
+  </pre></code>
+  </div>
 
   <div id="info-SwipePattern" class="info">
       SwipePattern will send to the screen:
@@ -167,7 +184,12 @@
         <div class="joystick-relative"></div>
       </div>
 
-      <div id="template-SwipeArea" class="button-300-300 swipe-area"></div>
+      <div id="template-SwipeDigital" class="button-300-300 swipe-area">
+        <div class="button-text">SWIPE</div>
+      </div>
+      <div id="template-SwipeAnalog" class="button-300-300 swipe-area">
+        <div class="button-text">SWIPE</div>
+      </div>
 
       <div id="template-SwipePattern" class="swipe-pattern-container"></div>
 
@@ -183,7 +205,8 @@
   <script type="text/javascript" src="../dpad/dpad.js"></script>
   <script type="text/javascript" src="../button/button.js"></script>
   <script type="text/javascript" src="../joystick/joystick.js"></script>
-  <script type="text/javascript" src="../swipe-area/swipe-area.js"></script>
+  <script type="text/javascript" src="../swipe-digital/swipe-digital.js"></script>
+  <script type="text/javascript" src="../swipe-analog/swipe-analog.js"></script>
   <script type="text/javascript" src="../swipe-pattern/swipe-pattern.js"></script>
   <script type="text/javascript" src="ctrl-generator.js"></script>
   <script type="text/javascript" src="ui-ctrl-generator.js"></script>
@@ -202,6 +225,7 @@
           CtrlGenerator.Type.Joystick
           CtrlGenerator.Type.ButtonVertical
           CtrlGenerator.Type.ButtonMiddle
+          CtrlGenerator.Type.SwipeDigital
 
         * opts:
           The option params to initiate DPad, Joystick, Button. See their documentation.
