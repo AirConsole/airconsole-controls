@@ -11,13 +11,13 @@ amount of pixel has been swiped
 
 ```javascript
   // The first argument can be an html element or and element id. The second argument are options.
-  new DPad("my-dpad", {
+  new SwipeArea("my-swipe-area", {
       // Gets called when the amount of pixels swiped has been exceeded
       // Param is active directions {down: <Boolean>, left: <Boolean>, up: <Boolean>, right: <Boolean>}
       "onTrigger": function(direction_map) {},
-      // Gets called when the DPad is touched.
+      // Gets called when the SwipeArea is touched.
       "touchstart": function() {},
-      // Gets called when the DPad is released.
+      // Gets called when the SwipeArea is released.
       "touchend": function(had_direction) {},
       // (Optional) Minimum distance (px) to swipe until triggering the onTrigger function
       "min_swipe_distance": 30,
