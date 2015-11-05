@@ -25,7 +25,7 @@ output += outputAddScript('http://www.airconsole.com/api/airconsole-1.2.1.js');
 output += outputAddScript('dpad/dpad.js');
 output += outputAddScript('joystick/joystick.js');
 output += outputAddScript('button/button.js');
-output += outputAddScript('swipe-area/swipe-area.js');
+output += outputAddScript('swipe-digital/swipe-digital.js');
 output += outputAddScript('swipe-pattern/swipe-pattern.js');
 output += outputAddScript('ctrl-generator/ctrl-generator.js');
 output += '<script type="text/javascript">'+ "\n";
@@ -178,7 +178,7 @@ var UICtrlGenerator = (function(ctrl_generator) {
     // DPad or Joystick
     if (selected_type === ctrl_generator.Type.DPad ||
         selected_type === ctrl_generator.Type.Joystick ||
-        selected_type === ctrl_generator.Type.SwipeArea ||
+        selected_type === ctrl_generator.Type.SwipeDigital ||
         selected_type === ctrl_generator.Type.SwipePattern) {
       ctrl_config[side_id] = {
         type: ctrl_generator.Type[selected_type]

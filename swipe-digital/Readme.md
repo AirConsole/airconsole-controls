@@ -1,7 +1,8 @@
-# SwipeArea
+# SwipeDigital
 
 A 4-way or 8-way relative-swipe pad which does not trigger on touchend, but when a certain
-amount of pixel has been swiped
+amount of pixel has been swiped. Other than SwipeAnalog, SwipeDigital returns a map of
+active swipe directions ('left', 'top', ...).
 
 ## Example
 
@@ -11,18 +12,18 @@ amount of pixel has been swiped
 
 ```javascript
   // The first argument can be an html element or and element id. The second argument are options.
-  new SwipeArea("my-swipe-area", {
+  new SwipeDigital("my-swipe-area", {
       // Gets called when the amount of pixels swiped has been exceeded
       // Param is active directions {down: <Boolean>, left: <Boolean>, up: <Boolean>, right: <Boolean>}
       "onTrigger": function(direction_map) {},
-      // Gets called when the SwipeArea is touched.
+      // Gets called when the SwipeDigital is touched.
       "touchstart": function() {},
-      // Gets called when the SwipeArea is released.
+      // Gets called when the SwipeDigital is released.
       "touchend": function(had_direction) {},
       // (Optional) Minimum distance (px) to swipe until triggering the onTrigger function
       "min_swipe_distance": 30,
       // (Optional) allowed_directions: ALL, HORIZONTAL or VERTICAL
-      "allowed_directions": SwipeArea.ALLOWED_DIRECTIONS.ALL
+      "allowed_directions": SwipeDigital.ALLOWED_DIRECTIONS.ALL
       // (Optional) diagonal: For All-Directions, enables diagonal swipe detection
       "diagonal": false
     });

@@ -1,19 +1,19 @@
 /**
- * An object containing a configuration for the SwipeArea constructor.
+ * An object containing a configuration for the SwipeDigital constructor.
  * @typedef {object} Config
- * @property {SwipeArea~onTrigger} onTrigger - The callback which gets triggered when
+ * @property {SwipeDigital~onTrigger} onTrigger - The callback which gets triggered when
  *            the min amount of pixel has been swiped.
  * @property {Function} touchstart -
- *           The callback that gets called when the SwipeArea is touched
- * @property {SwipeArea~touchEndCallback} touchend -
- *           The callback that gets called when the SwipeArea is released
+ *           The callback that gets called when the SwipeDigital is touched
+ * @property {SwipeDigital~touchEndCallback} touchend -
+ *           The callback that gets called when the SwipeDigital is released
  * @property {number|undefined} min_swipe_distance - amount of pixels
- *           which the user needs to move or tap the SwipeArea before triggering a
+ *           which the user needs to move or tap the SwipeDigital before triggering a
  *           direction. E.g: 20
- * @property {SwipeArea~ALLOWED_DIRECTIONS|undefined} allowed_directions - If to allow all
+ * @property {SwipeDigital~ALLOWED_DIRECTIONS|undefined} allowed_directions - If to allow all
              directions or simply vertical or horizontal
  * @property {boolean|undefined} diagonal - If true, diagonal movement are
- *           possible and it becomes a 8-way SwipeArea: For exmaple UP and RIGHT at
+ *           possible and it becomes a 8-way SwipeDigital: For exmaple UP and RIGHT at
  *           the same time. Default: false
  * @property {boolean} log - Debug output iff a callback is not set.
  */
@@ -21,8 +21,8 @@
 /**
  * This callback is called when the amount of pixels swiped exceeds the
  * min_swipe_distance
- * @callback SwipeArea~onTrigger
- * @param {SwipeArea~ActiveDirection} directions - An object. Active directions are true
+ * @callback SwipeDigital~onTrigger
+ * @param {SwipeDigital~ActiveDirection} directions - An object. Active directions are true
  *         E.g {left: true, top: false, ... }
  */
 
@@ -33,11 +33,11 @@
  * @param {Config} opts - Constructor config.
  * @constructor
  */
-var SwipeArea = function(el, opts) {
+var SwipeDigital = function(el, opts) {
   opts = opts || {}
   this.min_swipe_distance = opts.min_swipe_distance || 30;
   this.diagonal = opts.diagonal || false;
-  this.allowed_directions = opts.allowed_directions || SwipeArea.ALLOWED_DIRECTIONS.ALL;
+  this.allowed_directions = opts.allowed_directions || SwipeDigital.ALLOWED_DIRECTIONS.ALL;
   this.is_touch_down = false;
   this.has_triggered_for_current_swipe = false;
   this.start_position = {
@@ -76,7 +76,7 @@ var SwipeArea = function(el, opts) {
   this.bindEvents();
 };
 
-SwipeArea.ALLOWED_DIRECTIONS = {
+SwipeDigital.ALLOWED_DIRECTIONS = {
   ALL: 'all',
   HORIZONTAL: 'horizontal',
   VERTICAL: 'vertical'
@@ -87,30 +87,30 @@ SwipeArea.ALLOWED_DIRECTIONS = {
  * @constant
  * @type {string}
  */
-SwipeArea.UP = "up";
+ SwipeDigital.UP = "up";
 
 /**
  * Direction down
  * @constant
  * @type {string}
  */
-SwipeArea.DOWN = "down";
+ SwipeDigital.DOWN = "down";
 
 /**
  * Direction left
  * @constant
  * @type {string}
  */
-SwipeArea.LEFT = "left";
+ SwipeDigital.LEFT = "left";
 
 /**
  * Direction right
  * @constant
  * @type {string}
  */
-SwipeArea.RIGHT = "right";
+ SwipeDigital.RIGHT = "right";
 
-SwipeArea.prototype = {
+SwipeDigital.prototype = {
 
   /**
    * Binds touch and mouse events to handlers
@@ -199,9 +199,9 @@ SwipeArea.prototype = {
     var pos = this.getRelativePos(e);
     var vec = this.start_position;
     var has_directions = false;
-    var is_all = this.allowed_directions === SwipeArea.ALLOWED_DIRECTIONS.ALL;
-    var is_horizontal = this.allowed_directions === SwipeArea.ALLOWED_DIRECTIONS.HORIZONTAL;
-    var is_vertical = this.allowed_directions === SwipeArea.ALLOWED_DIRECTIONS.VERTICAL;
+    var is_all = this.allowed_directions === SwipeDigital.ALLOWED_DIRECTIONS.ALL;
+    var is_horizontal = this.allowed_directions === SwipeDigital.ALLOWED_DIRECTIONS.HORIZONTAL;
+    var is_vertical = this.allowed_directions === SwipeDigital.ALLOWED_DIRECTIONS.VERTICAL;
 
     // Check if distance has been exceeded
     var distance = this.getDistanceBetweenTwoPoints(pos, vec);
@@ -219,13 +219,13 @@ SwipeArea.prototype = {
         if (angle <= Math.PI/4 + diagonal_extension ||
           angle > Math.PI*7/4-diagonal_extension) {
           has_directions = true;
-          this.active_directions[SwipeArea.RIGHT] = true;
+          this.active_directions[SwipeDigital.RIGHT] = true;
         }
 
         if (angle >= Math.PI*3/4 - diagonal_extension &&
           angle < Math.PI*5/4 + diagonal_extension) {
           has_directions = true;
-          this.active_directions[SwipeArea.LEFT] = true;
+          this.active_directions[SwipeDigital.LEFT] = true;
         }
 
       }
@@ -234,13 +234,13 @@ SwipeArea.prototype = {
         if (angle >= Math.PI/4 - diagonal_extension &&
           angle < Math.PI*3/4 + diagonal_extension) {
           has_directions = true;
-          this.active_directions[SwipeArea.DOWN] = true;
+          this.active_directions[SwipeDigital.DOWN] = true;
         }
 
         if (angle >= Math.PI*5/4 - diagonal_extension &&
           angle < Math.PI*7/4 + diagonal_extension) {
           has_directions = true;
-          this.active_directions[SwipeArea.UP] = true;
+          this.active_directions[SwipeDigital.UP] = true;
         }
       }
     }

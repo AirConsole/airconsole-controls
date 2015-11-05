@@ -35,7 +35,7 @@ var CtrlGenerator = (function() {
     Joystick: 'Joystick',
     ButtonVertical: 'Button',
     ButtonMiddle: 'ButtonMiddle',
-    SwipeArea: 'SwipeArea',
+    SwipeDigital: 'SwipeDigital',
     SwipePattern: 'SwipePattern'
   };
 
@@ -44,7 +44,7 @@ var CtrlGenerator = (function() {
   GeneratorMap[Type.Joystick] = generatePad;
   GeneratorMap[Type.ButtonVertical] = generateButtonVertical;
   GeneratorMap[Type.ButtonMiddle] = generateButtonsMiddle;
-  GeneratorMap[Type.SwipeArea] = generateSwipeArea;
+  GeneratorMap[Type.SwipeDigital] = generateSwipeDigital;
   GeneratorMap[Type.SwipePattern] = generateSwipePattern;
   GeneratorMap[Type.EMPTY] = function() {};
 
@@ -165,7 +165,7 @@ var CtrlGenerator = (function() {
    * @param {Element.~} ele - The side element (left, middle or right)
    * @param {Options} side_options - All options of the side
    */
-  function generateSwipeArea(config, ele, side_options, side_id) {
+  function generateSwipeDigital(config, ele, side_options, side_id) {
     var swipe_ele = cloneElement(config.type);
     ele.appendChild(swipe_ele);
 
