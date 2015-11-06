@@ -177,11 +177,12 @@ var UICtrlGenerator = (function(ctrl_generator) {
     form_ele.html('');
 
     // DPad or Joystick
-    if (selected_type === ctrl_generator.Type.DPad ||
-        selected_type === ctrl_generator.Type.Joystick ||
-        selected_type === ctrl_generator.Type.SwipeDigital ||
-        selected_type === ctrl_generator.Type.SwipeAnalog ||
-        selected_type === ctrl_generator.Type.SwipePattern) {
+    if (selected_type === ctrl_generator.Type.DPad.label ||
+        selected_type === ctrl_generator.Type.DPadRelative.label ||
+        selected_type === ctrl_generator.Type.Joystick.label ||
+        selected_type === ctrl_generator.Type.SwipeDigital.label ||
+        selected_type === ctrl_generator.Type.SwipeAnalog.label ||
+        selected_type === ctrl_generator.Type.SwipePattern.label) {
       ctrl_config[side_id] = {
         type: ctrl_generator.Type[selected_type]
       };
@@ -213,11 +214,12 @@ var UICtrlGenerator = (function(ctrl_generator) {
     ui_selects_ele.each(function() {
       var $ele = $(this);
       for (var type in ctrl_generator.Type) {
-        if (type === ctrl_generator.Type.ButtonMiddle) continue;
-        var opt = $('<option value=' + type + '>' + type + '</option>');
+        var type_obj = ctrl_generator.Type[type];
+        if (type_obj.label === ctrl_generator.Type.ButtonMiddle.label) continue;
+        var opt = $('<option value=' + type_obj.label + '>' + type_obj.label + '</option>');
         var side_id = $ele.attr('data-id');
-        if (type === ctrl_config[side_id].type ||
-            (ctrl_config[side_id] instanceof Array && type === 'ButtonVertical')) {
+        if (type_obj.label === ctrl_config[side_id].type ||
+            (ctrl_config[side_id] instanceof Array && type_obj.label === 'ButtonVertical')) {
           opt.attr('selected', 'selected');
           //showInfo($ele.parent(), type, side_id);
         }
