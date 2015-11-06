@@ -30,25 +30,54 @@ var CtrlGenerator = (function() {
   };
 
   var Type = {
-    EMPTY: 'EMPTY',
-    DPad: 'DPad',
-    Joystick: 'Joystick',
-    ButtonVertical: 'Button',
-    ButtonMiddle: 'ButtonMiddle',
-    SwipeDigital: 'SwipeDigital',
-    SwipeAnalog: 'SwipeAnalog',
-    SwipePattern: 'SwipePattern'
+    EMPTY: {
+      label: 'EMPTY',
+      class_name: null
+    },
+    DPadRelative: {
+      label: 'DPadRelative',
+      class_name: 'DPad'
+    },
+    DPad: {
+      label: 'DPad',
+      class_name: 'DPad'
+    },
+    Joystick: {
+      label: 'Joystick',
+      class_name: 'Joystick'
+    },
+    ButtonVertical: {
+      label: 'ButtonVertical',
+      class_name: 'Button'
+    },
+    ButtonMiddle: {
+      label: 'ButtonMiddle',
+      class_name: 'Button'
+    },
+    SwipeDigital: {
+      label: 'SwipeDigital',
+      class_name: 'SwipeDigital'
+    },
+    SwipeAnalog: {
+      label: 'SwipeAnalog',
+      class_name: 'SwipeAnalog'
+    },
+    SwipePattern: {
+      label: 'SwipePattern',
+      class_name: 'SwipePattern'
+    }
   };
 
   var GeneratorMap = {};
-  GeneratorMap[Type.DPad] = generatePad;
-  GeneratorMap[Type.Joystick] = generatePad;
-  GeneratorMap[Type.ButtonVertical] = generateButtonVertical;
-  GeneratorMap[Type.ButtonMiddle] = generateButtonsMiddle;
-  GeneratorMap[Type.SwipeDigital] = generateSwipeArea;
-  GeneratorMap[Type.SwipeAnalog] = generateSwipeArea;
-  GeneratorMap[Type.SwipePattern] = generateSwipePattern;
-  GeneratorMap[Type.EMPTY] = function() {};
+  GeneratorMap[Type.DPad.label] = generatePad;
+  GeneratorMap[Type.DPadRelative.label] = generatePadRelative;
+  GeneratorMap[Type.Joystick.label] = generatePad;
+  GeneratorMap[Type.ButtonVertical.label] = generateButtonVertical;
+  GeneratorMap[Type.ButtonMiddle.label] = generateButtonsMiddle;
+  GeneratorMap[Type.SwipeDigital.label] = generateSwipeArea;
+  GeneratorMap[Type.SwipeAnalog.label] = generateSwipeArea;
+  GeneratorMap[Type.SwipePattern.label] = generateSwipePattern;
+  GeneratorMap[Type.EMPTY.label] = function() {};
 
   /**
    * Helper function to clone an element (deep clone)
@@ -56,10 +85,14 @@ var CtrlGenerator = (function() {
    * @return {HTMLElement}
    */
   function cloneElement(type) {
-    var ele = document.getElementById('template-' + type).cloneNode(true);
-    ele.id = type + "-" + (++id_counter);
+    var ele = document.getElementById('template-' + type.label).cloneNode(true);
+    ele.id = type.label + "-" + (++id_counter);
     return ele;
   }
+
+  function generatePadRelative(config, ele, side_options, side_id) {
+    generatePad(config, ele, side_options, side_id, true);
+  };
 
   /**
    * Create DPad or Joystick
@@ -67,14 +100,17 @@ var CtrlGenerator = (function() {
    * @param {Element.~} ele - The side element (left, middle or right)
    * @param {Options} side_options - All options of the side
    */
-  function generatePad(config, ele, side_options, side_id) {
+  function generatePad(config, ele, side_options, side_id, is_relative) {
+    is_relative = is_relative || false;
     var dpad_ele = cloneElement(config.type);
     ele.appendChild(dpad_ele);
 
     var params = config.opts || {};
-    var id = config.key || config.type.toLowerCase() + '-' + side_id;
+    var id = config.key || config.type.label.toLowerCase() + '-' + side_id;
 
-    if (config.type === Type.DPad) {
+    params.relative = params.is_relative || is_relative;
+
+    if (config.type.class_name === Type.DPad.class_name) {
       if (!params.directionchange) {
         params.directionchange = function(key, pressed) {
           sendInputEvent(id, pressed, { direction: key });
@@ -82,7 +118,7 @@ var CtrlGenerator = (function() {
       }
     }
 
-    if (config.type === Type.Joystick) {
+    if (config.type.class_name === Type.Joystick.class_name) {
       if (!params.touchmove) {
         params.touchmove = function(point) {
           sendInputEvent(id, true, point);
@@ -96,7 +132,7 @@ var CtrlGenerator = (function() {
       }
     }
 
-    var obj = new window[config.type](dpad_ele, params);
+    var obj = new window[config.type.class_name](dpad_ele, params);
     params.key = id;
     generated_config[side_id] = {
       ele: dpad_ele,
@@ -116,7 +152,7 @@ var CtrlGenerator = (function() {
     parent_ele.appendChild(swipe_ele);
 
     var params = config.opts || {};
-    var id = config.key || config.type.toLowerCase() + '-' + side_id;
+    var id = config.key || config.type.label.toLowerCase() + '-' + side_id;
 
     if (!params.onTouchCircle) {
       params.onTouchCircle = function(circle) {
@@ -144,7 +180,7 @@ var CtrlGenerator = (function() {
       ];
     }
 
-    var obj = new window[config.type](swipe_ele, params);
+    var obj = new window[config.type.class_name](swipe_ele, params);
     params.key = id;
     generated_config[side_id] = {
       ele: swipe_ele,
@@ -172,7 +208,7 @@ var CtrlGenerator = (function() {
     ele.appendChild(swipe_ele);
 
     var params = config.opts || {};
-    var id = config.key || config.type.toLowerCase() + '-' + side_id;
+    var id = config.key || config.type.label.toLowerCase() + '-' + side_id;
 
     if (!params.onTrigger) {
       params.onTrigger = function(param_obj) {
@@ -186,7 +222,7 @@ var CtrlGenerator = (function() {
       }
     }
 
-    var obj = new window[config.type](swipe_ele, params);
+    var obj = new window[config.type.class_name](swipe_ele, params);
     params.key = id;
     generated_config[side_id] = {
       ele: swipe_ele,
@@ -204,7 +240,6 @@ var CtrlGenerator = (function() {
   function generateButtonVertical(config, ele, side_options, side_id) {
     var num_of_buttons = side_options.length;
     var height = Math.round(100 / num_of_buttons);
-
     var button_ele = cloneElement(config.type);
     button_ele.style.height = height + "%";
     if (num_of_buttons === 1) {
@@ -231,7 +266,7 @@ var CtrlGenerator = (function() {
       }
     }
 
-    var obj = new window[config.type](button_ele, params);
+    var obj = new window[config.type.class_name](button_ele, params);
     if (!generated_config[side_id] || generated_config[side_id] === Type.EMPTY) {
       generated_config[side_id] = [];
     }
@@ -364,13 +399,13 @@ var CtrlGenerator = (function() {
           for (var i = 0; i < opts.length; i++) {
             var opt = opts[i];
             if (!opt || opt === Type.EMPTY) continue;
-            if (!opt.type || !GeneratorMap[opt.type]) {
+            if (!opt.type || !GeneratorMap[opt.type.label]) {
               throw "You passed an unknow type in the config properties. Use one of CtrlGenerator.Type.*";
             }
-            GeneratorMap[opt.type](opt, ele, opts, side);
+            GeneratorMap[opt.type.label](opt, ele, opts, side);
           }
         } else {
-          GeneratorMap[Type.ButtonMiddle](opts, ele);
+          GeneratorMap[Type.ButtonMiddle.label](opts, ele);
         }
       }
     }
