@@ -22,9 +22,7 @@ active swipe directions ('left', 'top', ...).
       "touchend": function(had_direction) {},
       // (Optional) Minimum distance (px) to swipe until triggering the onTrigger function
       "min_swipe_distance": 30,
-      // (Optional) allowed_directions: ALL, HORIZONTAL or VERTICAL
+      // (Optional) allowed_directions: FOURWAY, EIGHTWAY, HORIZONTAL or VERTICAL
       "allowed_directions": SwipeDigital.ALLOWED_DIRECTIONS.ALL
-      // (Optional) diagonal: For All-Directions, enables diagonal swipe detection
-      "diagonal": false
     });
 ```

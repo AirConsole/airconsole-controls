@@ -60,8 +60,7 @@
 
   // Example of a swipe area digital
   var swipe_area = new SwipeDigital("swipe-area-digital", {
-    allowed_directions: SwipeDigital.ALLOWED_DIRECTIONS.ALL,
-    diagonal: false,
+    allowed_directions: SwipeDigital.ALLOWED_DIRECTIONS.EIGHTWAY,
     min_swipe_distance: 30,
     touchstart: function() {
       console.log("Touch start");

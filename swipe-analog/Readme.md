@@ -1,7 +1,7 @@
 # SwipeAnalog
 
 A relative-swipe pad which does not trigger on touchend, but when a certain
-amount of pixel has been swiped. Other than SwipeDigigal, SwipeAnalog returns a direction
+amount of pixel has been swiped. Other than SwipeDigital, SwipeAnalog returns a direction
 vector.
 
 ## Example
