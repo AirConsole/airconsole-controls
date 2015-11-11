@@ -10,11 +10,8 @@
  * @property {number|undefined} min_swipe_distance - amount of pixels
  *           which the user needs to move or tap the SwipeDigital before triggering a
  *           direction. E.g: 20
- * @property {SwipeDigital~ALLOWED_DIRECTIONS|undefined} allowed_directions - If to allow all
-             directions or simply vertical or horizontal
- * @property {boolean|undefined} diagonal - If true, diagonal movement are
- *           possible and it becomes a 8-way SwipeDigital: For exmaple UP and RIGHT at
- *           the same time. Default: false
+ * @property {SwipeDigital~ALLOWED_DIRECTIONS|undefined} allowed_directions - If to allow
+             4 directions, 8 directions or simply vertical or horizontal
  * @property {boolean} log - Debug output iff a callback is not set.
  */
 
@@ -36,8 +33,7 @@
 var SwipeDigital = function(el, opts) {
   opts = opts || {}
   this.min_swipe_distance = opts.min_swipe_distance || 30;
-  this.diagonal = opts.diagonal || false;
-  this.allowed_directions = opts.allowed_directions || SwipeDigital.ALLOWED_DIRECTIONS.ALL;
+  this.allowed_directions = opts.allowed_directions || SwipeDigital.ALLOWED_DIRECTIONS.FOURWAY;
   this.is_touch_down = false;
   this.has_triggered_for_current_swipe = false;
   this.start_position = {
@@ -77,9 +73,10 @@ var SwipeDigital = function(el, opts) {
 };
 
 SwipeDigital.ALLOWED_DIRECTIONS = {
-  ALL: 'all',
-  HORIZONTAL: 'horizontal',
-  VERTICAL: 'vertical'
+  FOURWAY: 'fourway', // UP, DOWN, LEFT, RIGHT
+  EIGHTWAY: 'eightway', // UP, DOWN, LEFT, RIGHT but up to 2 at the same time
+  HORIZONTAL: 'horizontal', // LEFT or RIGHT
+  VERTICAL: 'vertical' // UP or DOWN
 };
 
 /**
@@ -199,9 +196,15 @@ SwipeDigital.prototype = {
     var pos = this.getRelativePos(e);
     var vec = this.start_position;
     var has_directions = false;
-    var is_all = this.allowed_directions === SwipeDigital.ALLOWED_DIRECTIONS.ALL;
-    var is_horizontal = this.allowed_directions === SwipeDigital.ALLOWED_DIRECTIONS.HORIZONTAL;
-    var is_vertical = this.allowed_directions === SwipeDigital.ALLOWED_DIRECTIONS.VERTICAL;
+
+    if (this.allowed_directions ===
+        SwipeDigital.ALLOWED_DIRECTIONS.HORIZONTAL) {
+      pos.y = vec.y;
+    }
+    if (this.allowed_directions ===
+        SwipeDigital.ALLOWED_DIRECTIONS.VERTICAL) {
+      pos.x = vec.x;
+    }
 
     // Check if distance has been exceeded
     var distance = this.getDistanceBetweenTwoPoints(pos, vec);
@@ -212,39 +215,34 @@ SwipeDigital.prototype = {
       if (angle < 0) {
         angle += 2 * Math.PI;
       }
-      var diagonal_extension = this.diagonal ? Math.PI / 8 : 0;
+      var diagonal_extension = (
+          this.allowed_directions == SwipeDigital.ALLOWED_DIRECTIONS.EIGHTWAY ?
+          Math.PI / 8 : 0);
 
-      if (is_all || is_horizontal) {
-
-        if (angle <= Math.PI/4 + diagonal_extension ||
+      if (angle <= Math.PI/4 + diagonal_extension ||
           angle > Math.PI*7/4-diagonal_extension) {
-          has_directions = true;
-          this.active_directions[SwipeDigital.RIGHT] = true;
-        }
-
-        if (angle >= Math.PI*3/4 - diagonal_extension &&
-          angle < Math.PI*5/4 + diagonal_extension) {
-          has_directions = true;
-          this.active_directions[SwipeDigital.LEFT] = true;
-        }
-
+        has_directions = true;
+        this.active_directions[SwipeDigital.RIGHT] = true;
       }
 
-      if (is_all || is_vertical) {
-        if (angle >= Math.PI/4 - diagonal_extension &&
-          angle < Math.PI*3/4 + diagonal_extension) {
-          has_directions = true;
-          this.active_directions[SwipeDigital.DOWN] = true;
-        }
+      if (angle >= Math.PI*3/4 - diagonal_extension &&
+          angle < Math.PI*5/4 + diagonal_extension) {
+        has_directions = true;
+        this.active_directions[SwipeDigital.LEFT] = true;
+      }
 
-        if (angle >= Math.PI*5/4 - diagonal_extension &&
+      if (angle >= Math.PI/4 - diagonal_extension &&
+          angle < Math.PI*3/4 + diagonal_extension) {
+        has_directions = true;
+        this.active_directions[SwipeDigital.DOWN] = true;
+      }
+
+      if (angle >= Math.PI*5/4 - diagonal_extension &&
           angle < Math.PI*7/4 + diagonal_extension) {
-          has_directions = true;
-          this.active_directions[SwipeDigital.UP] = true;
-        }
+        has_directions = true;
+        this.active_directions[SwipeDigital.UP] = true;
       }
     }
-
     return has_directions;
   },
 
