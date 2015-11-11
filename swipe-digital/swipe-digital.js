@@ -254,7 +254,9 @@ SwipeDigital.prototype = {
   getRelativePos: function(e) {
     var pos = this.getEventPoint(e);
     var rect = this.container.getBoundingClientRect();
-    return { x: pos.x - rect.left, y: pos.y - rect.top };
+    var x = pos.x - rect.left - window.scrollX;
+    var y = pos.y - rect.top - window.scrollY;
+    return { x: x, y: y };
   },
 
   /**
