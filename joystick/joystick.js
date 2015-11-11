@@ -77,11 +77,13 @@ function Joystick(el, opts) {
   }
 
   me.container.addEventListener("touchstart", function(e) {
-    me.onStart(me.getRelativePos(e.touches[0]));
+    var touch = e.targetTouches[0] || e.changedTouches[0] || e.touches[0];
+    me.onStart(me.getRelativePos(touch));
     e.preventDefault();
   });
   me.container.addEventListener("touchmove", function(e) {
-    me.onMove(me.getRelativePos(e.touches[0]));
+    var touch = e.targetTouches[0] || e.changedTouches[0] || e.touches[0];
+    me.onMove(me.getRelativePos(touch));
     e.preventDefault();
   });
   me.container.addEventListener("touchend", function(e) {
