@@ -383,10 +383,11 @@ DPad.prototype.onEnd = function() {
  * @return {DPad~Coordinate}
  */
 DPad.prototype.getRelativePos = function(e) {
-  var me = this;
   var pos = this.getEventPoint(e);
-  var rect = me.container.getBoundingClientRect();
-  return { "x": pos.x - rect.left, "y": pos.y - rect.top };
+  var rect = this.container.getBoundingClientRect();
+  var x = pos.x - rect.left - window.scrollX;
+  var y = pos.y - rect.top - window.scrollY;
+  return { x: x, y: y };
 };
 
 /**

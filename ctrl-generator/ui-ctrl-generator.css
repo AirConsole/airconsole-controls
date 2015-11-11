@@ -21,6 +21,11 @@ body {
   padding: 15px;
 }
 
+.gamepad_container {
+  max-width: 900px;
+  max-height: 450px;
+}
+
 .get_started_container {
   background: #3498db;
   color: #FFFFFF;
@@ -30,6 +35,11 @@ body {
   border-radius: 4px;
   padding: 14px;
   box-sizing: border-box;
+  cursor: pointer;
+}
+
+.get_started_container:hover {
+  cursor: pointer;
 }
 
 #output {

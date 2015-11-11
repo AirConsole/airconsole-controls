@@ -1,5 +1,6 @@
 <html>
   <head>
+    <link rel="stylesheet" type="text/css" href="../joystick/joystick.css">
     <script type="text/javascript" src="../joystick/joystick.js"></script>
     <style type="text/css">
       body {
@@ -29,22 +30,14 @@
         top: 5%;
         left: 5%;
       }
-
-      .joystick {
-        border-radius: 100%;
-        background-color: black;
-      }
-
-      .joystick-relative {
-        border-radius: 100%;
-        background-color: #adee00;
-      }
     </style>
   </head>
   <body>
     <div class="example-container">
       <div id="my-joystick" class="joystick">
-        <div class="joystick-relative"></div>
+        <div class="joystick-relative">
+          <div class="joystick-relative-stick"></div>
+        </div>
       </div>
     </div>
     <script type="text/javascript">

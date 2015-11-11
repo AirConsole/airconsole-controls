@@ -16,6 +16,8 @@
   <p>
     This generator helps you to build a simple AirConsole controller including Buttons, DPad or Joystick. It also generates the code
     to send messages to the screen, which happens whenever a button was pressed or the joystick has been moved.
+
+    <p><b>Open your browsers console</b> - and click on your generated elements to see which data messages will be send to your AirConsole screen.</p>
   </p>
 
   <div id="gamepad_code">
@@ -54,7 +56,11 @@
       Create a new file called controller.html and paste the output code into it.
     </p>
     <p>
-      <b>Make sure</b> you have downloaded and included the project of <a href="https://github.com/AirConsole/airconsole-controls/tree/master" target="_blank">AirConsole-Controls</a> in your directory.
+      <b>Make sure</b> you have downloaded and included the project of <a href="https://github.com/AirConsole/airconsole-controls/tree/master" target="_blank">AirConsole-Controls</a> in your directory. We assume your project dir looks like this:
+      <ul>
+        <li><b>airconsole-controls</b></li>
+        <li>controller.html</li>
+      </ul>
     </p>
   </div>
 
@@ -191,7 +197,9 @@
       </div>
 
       <div id="template-Joystick" class="joystick">
-        <div class="joystick-relative"></div>
+        <div class="joystick-relative">
+          <div class="joystick-relative-stick"></div>
+        </div>
       </div>
 
       <div id="template-SwipeDigital" class="button-300-300 swipe-area">
