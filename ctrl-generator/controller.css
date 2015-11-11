@@ -17,8 +17,6 @@ body {
   display: inline-block;
   width: 100%;
   height: 100%;
-  max-width: 900px;
-  max-height: 450px;
 }
 
 .gamepad_container .left, .gamepad_container .right, .gamepad_container .middle  {
