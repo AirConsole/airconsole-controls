@@ -38,6 +38,10 @@ body {
   cursor: pointer;
 }
 
+.get_started_container:hover {
+  cursor: pointer;
+}
+
 #output {
   width: 900px;
   min-height: 220px;
