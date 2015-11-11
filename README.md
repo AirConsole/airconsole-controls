@@ -11,6 +11,16 @@ A 4-way or 8-way relative swipe DPad usually used for movement, *but also great 
 ## Joystick
 An analogue relative joystick.
 
+## SwipeAnalog
+A relative-swipe pad which returns a direction vector {x, y}.
+
+## SwipeDigital
+A 4-way or 8-way relative swipe pad which returns a map of
+active swipe directions. E.g. ``{ left: true, right: false, up: false, down: false }``.
+
+## SwipePattern
+A pattern of circles, which you can connect by swiping (like Android unlock swipe pattern)
+
 ## Examples
 See examples for how to use these components.
 
