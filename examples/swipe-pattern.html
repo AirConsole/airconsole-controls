@@ -1,3 +1,15 @@
+<!--
+
+
+
+
+   INSTEAD OF EDITING THIS HTML FILE, USE OUR CONTROLLER GENERATOR:
+   http://developers.airconsole.com/tools/airconsole-controls/ctrl-generator/controller.html
+
+
+
+
+!-->
 <html>
   <head>
     <meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
@@ -46,7 +58,9 @@
     <div class="container"><div id="canvas_container_left"></div><div id="canvas_container_right"></div></div>
 
     <script type="text/javascript" src="../swipe-pattern/swipe-pattern.js"></script>
+    <script type="text/javascript" src="fake-airconsole.js"></script>
     <script type="text/javascript">
+      var airconsole = new AirConsole();
       var c_left = document.getElementById('canvas_container_left');
       var c_right = document.getElementById('canvas_container_right');
 
@@ -81,6 +95,12 @@
           if (this.pathIsTouched([2, 'customId', 8], true)) {
             console.log("2, customId, 8 Pattern MATCHES", touched_circles);
           }
+          airconsole.message(AirConsole.SCREEN,
+              {
+                "swipe-patter-left": {
+                  "circles": touched_circles
+                }
+              });
         }
       });
 
@@ -95,6 +115,12 @@
         onTouchCircle: function(circle) {
           if (this.pathIsTouched([1, 2, 4, 3, 1], true)) {
             console.log("Round complete");
+            airconsole.message(AirConsole.SCREEN,
+                {
+                  "swipe-patter-right": {
+                    "my_pattern": "circle"
+                  }
+                });
           }
           if (circle.id === 1 && this.touched_circles.length > 1) {
             this.clearTouchedCircles();

@@ -1,3 +1,15 @@
+<!--
+
+
+
+
+   INSTEAD OF EDITING THIS HTML FILE, USE OUR CONTROLLER GENERATOR:
+   http://developers.airconsole.com/tools/airconsole-controls/ctrl-generator/controller.html
+
+
+
+
+!-->
 <html>
 <head>
   <meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
@@ -55,29 +67,37 @@
 
 <script type="text/javascript" src="../swipe-digital/swipe-digital.js"></script>
 <script type="text/javascript" src="../swipe-analog/swipe-analog.js"></script>
+<script type="text/javascript" src="fake-airconsole.js"></script>
 <script type="text/javascript">
-  var info = document.getElementById('info');
-
+  var airconsole = new AirConsole();
   // Example of a swipe area digital
   var swipe_area = new SwipeDigital("swipe-area-digital", {
     allowed_directions: SwipeDigital.ALLOWED_DIRECTIONS.EIGHTWAY,
     min_swipe_distance: 30,
     touchstart: function() {
-      console.log("Touch start");
+      airconsole.message(AirConsole.SCREEN,
+          {
+            "swipe-area-digital": {
+              "touch": true
+            }
+          });
     },
     touchend: function() {
-      console.log("Touch end");
+      airconsole.message(AirConsole.SCREEN,
+          {
+            "swipe-area-digital": {
+              "touch": false
+            }
+          });
     },
     // Directions: {down: <Boolean>, left: <Boolean>, up: <Boolean>, right: <Boolean>}
     onTrigger: function(directions) {
-      var d = document.createElement('DIV');
-      d.innerHTML = "";
-      for (var dir in directions) {
-        if (directions[dir] === true) {
-          d.innerHTML += dir + " ";
-        }
-      }
-      info.appendChild(d);
+      airconsole.message(AirConsole.SCREEN,
+          {
+            "swipe-area-digital": {
+              "directions": directions
+            }
+          });
     }
   });
 
@@ -85,16 +105,29 @@
   var swipe_analog = new SwipeAnalog("swipe-area-analog", {
     min_swipe_distance: 30,
     touchstart: function() {
-      console.log("Touch start");
+      airconsole.message(AirConsole.SCREEN,
+          {
+            "swipe-area-analog": {
+              "touch": true
+            }
+          });
     },
     touchend: function() {
-      console.log("Touch end");
+      airconsole.message(AirConsole.SCREEN,
+          {
+            "swipe-area-analog": {
+              "touch": false
+            }
+          });
     },
     // Direction vector {x, y, angle, degree}
     onTrigger: function(vector) {
-      var d = document.createElement('DIV');
-      d.innerHTML = "[" + vector.x + ", " + vector.y + "] - " + vector.degree + " deg";
-      info.appendChild(d);
+      airconsole.message(AirConsole.SCREEN,
+          {
+            "swipe-area-analog": {
+              "vector": vector
+            }
+          });
     }
   });
 </script>

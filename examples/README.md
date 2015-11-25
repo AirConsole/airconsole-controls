@@ -48,3 +48,7 @@
 
 [Live Demo](https://rawgit.com/AirConsole/airconsole-controls/master/examples/example-controller.html) -
 [Source](https://github.com/AirConsole/airconsole-controls/blob/master/examples/example-controller.html)
+
+## Rate Limiter
+[Live Demo](https://rawgit.com/AirConsole/airconsole-controls/master/examples/rate-limiter.html) -
+[Source](https://github.com/AirConsole/airconsole-controls/blob/master/examples/rate-limiter.html)
