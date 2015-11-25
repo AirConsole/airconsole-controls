@@ -4,7 +4,8 @@ The Rate Limiter helps you to send less than 10 messages per second.
 ## Example
 
 [Live Demo](https://rawgit.com/AirConsole/airconsole-controls/master/examples/rate-limiter.html) -
-[Source](https://github.com/AirConsole/airconsole-controls/blob/master/rate-limiter/rate-limiter.js)
+[Source](https://github.com/AirConsole/airconsole-controls/blob/master/rate-limiter/rate-limiter.js) -
+[Joystick example](https://rawgit.com/AirConsole/airconsole-controls/master/examples/joystick.html)
 
 ## General
 
