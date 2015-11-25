@@ -30,7 +30,6 @@ Also note that because data might be delayed through rate limiting,
 custom device states might not be immediately updated in the airconsole
 object. Just use RateLimiter.getCustomDeviceState(device_id) instead which
 merges the pending data of device states and returns up-to-date data.
-```
 
 ## Javascript
 ```javascript
