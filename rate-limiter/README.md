@@ -38,5 +38,5 @@ merges the pending data of device states and returns up-to-date data.
   rateLimiter.message(AirConsole.SCREEN, {"msg": "Hi Screen!"});
   rateLimiter.setCustomDeviceState({"key", "value"});
   rateLimiter.setCustomDeviceStateProperty("key", "value");
-  rateLimiter.getCustomDeviceState); // always returns up-to-date state
+  rateLimiter.getCustomDeviceState(); // always returns up-to-date state
 ```
