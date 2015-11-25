@@ -7,6 +7,7 @@
 var CtrlGenerator = (function() {
   var id_counter = 0;
   var airconsole_obj = null;
+  var rate_limiter = null;
   var debug = false;
   var generated_config = {
     left: null,
@@ -337,7 +338,7 @@ var CtrlGenerator = (function() {
       if (debug) {
         console.info("Send", message);
       }
-      airconsole_obj.message(airconsole_obj.SCREEN, message);
+      rate_limiter.message(airconsole_obj.SCREEN, message);
     }
   }
 
@@ -367,6 +368,7 @@ var CtrlGenerator = (function() {
      */
     setAirConsole: function(airconsole) {
       airconsole_obj = airconsole;
+      rate_limiter = new RateLimiter(airconsole);
       return this;
     },
 
