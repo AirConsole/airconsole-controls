@@ -324,8 +324,8 @@ var CtrlGenerator = (function() {
    */
   function sendInputEvent(key, pressed, params) {
     params = params || {};
-    var message = {
-      key: key,
+    var message = {};
+    message[key] = {
       pressed: pressed,
       message: params
     };

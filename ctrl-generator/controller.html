@@ -69,8 +69,9 @@
     Buttons send:
 <code><pre>
   {
-    key: &lt;the-defined-key&gt;,
-    pressed: true|false
+    &lt;the-defined-key&gt;: {
+      pressed: true|false
+    }
   }
 </pre></code>
   </div>
@@ -79,9 +80,10 @@
     DPad will send to the screen:
 <code><pre>
   {
-    key: "<span class="key"></span>",
-    // Directions 'left', 'top', 'right', 'bottom'
-    message: { direction: &lt;String&gt; }
+    <span class="key"></span>: {
+      // Directions 'left', 'top', 'right', 'bottom'
+      message: { direction: &lt;String&gt; }
+    }
   }
 </pre></code>
   </div>
@@ -90,9 +92,10 @@
     Joystick will send to the screen:
 <code><pre>
   {
-    key: "<span class="key"></span>",
-    pressed: true|false,
-    message: { x: Number, y: Number }
+    <span class="key"></span>: {
+      pressed: true|false,
+      message: { x: Number, y: Number }
+    }
   }
 </pre></code>
   </div>
@@ -101,15 +104,16 @@
       SwipeDigital will send to the screen:
   <code><pre>
     {
-      key: "<span class="key"></span>",
-      pressed: true|false,
-      // Directions-Object: {
-      // left: &lt;Boolean&gt;,
-      // top: &lt;Boolean&gt;,
-      // right: &lt;Boolean&gt;,
-      // bottom: &lt;Boolean&gt;
-      // }
-      message: directions (Object)
+      <span class="key"></span>: {
+        pressed: true|false,
+        // Directions-Object: {
+        // left: &lt;Boolean&gt;,
+        // top: &lt;Boolean&gt;,
+        // right: &lt;Boolean&gt;,
+        // bottom: &lt;Boolean&gt;
+        // }
+        message: directions (Object)
+      }
     }
   </pre></code>
     </div>
@@ -118,15 +122,16 @@
       SwipeAnalog will send to the screen:
   <code><pre>
     {
-      key: "<span class="key"></span>",
-      pressed: true|false,
-      // Direction-Vector-Object: {
-      // x: &lt;Number&gt;,
-      // y: &lt;Number&gt;,
-      // angle: &lt;Number&gt;,
-      // degree: &lt;Number&gt;
-      // }
-      message: (Vec-Object)
+      <span class="key"></span>: {
+        pressed: true|false,
+        // Direction-Vector-Object: {
+        // x: &lt;Number&gt;,
+        // y: &lt;Number&gt;,
+        // angle: &lt;Number&gt;,
+        // degree: &lt;Number&gt;
+        // }
+        message: (Vec-Object)
+      }
     }
   </pre></code>
   </div>
@@ -135,11 +140,12 @@
       SwipePattern will send to the screen:
   <code><pre>
     {
-      key: "<span class="key"></span>",
-      pressed: true|false,
-      // Message contains an array of circle
-      // which were touched
-      message: &lt;Array&gt;
+      <span class="key"></span>: {
+        pressed: true|false,
+        // Message contains an array of circle
+        // which were touched
+        message: &lt;Array&gt;
+      }
     }
   </pre></code>
     </div>
