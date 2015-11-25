@@ -1,6 +1,19 @@
+<!--
+
+
+
+
+   INSTEAD OF EDITING THIS HTML FILE, USE OUR CONTROLLER GENERATOR:
+   http://developers.airconsole.com/tools/airconsole-controls/ctrl-generator/controller.html
+
+
+
+
+!-->
 <html>
 <head>
   <script type="text/javascript" src="../dpad/dpad.js"></script>
+  <script type="text/javascript" src="fake-airconsole.js"></script>
   <link rel="stylesheet" href="../dpad/dpad.css">
   <style type="text/css">
     body {
@@ -19,7 +32,7 @@
       width: 100%;
       height: 100%;
       max-width: 1000px;
-      max-height: 500px;
+      max-height: 360px;
     }
 
     /* You need to explicitly position your dpads */
@@ -94,56 +107,121 @@
   </div>
 </div>
 <script type="text/javascript">
+  var airconsole = new AirConsole();
 
   var dpad0 = new DPad("dpad-0", {
     relative: true,
     distance: { x: 10, y: 10},
     "directionchange": function(key, pressed) {
-      console.log("Direction changed: " + key + " " + pressed);
+      airconsole.message(AirConsole.SCREEN, {
+        "dpad0": {
+          "directionchange": {
+            "key": key,
+            "pressed": pressed
+          }
+        }
+      });
     },
     "touchstart": function() {
-      console.log("Touch start");
+      airconsole.message(AirConsole.SCREEN, {
+        "dpad0": {
+          "touch": true
+        }
+      });
     },
     "touchend": function(had_direction) {
-      console.log("Touch end, had direction: " + had_direction);
+      airconsole.message(AirConsole.SCREEN, {
+        "dpad0": {
+          "touch": false,
+          "had_direction": had_direction
+        }
+      });
     }
   });
   var dpad1 = new DPad("dpad-1", {
     relative: true,
     distance: { x: 10, y: 10},
     "directionchange": function(key, pressed) {
-      console.log("Direction changed: " + key + " " + pressed);
+      airconsole.message(AirConsole.SCREEN, {
+        "dpad1": {
+          "directionchange": {
+            "key": key,
+            "pressed": pressed
+          }
+        }
+      });
     },
     "touchstart": function() {
-      console.log("Touch start");
+      airconsole.message(AirConsole.SCREEN, {
+        "dpad1": {
+          "touch": true
+        }
+      });
     },
     "touchend": function(had_direction) {
-      console.log("Touch end, had direction: " + had_direction);
+      airconsole.message(AirConsole.SCREEN, {
+        "dpad1": {
+          "touch": false,
+          "had_direction": had_direction
+        }
+      });
     },
     "diagonal": true
   });
   var dpad2 = new DPad("dpad-2", {
     "directionchange": function(key, pressed) {
-      console.log("Direction changed: " + key + " " + pressed);
+      airconsole.message(AirConsole.SCREEN, {
+        "dpad2": {
+          "directionchange": {
+            "key": key,
+            "pressed": pressed
+          }
+        }
+      });
     },
     "touchstart": function() {
-      console.log("Touch start");
+      airconsole.message(AirConsole.SCREEN, {
+        "dpad2": {
+          "touch": true
+        }
+      });
     },
     "touchend": function(had_direction) {
-      console.log("Touch end, had direction: " + had_direction);
-    },
+      airconsole.message(AirConsole.SCREEN, {
+        "dpad2": {
+          "touch": false,
+          "had_direction": had_direction
+        }
+      });
+    }
   });
   var dpad3 = new DPad("dpad-3", {
     diagonal: true,
     "directionchange": function(key, pressed) {
-      console.log("Direction changed: " + key + " " + pressed);
+      airconsole.message(AirConsole.SCREEN, {
+        "dpad3": {
+          "directionchange": {
+            "key": key,
+            "pressed": pressed
+          }
+        }
+      });
     },
     "touchstart": function() {
-      console.log("Touch start");
+      airconsole.message(AirConsole.SCREEN, {
+        "dpad3": {
+          "touch": true
+        }
+      });
     },
     "touchend": function(had_direction) {
-      console.log("Touch end, had direction: " + had_direction);
-    },
+      airconsole.message(AirConsole.SCREEN, {
+        "dpad3": {
+          "touch": false,
+          "had_direction": had_direction
+        }
+      });
+    }
   });
 </script>
 </body>

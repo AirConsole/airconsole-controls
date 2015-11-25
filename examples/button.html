@@ -1,6 +1,19 @@
+<!--
+
+
+
+
+   INSTEAD OF EDITING THIS HTML FILE, USE OUR CONTROLLER GENERATOR:
+   http://developers.airconsole.com/tools/airconsole-controls/ctrl-generator/controller.html
+
+
+
+
+!-->
 <html>
   <head>
     <script type="text/javascript" src="../button/button.js"></script>
+    <script type="text/javascript" src="fake-airconsole.js"></script>
     <link rel="stylesheet" href="../button/button.css">
     <style type="text/css">
       body {
@@ -54,21 +67,23 @@
     </div>
     <script type="text/javascript">
 
+      var airconsole = new AirConsole();
+
       var round = new Button("button-round", {
         "down": function() {
-          console.log("Round button pressed");
+          airconsole.message(AirConsole.SCREEN, {"round" : "down"});
         },
         "up": function() {
-          console.log("Round button released");
+          airconsole.message(AirConsole.SCREEN, {"round" : "up"});
         }
       });
 
       var rectangular = new Button("button-rectangular", {
         "down": function() {
-          console.log("Rectangular button pressed");
+          airconsole.message(AirConsole.SCREEN, {"rectangular" : "down"});
         },
         "up": function() {
-          console.log("Rectangular button released");
+          airconsole.message(AirConsole.SCREEN, {"rectangular" : "up"});
         }
       });
 

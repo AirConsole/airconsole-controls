@@ -11,6 +11,9 @@ A 4-way or 8-way relative swipe DPad usually used for movement, *but also great 
 ## Joystick
 An analogue relative joystick.
 
+## Rate Limiter
+The Rate Limiter helps you to send less than 10 messages per second.
+
 ## SwipeAnalog
 A relative-swipe pad which returns a direction vector {x, y}.
 
