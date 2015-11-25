@@ -155,8 +155,9 @@ var CtrlGenerator = (function() {
     var id = config.key || config.type.label.toLowerCase() + '-' + side_id;
 
     if (!params.onTouchCircle) {
+      // Only on touchend
       params.onTouchCircle = function(circle) {
-        sendInputEvent(id, true, circle);
+        //sendInputEvent(id, true, circle);
       }
     }
 

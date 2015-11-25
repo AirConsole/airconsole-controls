@@ -174,9 +174,15 @@ SwipePattern.prototype = {
    * @param {SwipePattern~Circle} circle
    */
   addTouchedCircle: function(circle) {
-    this.touched_circles.push(circle);
+    var circle_data = {
+      id: circle.id,
+      x: circle.x,
+      y: circle.y,
+      radius: circle.radius
+    };
+    this.touched_circles.push(circle_data);
     if (this.onTouchCircle) {
-      this.onTouchCircle(circle);
+      this.onTouchCircle(circle_data);
     }
   },
 
