@@ -24,6 +24,7 @@ output += "\n";
 output += $('#templates').html();
 output += "\n";
 output += outputAddScript('http://www.airconsole.com/api/airconsole-1.3.0.js');
+output += outputAddScript(base_folder + 'rate-limiter/rate-limiter.js');
 output += outputAddScript(base_folder + 'dpad/dpad.js');
 output += outputAddScript(base_folder + 'joystick/joystick.js');
 output += outputAddScript(base_folder + 'button/button.js');
