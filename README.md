@@ -22,7 +22,10 @@ A 4-way or 8-way relative swipe pad which returns a map of
 active swipe directions. E.g. ``{ left: true, right: false, up: false, down: false }``.
 
 ## SwipePattern
-A pattern of circles, which you can connect by swiping (like Android unlock swipe pattern)
+A pattern of circles, which you can connect by swiping (like Android unlock swipe pattern).
+
+## ShakeDetector
+Evaluates ``AirConsole.onDeviceMotion`` for shake-like-events of a device.
 
 ## Examples
 See examples for how to use these components.
