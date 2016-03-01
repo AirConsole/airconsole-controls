@@ -35,7 +35,7 @@ merges the pending data of device states and returns up-to-date data.
 ## Javascript
 ```javascript
   var airconsole = new AirConsole();
-  var rateLimiter = new RateLimiter();
+  var rateLimiter = new RateLimiter(airconsole);
   rateLimiter.message(AirConsole.SCREEN, {"msg": "Hi Screen!"});
   rateLimiter.setCustomDeviceState({"key", "value"});
   rateLimiter.setCustomDeviceStateProperty("key", "value");
