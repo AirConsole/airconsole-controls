@@ -48,46 +48,53 @@ var UICtrlGenerator = (function(ctrl_generator) {
   var middle_bttn_label = $('#middle_bttn_label');
   var middle_bttn_add = $('#middle_bttn_add');
   var middle_bttn_remove = $('#middle_bttn_remove');
+  var checkbox_message_format = $("#checkbox_message_format");
 
   // A default config
   var ctrl_config = {
-    left: {
-      type: CtrlGenerator.Type.DPad,
-    },
-    middle: [
-      {
-        label: 'START',
-        key: 'start'
+    is_message_format: false,
+    elements: {
+      left: {
+        type: CtrlGenerator.Type.DPad,
       },
-      {
-        label: 'RESET',
-        key: 'reset'
-      },
-      {
-        label: 'PIZZA',
-        key: 'pizza'
-      }
-    ],
-    right: [
-      {
-        type: CtrlGenerator.Type.ButtonVertical,
-        label: "Defend",
-        key: "a"
-      },
-      {
-        type: CtrlGenerator.Type.ButtonVertical,
-        label: "Shoot",
-        key: "b",
-        on_up_message: true
-      }
-    ]
+      middle: [
+        {
+          label: 'START',
+          key: 'start'
+        },
+        {
+          label: 'RESET',
+          key: 'reset'
+        },
+        {
+          label: 'PIZZA',
+          key: 'pizza'
+        }
+      ],
+      right: [
+        {
+          type: CtrlGenerator.Type.ButtonVertical,
+          label: "Defend",
+          key: "a"
+        },
+        {
+          type: CtrlGenerator.Type.ButtonVertical,
+          label: "Shoot",
+          key: "b",
+          on_up_message: true
+        }
+      ]
+    }
   };
 
   var clear = function() {
     ctrl_config = {
-      left: null,
-      middle: [],
-      right: null
+      is_message_format: false,
+      elements: {
+        left: null,
+        middle: [],
+        right: null
+      }
     };
     ui_selects_ele.each(function() {
       var $ele = $(this);
@@ -126,11 +133,11 @@ var UICtrlGenerator = (function(ctrl_generator) {
       on_up_message: has_up_event
     };
 
-    if (!ctrl_config[side_id] || ctrl_config[side_id] === ctrl_generator.Type.EMPTY) {
-      ctrl_config[side_id] = [];
+    if (!ctrl_config.elements[side_id] || ctrl_config.elements[side_id] === ctrl_generator.Type.EMPTY) {
+      ctrl_config.elements[side_id] = [];
     }
 
-    ctrl_config[side_id].push(bttn_data);
+    ctrl_config.elements[side_id].push(bttn_data);
     generate();
     resetButtonForm(side_id);
     showInfo(side_ele, selected_type, side_id);
@@ -186,18 +193,18 @@ var UICtrlGenerator = (function(ctrl_generator) {
         selected_type === ctrl_generator.Type.SwipeDigital.label ||
         selected_type === ctrl_generator.Type.SwipeAnalog.label ||
         selected_type === ctrl_generator.Type.SwipePattern.label) {
-      ctrl_config[side_id] = {
+      ctrl_config.elements[side_id] = {
         type: ctrl_generator.Type[selected_type]
       };
 
       // ButtonVertical
     } else if (selected_type === 'ButtonVertical') {
-      ctrl_config[side_id] = ctrl_generator.Type.EMPTY;
+      ctrl_config.elements[side_id] = ctrl_generator.Type.EMPTY;
       addButtonForm(form_ele, side_id, selected_type, side_ele);
 
     // EMPTY
     } else {
-      ctrl_config[side_id] = ctrl_generator.Type.EMPTY;
+      ctrl_config.elements[side_id] = ctrl_generator.Type.EMPTY;
     }
     generate();
     showInfo(side_ele, selected_type, side_id);
@@ -205,7 +212,7 @@ var UICtrlGenerator = (function(ctrl_generator) {
 
   var onMiddleButtonAdd = function () {
     var label = middle_bttn_label.val();
-    ctrl_config['middle'].push({
+    ctrl_config.elements['middle'].push({
       label: label,
       key: label
     });
@@ -221,8 +228,8 @@ var UICtrlGenerator = (function(ctrl_generator) {
         if (type_obj.label === ctrl_generator.Type.ButtonMiddle.label) continue;
         var opt = $('<option value=' + type_obj.label + '>' + type_obj.label + '</option>');
         var side_id = $ele.attr('data-id');
-        if (type_obj.label === ctrl_config[side_id].type ||
-            (ctrl_config[side_id] instanceof Array && type_obj.label === 'ButtonVertical')) {
+        if (type_obj.label === ctrl_config.elements[side_id].type ||
+            (ctrl_config.elements[side_id] instanceof Array && type_obj.label === 'ButtonVertical')) {
           opt.attr('selected', 'selected');
           //showInfo($ele.parent(), type, side_id);
         }
@@ -235,7 +242,14 @@ var UICtrlGenerator = (function(ctrl_generator) {
 
   middle_bttn_add.on('click', onMiddleButtonAdd);
   middle_bttn_remove.on('click', function() {
-    ctrl_config['middle'] = [];
+    ctrl_config.elements['middle'] = [];
+    generate();
+  });
+
+  checkbox_message_format.on('click', function() {
+    var is_checked = $(this).is(':checked');
+    ctrl_config.is_message_format = is_checked;
+    ctrl_generator.toggleMessageFormat(is_checked);
     generate();
   });
 

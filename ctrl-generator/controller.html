@@ -14,7 +14,7 @@
 
   <h1>AirConsole Controller Generator</h1>
   <p>
-    This generator helps you to build a simple AirConsole controller including Buttons, DPad or Joystick. It also generates the code
+    This generator helps you to build a simple <a href="https://www.airconsole.com" target="_blank">AirConsole</a> controller including Buttons, DPad or Joystick. It also generates the code
     to send messages to the screen, which happens whenever a button was pressed or the joystick has been moved.
 
     <p><b>Open your browsers console</b> - and click on your generated elements to see which data messages will be send to your AirConsole screen.</p>
@@ -32,6 +32,7 @@
     <div class="get_started_container">
       START BUILDING
     </div>
+
     <div class="generator_container hide">
       <div class="left">
         <select class="ui_select" data-id="left"></select>
@@ -48,6 +49,13 @@
         <div class="info_container"></div>
         <div class="form_container"></div>
       </div>
+    </div>
+
+    <div class="warning">
+      <input type="checkbox" id="checkbox_message_format"> Format message for a Construct2 game.
+      <p>
+        Check if you are building a game with Construct2. The data structure of the message will be adapted.
+      </p>
     </div>
 
     <h4 class="output">Controller.html output:</h4>

@@ -18,6 +18,8 @@ var CtrlGenerator = (function() {
   var middle_ele = document.getElementById('middle');
   var right_ele = document.getElementById('right');
 
+  var is_message_format = false;
+
   var Side = {
     left: 'left',
     middle: 'middle',
@@ -37,7 +39,8 @@ var CtrlGenerator = (function() {
     },
     DPadRelative: {
       label: 'DPadRelative',
-      class_name: 'DPad'
+      class_name: 'DPad',
+      accept_message_format: false
     },
     DPad: {
       label: 'DPad',
@@ -45,7 +48,8 @@ var CtrlGenerator = (function() {
     },
     Joystick: {
       label: 'Joystick',
-      class_name: 'Joystick'
+      class_name: 'Joystick',
+      accept_message_format: false
     },
     ButtonVertical: {
       label: 'ButtonVertical',
@@ -61,11 +65,13 @@ var CtrlGenerator = (function() {
     },
     SwipeAnalog: {
       label: 'SwipeAnalog',
-      class_name: 'SwipeAnalog'
+      class_name: 'SwipeAnalog',
+      accept_message_format: false
     },
     SwipePattern: {
       label: 'SwipePattern',
-      class_name: 'SwipePattern'
+      class_name: 'SwipePattern',
+      accept_message_format: false
     }
   };
 
@@ -114,7 +120,11 @@ var CtrlGenerator = (function() {
     if (config.type.class_name === Type.DPad.class_name) {
       if (!params.directionchange) {
         params.directionchange = function(key, pressed) {
-          sendInputEvent(id, pressed, { direction: key });
+          var send_id = id;
+          if (is_message_format) {
+            send_id = id + "_" + key;
+          }
+          sendInputEvent(send_id, pressed, { direction: key });
         }
       }
     }
@@ -214,7 +224,17 @@ var CtrlGenerator = (function() {
 
     if (!params.onTrigger) {
       params.onTrigger = function(param_obj) {
-        sendInputEvent(id, true, param_obj);
+        var send_id = id;
+        if (is_message_format) {
+          var active_dir = null;
+          for (var dir in param_obj) {
+            if (param_obj[dir] === true) {
+              active_dir = dir;
+            }
+          }
+          send_id = id + "_" + active_dir;
+        }
+        sendInputEvent(send_id, true, param_obj);
       }
     }
 
@@ -327,10 +347,18 @@ var CtrlGenerator = (function() {
   function sendInputEvent(key, pressed, params) {
     params = params || {};
     var message = {};
-    message[key] = {
-      pressed: pressed,
-      message: params
-    };
+
+    if (is_message_format) {
+      pressed = pressed ? 'down' : 'up';
+      message = {
+        message: (key + '_' + pressed)
+      };
+    } else {
+      message[key] = {
+        pressed: pressed,
+        message: params
+      };
+    }
 
     if (!airconsole_obj) {
       console.warn("You have to call CtrlGenerator.setAirConsole and pass the airconsole instance!");
@@ -383,14 +411,18 @@ var CtrlGenerator = (function() {
       generated_config = {};
     },
 
+    toggleMessageFormat: function(state) {
+      is_message_format = state;
+    },
+
     /**
      * Generates the controller by passed config
      * @param {Object} config
      */
     generate: function (config) {
       this.clear();
-      for (var side in config) {
-        var opts = config[side];
+      for (var side in config.elements) {
+        var opts = config.elements[side];
         var ele = Element[side];
 
         if (!opts) continue;

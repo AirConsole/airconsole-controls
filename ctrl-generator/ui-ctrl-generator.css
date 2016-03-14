@@ -6,6 +6,12 @@ body {
   display: none;
 }
 
+.warning {
+  padding: 10px;
+  background: rgb(253, 171, 47);
+  color: #FFFFFF;
+}
+
 .container {
   width: 900px;
   margin: auto;
