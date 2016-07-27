@@ -127,8 +127,8 @@ var CtrlGenerator = (function() {
       }
 
       if (!params.touchend) {
-        params.touchend = function() {
-          sendInputEvent(id, false);
+        params.touchend = function(event, was_swipe) {
+          sendInputEvent(id, false, { "was_swipe": was_swipe });
         }
       }
     }
