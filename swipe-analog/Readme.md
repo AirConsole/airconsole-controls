@@ -18,8 +18,8 @@ vector.
       "onTrigger": function(direction_vector) {},
       // Gets called when the SwipeAnalog is touched.
       "touchstart": function() {},
-      // Gets called when the SwipeAnalog is released.
-      "touchend": function() {},
+      // Gets called when the SwipeAnalog is released. If had_directions is false, it was just a tap.
+      "touchend": function(event, had_directions) {},
       // (Optional) Minimum distance (px) to swipe until triggering the onTrigger function
       "min_swipe_distance": 30
     });
