@@ -7,6 +7,8 @@
  *           The callback that gets called when the SwipeDigital is touched
  * @property {SwipeDigital~touchEndCallback} touchend -
  *           The callback that gets called when the SwipeDigital is released
+ *           The first param is the event object. The second a boolean if swipe
+ *           was triggered.
  * @property {number|undefined} min_swipe_distance - amount of pixels
  *           which the user needs to move or tap the SwipeDigital before triggering a
  *           direction. E.g: 20
@@ -159,8 +161,8 @@ SwipeDigital.prototype = {
    */
   onTouchEnd: function(e) {
     this.is_touch_down = false;
+    this.end_cb(e, this.has_triggered_for_current_swipe);
     this.has_triggered_for_current_swipe = false;
-    this.end_cb(e);
     this.container.className = this.container.className.replace(/ button\-active/g, "");
     e.preventDefault();
   },

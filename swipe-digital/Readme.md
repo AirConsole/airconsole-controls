@@ -17,9 +17,9 @@ active swipe directions ('left', 'top', ...).
       // Param is active directions {down: <Boolean>, left: <Boolean>, up: <Boolean>, right: <Boolean>}
       "onTrigger": function(direction_map) {},
       // Gets called when the SwipeDigital is touched.
-      "touchstart": function() {},
-      // Gets called when the SwipeDigital is released.
-      "touchend": function(had_direction) {},
+      "touchstart": function(event) {},
+      // Gets called when the SwipeDigital is released. If had_directions is false, it was just a tap.
+      "touchend": function(event, had_directions) {},
       // (Optional) Minimum distance (px) to swipe until triggering the onTrigger function
       "min_swipe_distance": 30,
       // (Optional) allowed_directions: FOURWAY, EIGHTWAY, HORIZONTAL or VERTICAL
