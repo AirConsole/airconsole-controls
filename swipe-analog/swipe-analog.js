@@ -18,13 +18,15 @@
 
  /**
   * This callback is called when the amount of pixels swiped exceeds the
-  * min_swipe_distance
+  * min_swipe_distance (if is_slingshot is false)
   * @callback SwipeArea~onTrigger
   * @param {SwipeArea~Vector} vector - A normalized direction vector
   *        @property {Number} x - The x property
   *        @property {Number} y - The y property
   *        @property {Number} angle - The angle in radian
   *        @property {Number} degree - The angle in degree
+  *        @property {Number} distance - The distance in px which was swiped
+  *        @property {Number} speed - average px per seconds speed which was swiped
   */
 
 /**
@@ -44,6 +46,7 @@ var SwipeAnalog = function(el, opts) {
     x: 0,
     y: 0
   };
+  this.start_move_ts = null;
 
   if (typeof el == "string") {
     el = document.getElementById(el);
@@ -93,6 +96,7 @@ SwipeAnalog.prototype = {
    */
   onTouchStart: function(e) {
     this.is_touch_down = true;
+    this.start_move_ts = new Date().getTime();
     this.setStartPosition(e);
     this.start_cb(e);
     e.preventDefault();
@@ -166,6 +170,10 @@ SwipeAnalog.prototype = {
       swipe_vector.distance = distance;
       swipe_vector.angle = angle;
       swipe_vector.degree = Math.round(angle * 180 / Math.PI);
+      if (this.start_move_ts) {
+        var time_delta = (+new Date()) - this.start_move_ts;
+        swipe_vector.speed = Math.round(distance / (time_delta / 1000), 10);
+      }
     }
     return swipe_vector;
   },
