@@ -58,6 +58,7 @@ function JoystickRelative(el, opts) {
   me.center = { x: 0, y: 0};
   me.core_center_radius_px = 0;
   me.is_touch_down = false;
+  me.start_move_ts = 0;
 
   // =====================================================================================
 
@@ -161,19 +162,14 @@ JoystickRelative.prototype.getBaseStickCenter = function() {
  */
 JoystickRelative.prototype.onStart = function(e) {
   var me = this;
-  console.log("start");
+  me.start_move_ts = new Date().getTime();
   var touch_point = me.getRelativePos(e);
   var area = me.getPointArea(touch_point);
 
   //
+  var distance_to_center = me.getDistanceBetweenTwoPoints(me.center, touch_point);
   if (!this.isWithinBaseStick(touch_point)) {
-    //if (area === JoystickRelative.Area.Outer) {
-      // DPAD
-    //}
-    me.placeBaseStick(touch_point.x, touch_point.y);
-
     var angle = me.getAngleBetweenTwoPoints(me.center, touch_point);
-    var distance_to_center = me.getDistanceBetweenTwoPoints(me.center, touch_point);
     var distance_perc = Math.min((me.core_center_radius_px * distance_to_center) / 100, 100);
     var stick_distance_px = ((me.base_stick.offsetWidth / 2) * distance_perc) / 100;
     var base_center = touch_point;
@@ -182,11 +178,16 @@ JoystickRelative.prototype.onStart = function(e) {
     me.placeBaseStick(stick_pos_x, stick_pos_y);
     me.placeStick(touch_point.x, touch_point.y);
   } else {
-    me.placeStick(touch_point.x, touch_point.y);
+    if (area !== JoystickRelative.Area.Inner) {
+      me.placeStick(touch_point.x, touch_point.y);
+    } else {
+      me.placeStick(me.center.x, me.center.y);
+    }
   }
 
   me.is_touch_down = true;
-  me.start_cb(touch_point);
+  var swipe_vector = me.getSwipeVector(touch_point, me.getBaseStickCenter());
+  me.start_cb(swipe_vector);
   e.preventDefault();
 };
 
@@ -197,7 +198,6 @@ JoystickRelative.prototype.onStart = function(e) {
 JoystickRelative.prototype.onMove = function(e) {
   var me = this;
   if (!me.is_touch_down) return;
-  console.log("move");
   var touch_point = me.getRelativePos(e);
   var area = me.getPointArea(touch_point);
   var in_base_stick = me.isWithinBaseStick(touch_point);
@@ -208,7 +208,8 @@ JoystickRelative.prototype.onMove = function(e) {
   } else {
     me.placeStick(touch_point.x, touch_point.y);
   }
-  me.move_cb();
+  var swipe_vector = me.getSwipeVector(touch_point, me.getBaseStickCenter());
+  me.move_cb(swipe_vector);
   e.preventDefault();
 };
 
@@ -314,6 +315,37 @@ JoystickRelative.prototype.getRelativePos = function(e) {
 };
 
 /**
+ * Returns true if we swiped more than min swiped distance
+ * @param {Event} e - An event
+ * @return {object|null}
+ */
+ JoystickRelative.prototype.getSwipeVector = function(touch_point, center) {
+  var pos = touch_point;
+  var vec = center;
+  var swipe_vector = null;
+
+  // Check if distance has been exceeded and calculate direction vector
+  var distance = this.getDistanceBetweenTwoPoints(pos, vec);
+  swipe_vector = this.getNormalizedVector({
+    x: pos.x - vec.x,
+    y: pos.y - vec.y
+  });
+
+  var angle = Math.atan2(swipe_vector.y, swipe_vector.x);
+  if (angle < 0) {
+    angle += 2 * Math.PI;
+  }
+  swipe_vector.distance = distance;
+  swipe_vector.angle = angle;
+  swipe_vector.degree = Math.round(angle * 180 / Math.PI);
+  if (this.start_move_ts) {
+    var time_delta = (+new Date()) - this.start_move_ts;
+    swipe_vector.speed = Math.round(distance / (time_delta / 1000), 10);
+  }
+  return swipe_vector;
+};
+
+/**
  * Returns the event point coordinates considering both touch and mouse events
  * @param {Event} e - An event
  * @return {DPad~Coordinate}
@@ -352,4 +384,17 @@ JoystickRelative.prototype.getDistanceBetweenTwoPoints = function(p1, p2) {
  */
 JoystickRelative.prototype.getAngleBetweenTwoPoints = function(p1, p2) {
   return Math.atan2(p2.y - p1.y, p2.x - p1.x);
+};
+
+/**
+ * Returns a normlized vector
+ * @param {Vector} vector
+ * @return {Object}
+ */
+JoystickRelative.prototype.getNormalizedVector = function(vec) {
+  var len = Math.sqrt(vec.x * vec.x + vec.y * vec.y);
+  return {
+    x: (vec.x / len),
+    y: (vec.y / len)
+  }
 };
