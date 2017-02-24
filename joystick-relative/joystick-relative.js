@@ -58,7 +58,8 @@ function JoystickRelative(el, opts) {
   me.center = { x: 0, y: 0};
   me.core_center_radius_px = 0;
   me.is_touch_down = false;
-  me.start_move_ts = 0;
+  me.start_move_ts = null;
+  me.was_center = false;
 
   // =====================================================================================
 
@@ -164,11 +165,11 @@ JoystickRelative.prototype.onStart = function(e) {
   var me = this;
   me.start_move_ts = new Date().getTime();
   var touch_point = me.getRelativePos(e);
-  var area = me.getPointArea(touch_point);
 
   //
   var distance_to_center = me.getDistanceBetweenTwoPoints(me.center, touch_point);
-  if (!this.isWithinBaseStick(touch_point)) {
+  var is_in_center = me.isInCenter(touch_point);
+  if (!me.isWithinBaseStick(touch_point)) {
     var angle = me.getAngleBetweenTwoPoints(me.center, touch_point);
     var distance_perc = Math.min((me.core_center_radius_px * distance_to_center) / 100, 100);
     var stick_distance_px = ((me.base_stick.offsetWidth / 2) * distance_perc) / 100;
@@ -178,7 +179,7 @@ JoystickRelative.prototype.onStart = function(e) {
     me.placeBaseStick(stick_pos_x, stick_pos_y);
     me.placeStick(touch_point.x, touch_point.y);
   } else {
-    if (area !== JoystickRelative.Area.Inner) {
+    if (!is_in_center) {
       me.placeStick(touch_point.x, touch_point.y);
     } else {
       me.placeStick(me.center.x, me.center.y);
@@ -197,10 +198,16 @@ JoystickRelative.prototype.onStart = function(e) {
  */
 JoystickRelative.prototype.onMove = function(e) {
   var me = this;
+  e.preventDefault();
   if (!me.is_touch_down) return;
   var touch_point = me.getRelativePos(e);
-  var area = me.getPointArea(touch_point);
   var in_base_stick = me.isWithinBaseStick(touch_point);
+  var is_in_center = !me.was_center && me.isInCenter(touch_point);
+  if (is_in_center) {
+    return;
+  } else {
+    me.was_center = true;
+  }
 
   if (!in_base_stick) {
     me.placeStick(touch_point.x, touch_point.y);
@@ -210,7 +217,6 @@ JoystickRelative.prototype.onMove = function(e) {
   }
   var swipe_vector = me.getSwipeVector(touch_point, me.getBaseStickCenter());
   me.move_cb(swipe_vector);
-  e.preventDefault();
 };
 
 /**
@@ -229,22 +235,17 @@ JoystickRelative.prototype.isWithinBaseStick = function(touch_point) {
   return distance <= this.core_center_radius_px;
 };
 
-JoystickRelative.prototype.getPointArea = function(touch_point) {
+JoystickRelative.prototype.isInCenter = function(touch_point) {
   var me = this;
-  var distance_to_center = me.getDistanceBetweenTwoPoints(touch_point, me.center);
-  var in_base_stick = me.isWithinBaseStick(touch_point);
-  var area = null;
-
-  if (distance_to_center < me.core_center_radius_px || in_base_stick) {
-    area = JoystickRelative.Area.Inner;
-  } else if (distance_to_center <= me.inner_radius_size_px &&
-      distance_to_center >= me.core_center_radius_px) {
-    area = JoystickRelative.Area.Middle;
-  } else if (distance_to_center > me.inner_radius_size_px) {
-    area = JoystickRelative.Area.Outer;
+  var is_center = false;
+  var base_center = this.getBaseStickCenter();
+  var distance_base_center = me.getDistanceBetweenTwoPoints(base_center, me.center);
+  var distance_stick_center = me.getDistanceBetweenTwoPoints(touch_point, me.center);
+  if (distance_base_center <= 2 &&
+      distance_stick_center <= 20) {
+    is_center = true;
   }
-
-  return area;
+  return is_center;
 };
 
 JoystickRelative.prototype.adjustBaseStick = function(touch_point) {
