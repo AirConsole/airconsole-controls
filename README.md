@@ -27,6 +27,9 @@ A pattern of circles, which you can connect by swiping (like Android unlock swip
 ## ShakeDetector
 Evaluates ``AirConsole.onDeviceMotion`` for shake-like-events of a device.
 
+## TouchArea
+A generic touch area.
+
 ## Examples
 See examples for how to use these components.
 
