@@ -23,7 +23,7 @@
  */
 
 /**
- * This callback is called when the direction of a DPad changes.
+ * This callback is called when the direction of a Joystick changes.
  * @callback Joystick~touchMoveCallback
  * @param {Joystick~Offset} offset - The offset of the joystick.
  */
@@ -91,7 +91,7 @@ function Joystick(el, opts) {
     e.preventDefault();
   });
   var mouse_down = false;
-  if (true) {
+  if (!('ontouchstart' in document.documentElement)) {
     me.container.addEventListener("mousedown", function(e) {
       me.onStart(me.getRelativePos(e));
       mouse_down = true;
