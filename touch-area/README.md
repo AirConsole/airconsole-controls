@@ -3,8 +3,8 @@ A generic touch area.
 
 ## Example
 
-[Live Demo](https://rawgit.com/AirConsole/airconsole-controls/master/examples/toucharea.html) -
-[Source](https://github.com/AirConsole/airconsole-controls/blob/master/examples/toucharea.html)
+[Live Demo](https://rawgit.com/AirConsole/airconsole-controls/master/examples/touch-area.html) -
+[Source](https://github.com/AirConsole/airconsole-controls/blob/master/examples/touch-area.html)
 
 ## Javascript
 ```javascript
