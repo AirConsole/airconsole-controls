@@ -1,5 +1,5 @@
 # TouchArea
-An analogue relative joystick.
+A generic touch area.
 
 ## Example
 
