@@ -42,6 +42,13 @@
 [Source](https://github.com/AirConsole/airconsole-controls/blob/master/examples/swipe-pattern.html) -
 [Documentation](https://github.com/AirConsole/airconsole-controls/blob/master/swipe-pattern/README.md)
 
+## [TouchArea](https://github.com/AirConsole/airconsole-controls/blob/master/touch-area/README.md)
+
+[Live Demo](https://rawgit.com/AirConsole/airconsole-controls/master/examples/touch-area.html) -
+[Source](https://github.com/AirConsole/airconsole-controls/blob/master/examples/touch-area.html) -
+[Documentation](https://github.com/AirConsole/airconsole-controls/blob/master/touch-area/README.md)
+
+
 ## Example Controller
 
 ![alt text](https://github.com/airconsole/airconsole-controls/raw/master/examples/example-controller.png "Example Controller")
