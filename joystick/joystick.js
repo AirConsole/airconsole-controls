@@ -12,7 +12,7 @@
  *                               Default: 0.5
  * @property {number} min_delta - The minimum delta a joystick needs to have
  *                                moved before we call the callback.
- *                                Default: 0.25
+ *                                Default: 0.05
  * @property {boolean} absolute_start - If true, the joystick does a first
  *                                      move to the absolute position of the
  *                                      first touch position. Default: true
@@ -48,7 +48,7 @@
 function Joystick(el, opts) {
   var me = this;
   opts = opts || {}
-  me.distance_factor = opts.distance || 0.5;
+  me.distance_factor = opts.distance || 0.05;
   me.min_delta = opts.min_delta || 0.25;
   me.min_delta_sq = me.min_delta * me.min_delta;
   me.absolute_start = (opts.absolute_start == undefined ?
