@@ -15,7 +15,7 @@ You need to place & size the joystick explicitly. It needs to have position **re
 For example:
 ```html
 <style type=text/css>
-  #your-button {
+  #your-joystick {
     position: absolute;
     left: 0px;
     top: 0px;

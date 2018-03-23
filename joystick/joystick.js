@@ -7,8 +7,9 @@
  *           The callback that gets called when the Joystick is moved
  * @property {Function} touchend -
  *           The callback that gets called when the Joystick is released
- * @property {number} distance - The maximum amount of pixels a joystick can be
- *                               moved. Default: 40
+ * @property {number} distance - The maximum distance a joystick can be moved
+ *                               relative to it's size (min(x,y)).
+ *                               Default: 0.5
  * @property {number} min_delta - The minimum delta a joystick needs to have
  *                                moved before we call the callback.
  *                                Default: 0.25
@@ -47,7 +48,7 @@
 function Joystick(el, opts) {
   var me = this;
   opts = opts || {}
-  me.distance = opts.distance || 40;
+  me.distance_factor = opts.distance || 0.5;
   me.min_delta = opts.min_delta || 0.25;
   me.min_delta_sq = me.min_delta * me.min_delta;
   me.absolute_start = (opts.absolute_start == undefined ?
@@ -126,8 +127,8 @@ function Joystick(el, opts) {
       e.preventDefault();
     })
   }
-  me.distance_sq = Math.pow(me.distance, 2);
 }
+
 
 /**
  * Gets called when the Joystick gets touched
@@ -157,17 +158,19 @@ Joystick.prototype.onMove = function(pos) {
   var dx = pos.x - me.base.x;
   var dy = pos.y - me.base.y;
   var distance_sq = (dx*dx + dy*dy);
-  if (distance_sq > me.distance_sq) {
+  var max_distance = me.distance();
+  var max_distance_sq = max_distance * max_distance;
+  if (distance_sq > max_distance_sq) {
     var distance = Math.sqrt(distance_sq);
     var normalized_dx = dx / distance;
     var normalized_dy = dy / distance;
-    me.base.x = pos.x - normalized_dx * me.distance;
-    me.base.y = pos.y - normalized_dy * me.distance;
+    me.base.x = pos.x - normalized_dx * max_distance;
+    me.base.y = pos.y - normalized_dy * max_distance;
     dx = pos.x - me.base.x;
     dy = pos.y - me.base.y;
   }
   me.placeRelative(dx, dy);
-  var candidate = {"x": dx / me.distance, "y": dy / me.distance};
+  var candidate = {"x": dx / max_distance, "y": dy / max_distance};
   var call_dx = candidate.x - me.last_move_call.x;
   var call_dy = candidate.y - me.last_move_call.y;
   if ((call_dx * call_dx) + (call_dy * call_dy) >= me.min_delta_sq) {
@@ -209,8 +212,19 @@ Joystick.prototype.placeRelative = function(dx, dy) {
     return;
   }
   var style = me.relative.style;
+  var distance = me.distance();
   style.left = (dx) + "px";
-  style.right = (me.distance - dx) + "px";
+  style.right = (distance - dx) + "px";
   style.top = (dy) + "px";
-  style.bottom = (me.distance - dy) + "px";
+  style.bottom = (distance - dy) + "px";
 };
+
+/**
+ * Calculate the maximum distance a joystick is allowed to be moved.
+ * @return {Number}
+ */
+ Joystick.prototype.distance = function() {
+   var me = this;
+   var size = me.container.getBoundingClientRect();
+   return Math.min(size.width, size.height) * me.distance_factor / 2;
+}
