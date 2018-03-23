@@ -8,10 +8,13 @@
  * @property {Function} touchend -
  *           The callback that gets called when the Joystick is released
  * @property {number} distance - The maximum amount of pixels a joystick can be
- *                               moved. Default: 10
+ *                               moved. Default: 40
  * @property {number} min_delta - The minimum delta a joystick needs to have
  *                                moved before we call the callback.
  *                                Default: 0.25
+ * @property {boolean} absolute_start - If true, the joystick does a first
+ *                                      move to the absolute position of the
+ *                                      first touch position. Default: true
  * @property {boolean} log - Debug output iff a callback is not set.
  */
 
@@ -44,9 +47,11 @@
 function Joystick(el, opts) {
   var me = this;
   opts = opts || {}
-  me.distance = opts.distance || 10;
+  me.distance = opts.distance || 40;
   me.min_delta = opts.min_delta || 0.25;
   me.min_delta_sq = me.min_delta * me.min_delta;
+  me.absolute_start = (opts.absolute_start == undefined ?
+      true : opts.absolute_start)
 
   var log_cb = function(name) {
     return function (data) {
@@ -75,27 +80,37 @@ function Joystick(el, opts) {
     me.relative.style.position = "absolute";
     me.placeRelative(0, 0);
   }
-
+  var active =false;
   me.container.addEventListener("touchstart", function(e) {
-    var touch = e.targetTouches[0] || e.changedTouches[0] || e.touches[0];
-    me.onStart(me.getRelativePos(touch));
-    e.preventDefault();
+    if (!active) {
+      active = true;
+      var touch = e.targetTouches[0] || e.changedTouches[0] || e.touches[0];
+      me.onStart(me.getRelativePos(touch));
+      e.preventDefault();
+    }
   });
   me.container.addEventListener("touchmove", function(e) {
-    var touch = e.targetTouches[0] || e.changedTouches[0] || e.touches[0];
-    me.onMove(me.getRelativePos(touch));
-    e.preventDefault();
+    if (active) {
+      var touch = e.targetTouches[0] || e.changedTouches[0] || e.touches[0];
+      me.onMove(me.getRelativePos(touch));
+      e.preventDefault();
+    }
   });
   me.container.addEventListener("touchend", function(e) {
-    me.onEnd();
-    e.preventDefault();
+    if (active) {
+      active = false;
+      me.onEnd();
+      e.preventDefault();
+    }
   });
   var mouse_down = false;
   if (!('ontouchstart' in document.documentElement)) {
     me.container.addEventListener("mousedown", function(e) {
-      me.onStart(me.getRelativePos(e));
-      mouse_down = true;
-      e.preventDefault();
+      if (!mouse_down) {
+        me.onStart(me.getRelativePos(e));
+        mouse_down = true;
+        e.preventDefault();
+      }
     });
     me.container.addEventListener("mousemove", function(e) {
       if (mouse_down) {
@@ -104,8 +119,10 @@ function Joystick(el, opts) {
       e.preventDefault();
     });
     me.container.addEventListener("mouseup", function(e) {
-      me.onEnd();
-      mouse_down = false;
+      if (mouse_down) {
+        me.onEnd();
+        mouse_down = false;
+      }
       e.preventDefault();
     })
   }
@@ -118,10 +135,17 @@ function Joystick(el, opts) {
  */
 Joystick.prototype.onStart = function(pos) {
   var me = this;
-  me.base = pos;
   me.last_move_call = {x: 0, y: 0};
   me.container.className += " joystick-active";
-  me.start_cb();
+  if (!me.absolute_start) {
+    me.base = pos;
+    me.start_cb();
+  } else {
+    var size = me.container.getBoundingClientRect();
+    me.base = {x: size.width / 2, y: size.height / 2};
+    me.start_cb();
+    me.onMove(pos);
+  }
 };
 
 /**

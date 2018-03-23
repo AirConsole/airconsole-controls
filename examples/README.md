@@ -22,15 +22,6 @@
 [Source](https://github.com/AirConsole/airconsole-controls/blob/master/examples/joystick.html) -
 [Documentation](https://github.com/AirConsole/airconsole-controls/blob/master/joystick/README.md)
 
-## [Joystick Relative](https://github.com/AirConsole/airconsole-controls/blob/master/joystick-relative/README.md)
-
-![alt text](https://github.com/airconsole/airconsole-controls/raw/master/examples/joystick.png "Joystick Example")
-
-[Live Demo](https://rawgit.com/AirConsole/airconsole-controls/master/examples/joystick-relative.html) -
-[Source](https://github.com/AirConsole/airconsole-controls/blob/master/examples/joystick-relative.html) -
-[Documentation](https://github.com/AirConsole/airconsole-controls/blob/master/joystick-relative/README.md)
-
-
 ## [SwipeAnalog](https://github.com/AirConsole/airconsole-controls/blob/master/swipe-analog/README.md)
 
 [Live Demo](https://rawgit.com/AirConsole/airconsole-controls/master/examples/swipe-area.html) -
