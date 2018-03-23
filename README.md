@@ -9,7 +9,10 @@ A simple button that works well for touch devices and local debugging.
 A 4-way or 8-way relative swipe DPad usually used for movement, *but also great if you want to have 4 buttons on a controller*.
 
 ## Joystick
-An analogue relative joystick.
+An absolute placed analogue joystick.
+
+## Joystick Relative
+A relatively placed analogue joystick.
 
 ## Rate Limiter
 The Rate Limiter helps you to send less than 10 messages per second.
