@@ -1,5 +1,5 @@
 # Joystick
-An analogue relative joystick.
+An analogue absolutely placed joystick.
 
 ## Example
 

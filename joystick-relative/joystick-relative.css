@@ -9,8 +9,6 @@ body {
   width: 100%;
   height: 100%;
   background-color: black;
-  background: url(joystick-bg.png) no-repeat center center;
-  background-size: contain;
 }
 
 .joystick-relative {
@@ -28,9 +26,8 @@ body {
   padding-bottom: 0;
   margin-left: 0;
   margin-top: 0;
-  border-radius: 100%;
-  background-color: #000000;
-  border: 3px solid #ADDE00;
+  background: url(joystick-bg.png) no-repeat center center;
+  background-size: contain;
 }
 
 .joystick-relative-stick {
@@ -43,6 +40,6 @@ body {
   margin-left: 0;
   margin-top: 0;
   border-radius: 100%;
-  background-color: #ADDE00;
-  border: 3px solid #CCCCCC;
+  background: url(joystick-stick.png) no-repeat center center;
+  background-size: contain;
 }

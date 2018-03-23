@@ -1,5 +1,5 @@
-# Joystick
-An analogue relative joystick.
+# Joystick Relative
+An analogue relatively placed joystick.
 
 ## Example
 
@@ -28,7 +28,7 @@ For example:
 ## Javascript
 ```javascript
   // The first argument can be an html element or and element id. The second argument are options.
-  var my_joystick = new Joystick("my-joystick", {
+  var my_joystick = new JoystickRelative("my-joystick", {
     // Gets called when the joystick is touched
     "touchstart": function() {},
     
