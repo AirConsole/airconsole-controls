@@ -44,7 +44,7 @@ For example:
     "distance": 10,
     
     // (Optional) absolute_start: If true, the joystick jumps to the thumb, when its pressed.
-                                  If false, it is a relative joystick
+    //                            If false, it is a relative joystick
     "absolute_start": false
     
     // (Optional) min_delta: The minimum delta a joystick needs to have moved before
