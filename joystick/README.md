@@ -43,6 +43,10 @@ For example:
     // (Optional) distance: The maximum distance in pixels the joystick can be moved.
     "distance": 10,
     
+    // (Optional) absolute_start: If true, the joystick jumps to the thumb, when its pressed.
+                                  If false, it's a relative joystick
+    "absolute_start": false
+    
     // (Optional) min_delta: The minimum delta a joystick needs to have moved before
     //                       the callback gets called.
     "min_delta": 0.25
