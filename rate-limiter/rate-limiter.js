@@ -100,7 +100,8 @@ RateLimiter.prototype.setCustomDeviceStateProperty = function(key, value) {
  * @returns {*}
  */
 RateLimiter.prototype.getCustomDeviceState = function(device_id) {
-  if (device_id == undefined || device_id == airconsole.getDeviceId()) {
+  var me = this;
+  if (device_id == undefined || device_id == me.airconsole.getDeviceId()) {
     for (var i = 0; i < this.pending.length; ++i) {
       var pending = this.pending[i];
       if (pending.action == "custom") {
@@ -108,7 +109,7 @@ RateLimiter.prototype.getCustomDeviceState = function(device_id) {
           return pending.data;
         }
         var copy = {};
-        var existing = airconsole.getCustomDeviceState();
+        var existing = me.airconsole.getCustomDeviceState();
         if (existing) {
           this.mergeData_(existing, copy);
         }
@@ -117,7 +118,7 @@ RateLimiter.prototype.getCustomDeviceState = function(device_id) {
       }
     }
   }
-  return airconsole.getCustomDeviceState(device_id);
+  return me.airconsole.getCustomDeviceState(device_id);
 }
 
 // ---------------------- ONLY PRIVATE FUNCTIONS BELLOW ----------------------
