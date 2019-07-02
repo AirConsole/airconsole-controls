@@ -1,5 +1,5 @@
 # RateLimiter
-The Rate Limiter helps you to send less than 10 messages per second.
+The Rate Limiter helps you to send less than 25 messages per second.
 
 ## Example
 

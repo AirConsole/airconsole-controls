@@ -11,7 +11,7 @@
 
 
 /**
- * The Rate Limiter helps you to send less than 10 messages per second.
+ * The Rate Limiter helps you to send less than 25 messages per second.
  * It does this for messages and Custom Device States.
  * It sends data immediately in the beginning and then starts
  * rate limiting if the rate is too high: It merges the data together and
