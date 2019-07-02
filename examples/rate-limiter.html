@@ -10,7 +10,8 @@
     <script type="text/javascript">
       var airconsole = new AirConsole();
       var rateLimiter = new RateLimiter(airconsole, {
-        no_rate_limit_for_first_calls: 5
+        no_rate_limit_for_first_calls: 5,
+        rate_limit: 10
       });
       var rate_span = document.getElementById("rate");
       var intervals;
@@ -42,10 +43,10 @@
             var now = new Date().getTime();
             var sum = 1;
             var count = 0;
-            if (rateLimiter.rate.length >= 2) {
-              for (var i = 0; i < rateLimiter.rate.length - 1; ++i) {
-                if (rateLimiter.rate[i] > now - 1000) {
-                  sum = rateLimiter.rate[i+1] - rateLimiter.rate[i];
+            if (rateLimiter.rate[0] && rateLimiter.rate[0].length >= 2) {
+              for (var i = 0; i < rateLimiter.rate[0].length - 1; ++i) {
+                if (rateLimiter.rate[0][i] > now - 1000) {
+                  sum = rateLimiter.rate[0][i+1] - rateLimiter.rate[0][i];
                   count++;
                 }
               }
