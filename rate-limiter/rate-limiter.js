@@ -2,7 +2,7 @@
  * An object containing a configuration for the RateLimiter constructor.
  * @typedef {object} RateLimiterConfig
  * @property {number|undefined} rate_limit - Maximum amount of AirConsole calls
- *           per second. Default is 10. Max is 10.
+ *           per second. Default is 25. Max is 25.
  * @property {number|undefined} no_rate_limit_for_first_calls - You can disable
  *           rate limiting for the first X calls during one second.
  *           The following calls will be slower during the first second, so we
